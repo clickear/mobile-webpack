@@ -1,0 +1,9 @@
+{
+  "multi_entry": [
+
+  ],
+  "ignore": [
+    "style",
+    "test"
+  ]
+}
