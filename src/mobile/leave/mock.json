@@ -1,0 +1,105 @@
+{
+"Enable" : 1,
+"ViewType":2,
+"FlowState":3,
+"IsAutoFLow":1,
+"ApprovalState":1,
+"kqItemId":1245,
+"kqItemName":"年假",
+"dStartDate":"2015-12-29T01:00:00",
+"dEndDate":"2018-12-29T01:00:00",
+"lAllTime": 9,
+"reason":"家中有事：由于身体不适，需要在家休养。",
+"uploadSoundArr":[
+    {
+        "src":"sfsdfdgdf",
+        "time":"20",
+        "date":"12.23",
+        "formatterStr":"2m50s 08-12"
+    }
+],
+"uploadPicArr":[
+    {
+        "src": "../../libs/PhotoSwipe/data/15008518202_b016d7d289_m.jpg",
+        "w": 1600,
+        "h": 1600,
+        "author": "作者",
+        "fileName": "xx"
+    },
+    {
+        "src": "../../libs/PhotoSwipe/data/15008465772_383e697089_m.jpg",
+        "w": 1600,
+        "h": 1600,
+        "author": "作者",
+        "fileName":"xx"
+    },
+    {
+        "src": "../../libs/PhotoSwipe/data/14985868676_4b802b932a_m.jpg",
+        "w": 1600,
+        "h": 1600,
+        "author": "作者",
+        "fileName":"xx"
+    },
+    {
+        "src": "../../libs/PhotoSwipe/data/15008867125_68a8ed88cc_m.jpg",
+        "w": 1600,
+        "h": 1600,
+        "author": "作者",
+        "fileName": "xx"
+    }
+],
+"approvalRecord":[
+    {
+        "nodeState":2,
+        "option": "你大爷也",
+        "approverId":123456,
+        "approverName":"松岛枫",
+        "completeTime":"2015.12.25 19:30",
+        "contentStr":"",
+        "approverUploadSound":[{
+            "src":"sfsdf",
+            "time":"30'",
+            "date":"12.24"
+            }
+        ],
+        "approverNextPerson":[],
+        "approverSendPerson":["啦啦","呀呀"]
+    },
+    {
+        "nodeState":1,
+        "option": "你大爷也",
+        "approverId":123456,
+        "approverName":"松岛枫1",
+        "completeTime":"2015.12.25 19:30",
+        "contentStr":"请假条，是请求领导或老师或其它，准假不参加某项工作、学习、活动等的文书。",
+        "approverUploadSound":[],
+        "approverNextPerson":[],
+        "approverSendPerson":["水电费","多岁的"]
+    },
+    {
+        "nodeState":3,
+        "option": "你大爷也",
+        "approverId":123456,
+        "approverName":"松岛枫2",
+        "completeTime":"2015.12.25 19:30",
+        "contentStr":"请假条，是请求领导或老师或其它，准假不参加某项工作、学习、活动等的文书。请假条因为请假的原因，一般分为请病假和请事假两种。它是公文",
+        "approverUploadSound":[],
+        "approverNextPerson":[],
+        "approverSendPerson":[]
+    },
+    {
+        "nodeState":4,
+        "option": "你大爷也",
+        "approverId":123456,
+        "approverName":"松岛枫3",
+        "completeTime":"2015.12.25 19:30",
+        "contentStr":"",
+        "approverUploadSound":[],
+        "approverNextPerson":[],
+        "approverSendPerson":[]
+    }
+],
+"approverSendPerson":[{"name":"132","code":"199186"}, { "name":"789","code":"199186"}],
+"fixNextPersonArr":[{"name":"1", "code": 1}, {"name":"2'", "code": 2} ],
+"approverUploadSound":[]
+}

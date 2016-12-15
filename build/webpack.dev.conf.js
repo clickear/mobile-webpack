@@ -4,6 +4,7 @@ var merge = require('webpack-merge')
 var utils = require('./utils')
 var baseWebpackConfig = require('./webpack.base.conf')
 var HtmlWebpackPlugin = require('html-webpack-plugin')
+var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 // add hot-reload related code to entry chunks
 Object.keys(baseWebpackConfig.entry).forEach(function (name) {
@@ -24,14 +25,18 @@ module.exports = merge(baseWebpackConfig, {
     new webpack.optimize.OccurenceOrderPlugin(),
     new webpack.HotModuleReplacementPlugin(),
 
-     new webpack.ProvidePlugin({
-        "$": "jquery",
-        "jQuery": "jquery"
-    }),
     new webpack.ProvidePlugin({
-        "Vue": "vue",
-}),
+        "$": "jquery",
+        "jQuery": "jquery",
+         "Vue": "vue",
+          "moment": "moment",
+          "PhotoSwipe":"photoswipe",
+          "CarouselDatepicker":"../src/lib/datepicker/scripts/datepicker"
+    }),
+
+
     new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js'),
+    new ExtractTextPlugin("[name].css"),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       filename: 'index.html',

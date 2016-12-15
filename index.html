@@ -2,11 +2,168 @@
 <html>
   <head>
     <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="format-detection" content="telephone=no" />
     <title>mobile-webpack</title>
   	  </head>
   <body>
     <div id="cloundOfficeApp">
-    	<app-component></app-component>
+       <!-- step1 -->
+    <div class="ly-header" v-show="step == 1">
+        <a @click="closePage" class="l" href="javascript:;">取消</a>
+        <h2>请假申请单</h2>
+    </div>
+    <div class="receipt-home receipt-home-fix" v-show="step == 1">
+        <div class="receipt-menu-box">
+            <ul class="receipt-menu clx title_show">
+                <li v-for="row in kqItemArr"><a @click="selectType($index)" href="javascript:;"><ins :class="'i'+$index" ></ins>{{row}}</a></li>
+            </ul>
+        </div>
+    </div>
+    <!-- /step1 -->
+
+    <div class="ly-header" v-show="step > 1">
+        <a class="l" @click="closePage" href="javascript:;" >取消</a>
+        <h2>
+            <a class="slt" href="javascript:;" @click='openKqItemArr' id="title_name">{{kqItemName}}</a>
+            <ul class="leave-type clx title_show" v-if="showKqItemArr">
+                <li v-for="row in kqItemArr" :class="{ 'active': $index == kqItemId}"><a @click="selectType($index, 1)" href="javascript:;">{{row}}</a></li>
+            </ul>
+        </h2>
+    </div>
+
+    <div class="scroll-bd" v-show="step > 1">
+        <div class="layout-bd">
+            <!-- step2 -->
+            <div v-show="step == 2">
+                <div class="slt-time">
+                    <p class="tit">开始时间</p>
+                    <div id="dStartTime" class="datePlugin"></div>
+                    <p class="tit b">结束时间</p>
+                    <div id="dEndTime" class="datePlugin"></div>
+                </div>
+                <div class="slt-time-hours clx">
+                    <span class="s1">请假时长</span>
+                    <div class="slt-h">
+                        <a href="javascript:;" @click="lAllTime>0.5 && (lAllTime-=0.5)">-</a>
+                        <span class="s2"><i><input type="text" v-model="lAllTime" v-input-timeformat intSize="4" floatSize="1" isFormat=true  ></i>小时</span>
+                        <a href="javascript:;" @click="lAllTime=lAllTime*1+0.5">+</a>
+                    </div>
+                </div>
+            </div>
+            <!-- /step2 -->
+
+            <!-- step3 -->
+            <div class="receipt receipt-create" v-show="step == 3" v-cloak>
+                <div class="receipt-time-pane" id="sys_header3">
+                    <div class="time-slt clx">
+                        <span class="s1" v-html="getFormatStr(dStartDate)"></span>
+                        <span class="s2" v-html="getFormatStr(dEndDate)"></span>
+                    </div>
+                    <div class="hours" v-html="getAllTime(lAllTime)"><!-- <span class="num">{{ lAllTime }}</span>小时 --></div>
+                    <a class="btn-edit" @click="gotoStep(2)" href="javascript:;" ></a>
+                </div>
+
+                <div class="edit-content">
+                    <div class="txt-con">
+                        <span class="r">*</span>
+                        <textarea class="text-area" placeholder="请假原因" v-model="reason" v-calc-input length="200"></textarea>
+                        <span class="num"><i>{{reason.length}}</i>/200</span>
+                    </div>
+
+                    <input-keyword
+                        :items='keywordsArr'
+                        :current.sync='reason'>
+                    </input-keyword>
+
+                    <div class="add-media">
+                        <a class="pic-btn" v-show="uploadPicArr.length < 20" @click="showPhotoPicker = true" href="javascript:;"></a>
+                        <a class="voice-btn" v-show="uploadSoundArr.length == 0" @click="uploadSound" href="javascript:;"></a>
+                    </div>
+                    <div class="receipt-reason">
+                        <audio-player
+                            :allowedit="true"
+                            :status = "stop"
+                            :items='uploadSoundArr'>
+                        </audio-player>
+
+                        <photo-slide
+                            :allowedit="true"
+                            :items="uploadPicArr">
+                        </photo-slide>
+                    </div>
+                </div>
+
+                <div class="receipt-add">
+                    <h3>抄送:</h3>
+                    <fix-memberpicker
+                        :allowedit="true"
+                        :items="fixSendPersonArr"
+                        @add="addFixSendPerson">
+                    </fix-memberpicker>
+                </div>
+
+                <div class="receipt-add audit">
+                    <h3>审批人员：</h3>
+                    <fix-memberpicker
+                        :apply = 'true'
+                        :allowedit="IsAutoFLow"
+                        :items="fixNextPersonArr"
+                        @add="addApplyPerson">
+                    </fix-memberpicker>
+                </div>
+            </div>
+            <!-- /step3 -->
+        </div>
+
+        <div class="layout-fd">
+            <!-- step2 -->
+            <div v-show="step == 2">
+                <a class="fn-btn" href="javascript:;" @click="allowStep && gotoStep(3)" :data-action="allowStep?'':'disable'">下一步</a>
+                <input type="hidden" value="时间" id="dStart">
+                <input type="hidden" value="结束时间" id="dEnd">
+            </div>
+            <!-- /step2 -->
+
+
+            <!-- step3 -->
+            <div v-show="step == 3">
+                <a class="fn-btn" href="javascript:;" @click="submit" :data-action="allowSubmit? '':'disable' ">提交</a>
+            </div>
+            <!-- /step3 -->
+        </div>
+    </div>
+    
+    <!-- 图片上传组件 -->
+    <upload-images
+        :show.sync="showPhotoPicker"
+        @camera = "pickPhotoByCamera"
+        @album = "pickPhotoByAlbum">
+    </upload-images>
+    <!-- /图片上传组件 -->
+
+    <!-- 图片组件 -->
+    <photoswipe-gallery></photoswipe-gallery>
+    <!-- /图片组件 -->
+
+    <!-- 消息提示 -->
+    <pop-massege
+        :msg = "massegeText"
+        :type = "massegeType"
+        v-ref:showmsg>
+    </pop-massege>
+    <!-- /消息提示 -->
+
+    <!-- 消息确认弹框 -->
+    <pop-checked
+        :content = "checkContent"
+        :confirmtxt = "checkConfirmTxt"
+        :title = "checkTitle"
+        v-ref:showcheck
+        @confirm = "checkConfirm">
+    </pop-checked>
+    <!-- /消息确认弹框 -->
     </div>
     <!-- built files will be auto injected -->
   </body>

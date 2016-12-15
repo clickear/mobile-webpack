@@ -25,47 +25,47 @@ var fixMemberPickerVueCom = Vue.extend({
         if(this.apply){
             //这里注意，只能初始化一次。如果初始化多次。会出错。
             var drags = document.getElementById('fixMembers');
-            this.defaultSortable = Sortable.create(drags, {
-            animation: 150,
-            forceFallback: false,
-            disabled:!this.allowedit,
-            ghostClass : 'ghost',
-            filter: ".ignore",
-            draggable : '.avatar',
-            onEnd : function(evt){
-                var copy = cloundOfficeApp.fixNextPersonArr.concat([]);
-                if(evt.newIndex != undefined) {
-                        //首节点
-                        if(evt.newIndex == 0){
-                            if(Global.CurrentPerson.code == $("#fixMembers .avatar").eq(evt.newIndex).attr("name")){
-                                cloundOfficeApp.fixNextPersonArr = [];
-                                cloundOfficeApp.fixNextPersonArr = copy.concat([]);
-                                return false;
-                            }
-                        }
+            // this.defaultSortable = Sortable.create(drags, {
+            // animation: 150,
+            // forceFallback: false,
+            // disabled:!this.allowedit,
+            // ghostClass : 'ghost',
+            // filter: ".ignore",
+            // draggable : '.avatar',
+            // onEnd : function(evt){
+            //     var copy = cloundOfficeApp.fixNextPersonArr.concat([]);
+            //     if(evt.newIndex != undefined) {
+            //             //首节点
+            //             if(evt.newIndex == 0){
+            //                 if(Global.CurrentPerson.code == $("#fixMembers .avatar").eq(evt.newIndex).attr("name")){
+            //                     cloundOfficeApp.fixNextPersonArr = [];
+            //                     cloundOfficeApp.fixNextPersonArr = copy.concat([]);
+            //                     return false;
+            //                 }
+            //             }
 
-                        if(evt.newIndex > 0){
-                            if($("#fixMembers .avatar").eq(evt.newIndex).attr("name") == $("#fixMembers .avatar").eq(evt.newIndex - 1).attr("name")){
-                                cloundOfficeApp.fixNextPersonArr = [];
-                                cloundOfficeApp.fixNextPersonArr = copy.concat([]);
-                                return false;
-                            }
-                        }
-                        if(evt.newIndex < copy.length){
-                            if($("#fixMembers .avatar").eq(evt.newIndex).attr("name") == $("#fixMembers .avatar").eq(evt.newIndex + 1).attr("name")){
-                                cloundOfficeApp.fixNextPersonArr = [];
-                                cloundOfficeApp.fixNextPersonArr = copy.concat([]);
-                                return false;
-                            }
-                        }
-                        var old = copy[evt.oldIndex];
-                        copy.splice(evt.oldIndex, 1);
-                        copy.splice(evt.newIndex, 0, old);
-                        cloundOfficeApp.fixNextPersonArr = [];
-                        cloundOfficeApp.fixNextPersonArr = copy.concat([]);     
-                    }
-                }
-            });
+            //             if(evt.newIndex > 0){
+            //                 if($("#fixMembers .avatar").eq(evt.newIndex).attr("name") == $("#fixMembers .avatar").eq(evt.newIndex - 1).attr("name")){
+            //                     cloundOfficeApp.fixNextPersonArr = [];
+            //                     cloundOfficeApp.fixNextPersonArr = copy.concat([]);
+            //                     return false;
+            //                 }
+            //             }
+            //             if(evt.newIndex < copy.length){
+            //                 if($("#fixMembers .avatar").eq(evt.newIndex).attr("name") == $("#fixMembers .avatar").eq(evt.newIndex + 1).attr("name")){
+            //                     cloundOfficeApp.fixNextPersonArr = [];
+            //                     cloundOfficeApp.fixNextPersonArr = copy.concat([]);
+            //                     return false;
+            //                 }
+            //             }
+            //             var old = copy[evt.oldIndex];
+            //             copy.splice(evt.oldIndex, 1);
+            //             copy.splice(evt.newIndex, 0, old);
+            //             cloundOfficeApp.fixNextPersonArr = [];
+            //             cloundOfficeApp.fixNextPersonArr = copy.concat([]);     
+            //         }
+            //     }
+            // });
         }
     },
     methods : {
@@ -83,7 +83,7 @@ var fixMemberPickerVueCom = Vue.extend({
         },
         getIgnores : function(i){
             // console.log(i)
-            if(i > 0 && i < this.items.length){
+            if(i > 0 && i < this.items.length-1){
                 if(this.items[i - 1].code == this.items[i + 1].code){
                     return 'ignore';
                 }else{
@@ -95,4 +95,9 @@ var fixMemberPickerVueCom = Vue.extend({
         }
     }
 });
+
+function becomeAvatarSrc(code){
+    return ( ('') + '/officephoto/' + code + '/80');
+}
+
 Vue.component('fix-memberpicker', fixMemberPickerVueCom);

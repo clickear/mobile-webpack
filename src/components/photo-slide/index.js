@@ -1,4 +1,7 @@
-/* 图片查看2 */
+/* 图片查看 */
+
+import PhotoSwipeUI_Default from '../../lib/photoswipe/photoswipe-ui-default'
+
 var photoSlideVueCom = Vue.extend({
     props : ['items', 'allowedit', 'resize'],
     template :  '<div class="pic" :class="(items.length == 4 || items.length <= 2) && resize? \'fix\' : \'\'">'
@@ -36,4 +39,26 @@ var photoSlideVueCom = Vue.extend({
         }
     }
 });
+
+function initPhotoSwipe(opt) {
+    var pswpElement = document.querySelectorAll('.pswp')[0];
+    var items = opt.items;
+
+    var options = {
+        index: opt.index,
+        galleryUID: 1
+    };
+    gallery2 = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
+    gallery2.listen('gettingData', function(index, item) {
+    if(!item.w  || item.w == 0){
+        item.w = 1600;
+    }
+    if(!item.h || item.h == 0 ){
+          item.h = 1600;
+    }
+
+    });
+    gallery2.init();
+}
+
 Vue.component('photo-slide', photoSlideVueCom);
