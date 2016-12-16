@@ -1,34 +1,9 @@
-import App from './App'
-import jqueryui from 'jqueryui'
-import register from './components/register'
 
+import jqueryui from 'jqueryui'
 import {editVueMixin} from './mixins/_vue.mixins'
 /* eslint-disable no-new */
 
-// require("!css-loader!sass-loader! ./style/css/mobile.scss");
-
-// require('./style/css/mobile.scss'); 
- 
-import './style/css/mobile.scss'
-
-import './style/css/mobile_hack.css'
-
-
-import './lib/datepicker/style/carousel.css'
-
-
-import './lib/photoswipe/photoswipe.css'
-import './lib/photoswipe/default-skin/default-skin.css'
-
-import './lib/datepicker/scripts/carousel.js'
-import './lib/datepicker/scripts/datepicker.js'
-
-
-
-// @import "~jqueryui/jquery-ui";
-
 window.initData = require('./mobile/leave/mock.json');
-  
 window.initStepBack = 0;
  
 $(document).ready(function() {

@@ -386,10 +386,7 @@ const detailVueMixin = {
     }
 };
 
-
-
 export {
   editVueMixin,
   detailVueMixin
 }
-

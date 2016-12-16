@@ -1,9 +1,5 @@
-import Vue from 'vue'
-import App from '../App'
-
+// photoswipe 配置
 import photoswipedefault from '../lib/photoswipe/photoswipe-ui-default.js'
-
-
 
 import ximg from 'components/ximg/index.js';
 import input from 'components/input-keyword/index.js';
@@ -21,10 +17,6 @@ import delfixsend from 'components/delfixsend-component/index.js';
 import popmessage from 'components/pop-massege/index.js';
 import popchecked from 'components/pop-checked/index.js';
 import billlink from 'components/bill-link/index.js';
-
-
-Vue.component('app-component', App);
-
 
 Vue.directive('calc-input',{
   bind: function(){
@@ -50,8 +42,6 @@ Vue.directive('calc-input',{
     me.el.removeEventListener('input',me.evt, false);
   }
 });
-
-
 
 Vue.directive('input-timeformat',{
   bind: function(){
@@ -105,9 +95,6 @@ Vue.directive('input-timeformat',{
     me.el.removeEventListener('focus',me.focusEvt, false);
   }
 });
-
-
-
 
 var FE_Util = {
     formatNumber : function (opts){

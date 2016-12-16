@@ -1,5 +1,4 @@
 /* 图片查看 */
-
 import PhotoSwipeUI_Default from '../../lib/photoswipe/photoswipe-ui-default'
 
 var photoSlideVueCom = Vue.extend({

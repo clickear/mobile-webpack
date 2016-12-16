@@ -41,7 +41,7 @@ module.exports = merge(baseWebpackConfig, {
     }),
 
 
-    new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js'),
+    new webpack.optimize.CommonsChunkPlugin('common', 'common.js'),
     new ExtractTextPlugin("static/[name].css"),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({

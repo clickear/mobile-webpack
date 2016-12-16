@@ -36,6 +36,15 @@ var webpackConfig = merge(baseWebpackConfig, {
         warnings: false
       }
     }),
+        new webpack.ProvidePlugin({
+        "$": "jquery",
+        "jQuery": "jquery",
+         "Vue": "vue",
+          "moment": "moment",
+          "PhotoSwipe":"photoswipe",
+          "CarouselDatepicker":"../src/lib/datepicker/scripts/datepicker"
+    }),
+
     new webpack.optimize.OccurenceOrderPlugin(),
     // extract css into its own file
     new ExtractTextPlugin(utils.assetsPath('css/[name].[contenthash].css')),

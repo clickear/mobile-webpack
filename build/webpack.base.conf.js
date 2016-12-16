@@ -24,8 +24,8 @@ glob.sync('./src/**/*.js') .forEach(function(name) { var start = name.indexOf('s
 module.exports = {
   entry: 
   {
+    common: ['vue','jquery','moment','jqueryui','photoswipe','src/lib/photoswipe/photoswipe-ui-default.js','src/common','components/components'],
     app: './src/main.js',
-     vendors: ['vue','jquery','moment','jqueryui','photoswipe','src/lib/photoswipe/photoswipe-ui-default.js']
   },
   
   output: {
@@ -47,7 +47,6 @@ module.exports = {
     fallback: [path.join(__dirname, '../node_modules')]
   },
   module: {
-  
     loaders: [
       {
         test: require.resolve('vue'), 
