@@ -13,10 +13,16 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
 
 module.exports = merge(baseWebpackConfig, {
   module: {
-    loaders: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap })
+    loaders: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap, extract: true  })
   },
   // eval-source-map is faster for development
   devtool: '#eval-source-map',
+  vue: {
+    loaders: utils.cssLoaders({
+      sourceMap: config.build.productionSourceMap,
+      extract: true
+    })
+  },
   plugins: [
     new webpack.DefinePlugin({
       'process.env': config.dev.env
@@ -36,7 +42,7 @@ module.exports = merge(baseWebpackConfig, {
 
 
     new webpack.optimize.CommonsChunkPlugin('vendors', 'vendors.js'),
-    new ExtractTextPlugin("[name].css"),
+    new ExtractTextPlugin("static/[name].css"),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       filename: 'index.html',

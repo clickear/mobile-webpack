@@ -48,7 +48,7 @@ function initPhotoSwipe(opt) {
         index: opt.index,
         galleryUID: 1
     };
-    gallery2 = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
+    var gallery2 = new PhotoSwipe(pswpElement, PhotoSwipeUI_Default, items, options);
     gallery2.listen('gettingData', function(index, item) {
     if(!item.w  || item.w == 0){
         item.w = 1600;

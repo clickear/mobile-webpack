@@ -17,6 +17,9 @@ import './style/css/mobile_hack.css'
 import './lib/datepicker/style/carousel.css'
 
 
+import './lib/photoswipe/photoswipe.css'
+import './lib/photoswipe/default-skin/default-skin.css'
+
 import './lib/datepicker/scripts/carousel.js'
 import './lib/datepicker/scripts/datepicker.js'
 
