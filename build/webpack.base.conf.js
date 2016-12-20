@@ -9,32 +9,37 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
 var deps = [
   'jquery/dist/jquery.min.js',
-    'jquery/dist/jquery.js',
+  'jquery/dist/jquery.js',
 ];
 
-var getEntry = function() { 
-var entry = {}; //读取开发目录,并进行路径裁剪 
-glob.sync('./src/**/*.js') .forEach(function(name) { var start = name.indexOf('src/') + 4, end = name.length - 3;
- var n = name.slice(start, end); n = n.slice(0, n.lastIndexOf('/')); 
+var getEntry = function() {
+  var entry = {}; //读取开发目录,并进行路径裁剪 
+  glob.sync('./src/**/*.js').forEach(function(name) {
+    var start = name.indexOf('src/') + 4,
+      end = name.length - 3;
+    var n = name.slice(start, end);
+    n = n.slice(0, n.lastIndexOf('/'));
 
- //保存各个组件的入口
-  entry[n] = name; }); return entry; };
+    //保存各个组件的入口
+    entry[n] = name;
+  });
+  return entry;
+};
 
 
 module.exports = {
-  entry: 
-  {
-    common: ['vue','jquery','moment','jqueryui','photoswipe','src/lib/photoswipe/photoswipe-ui-default.js','src/common','components/components'],
+  entry: {
+    common: ['vue', 'jquery', 'moment', 'jqueryui', 'photoswipe', 'src/lib/photoswipe/photoswipe-ui-default.js', 'src/common', 'components/components', 'src/lib/datepicker/scripts/datepicker'],
     app: './src/main.js',
   },
-  
+
   output: {
     path: config.build.assetsRoot,
     publicPath: process.env.NODE_ENV === 'production' ? config.build.assetsPublicPath : config.dev.assetsPublicPath,
     filename: '[name].js'
   },
 
-  resolve: { 
+  resolve: {
     extensions: ['', '.js', '.vue'],
     fallback: [path.join(__dirname, '../node_modules')],
     alias: {
@@ -47,58 +52,49 @@ module.exports = {
     fallback: [path.join(__dirname, '../node_modules')]
   },
   module: {
-    loaders: [
-      {
-        test: require.resolve('vue'), 
-        loader: 'expose?Vue!'  
-      },
-      {
-        test:  require.resolve('jquery'), 
-        loader: 'expose?$!expose?jQuery!'  
-      },
-      {
-        test:  require.resolve('moment'), 
-        loader: 'expose?moment!'  
-      },
-      {
-        test:  require.resolve('jqueryui'), 
-        loader: 'expose?jqueryui!'  
-      },
-      {
-        test: require.resolve('photoswipe'), 
-        loader: 'expose?PhotoSwipe!'  
-      },
-      {
-        test: require.resolve('../src/lib/datepicker/scripts/datepicker'), 
-        loader: 'expose?CarouselDatepicker!'  
-      },
-      {
+    loaders: [{
+        test: require.resolve('vue'),
+        loader: 'expose?Vue!'
+      }, {
+        test: require.resolve('jquery'),
+        loader: 'expose?$!expose?jQuery!'
+      }, {
+        test: require.resolve('moment'),
+        loader: 'expose?moment!'
+      }, {
+        test: require.resolve('jqueryui'),
+        loader: 'expose?jqueryui!'
+      }, {
+        test: require.resolve('photoswipe'),
+        loader: 'expose?PhotoSwipe!'
+      }, {
+        test: require.resolve('../src/lib/datepicker/scripts/datepicker'),
+        loader: 'expose?CarouselDatepicker!'
+      }, {
+        test: require.resolve('../src/page/ndmobileajax'),
+        loader: 'expose?NDMobile_Ajax!'
+      }, {
         test: /\.vue$/,
         loader: 'vue'
-      },
-      {
+      }, {
         test: /\.js$/,
         loader: 'babel',
         include: projectRoot,
         exclude: /node_modules/
-      },
-      {
+      }, {
         test: /\.json$/,
         loader: 'json'
-      },
-      {
+      }, {
         test: /\.html$/,
         loader: 'vue-html'
-      },
-      {
+      }, {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url',
         query: {
           limit: 10000,
           name: utils.assetsPath('img/[name].[hash:7].[ext]')
         }
-      },
-      {
+      }, {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
         loader: 'url',
         query: {
