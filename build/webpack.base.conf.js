@@ -71,9 +71,6 @@ module.exports = {
         test: require.resolve('../src/lib/datepicker/scripts/datepicker'),
         loader: 'expose?CarouselDatepicker!'
       }, {
-        test: require.resolve('../src/page/ndmobileajax'),
-        loader: 'expose?NDMobile_Ajax!'
-      }, {
         test: /\.vue$/,
         loader: 'vue'
       }, {

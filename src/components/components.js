@@ -75,7 +75,7 @@ window.receiptStatusCfg = {
     }
 }
 
-var setCheckPop = function(obj){
+function setCheckPop(obj){
     var vn = cloundOfficeApp;
     var txt;
     if(!obj.content){
@@ -98,7 +98,7 @@ var setCheckPop = function(obj){
     vn.showCheckPop();
 }
 
-var setMsgkPop = function(obj){
+function setMsgkPop(obj){
     var vn = cloundOfficeApp;
     if(!obj.content){
         obj.content = '';

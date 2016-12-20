@@ -5,7 +5,7 @@ var avatarMsgVueCom = Vue.extend({
     template:  '<img :src="defaultsrc">',
     data:function(){
         return{
-            defaultsrc: this.dsrc || '../img/mobile/ava120.png'
+            defaultsrc: this.dsrc || '../static/img/mobile/ava120.png'
         }
     },
     created:function(){
