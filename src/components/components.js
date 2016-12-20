@@ -1,5 +1,4 @@
 // photoswipe 配置
-import photoswipedefault from '../lib/photoswipe/photoswipe-ui-default.js'
 import ximg from 'components/ximg/index.js';
 import input from 'components/input-keyword/index.js';
 import fix from 'components/fix-memberpicker/index.js';
@@ -33,77 +32,75 @@ window.becomeAvatarSrc = becomeAvatarSrc;
 window.lookPersonInfo = lookPersonInfo;
 window.PrgressBar = PrgressBar;
 
-
-function getViewModelData( vm ){
-    console.log(vm)
+function getViewModelData(vm) {
     return JSON.parse(JSON.stringify(vm.$data));
 }
 
 /* 表单状态 */
 window.receiptStatusCfg = {
-    1:{
-        action:'progress',
+    1: {
+        action: 'progress',
         name: '正在审批中'
     },
-    2:{
-        action:'success',
+    2: {
+        action: 'success',
         name: '通过'
     },
-    3:{
-        action:'reject',
+    3: {
+        action: 'reject',
         name: '拒绝'
     },
-    4:{
-        action:'progress',
+    4: {
+        action: 'progress',
         name: '未开始'
     },
-    5:{
-        action:'revoke',
+    5: {
+        action: 'revoke',
         name: '已撤销'
     },
-    6:{
-        action:'no-exist',
+    6: {
+        action: 'no-exist',
         name: '不存在'
     },
-    7:{
+    7: {
         action: 'done',
         name: '已审'
     },
-    8:{
+    8: {
         action: 'waiting',
         name: '待审'
     }
 }
 
-function setCheckPop(obj){
+function setCheckPop(obj) {
     var vn = cloundOfficeApp;
     var txt;
-    if(!obj.content){
+    if (!obj.content) {
         obj.content = '';
     }
-    if(!obj.title){
+    if (!obj.title) {
         obj.title = '';
     }
-    if(!obj.confirmTxt){
+    if (!obj.confirmTxt) {
         txt = "确定";
-    }else{
+    } else {
         txt = obj.confirmTxt;
     }
     vn.checkContent = obj.content;
     vn.checkTitle = obj.title;
     vn.checkConfirmTxt = txt;
-    initConfirmPop(function(){
+    initConfirmPop(function() {
         obj.confirm();
     });
     vn.showCheckPop();
 }
 
-function setMsgkPop(obj){
+function setMsgkPop(obj) {
     var vn = cloundOfficeApp;
-    if(!obj.content){
+    if (!obj.content) {
         obj.content = '';
     }
-    if(!obj.type){
+    if (!obj.type) {
         obj.type = '';
     }
     vn.massegeText = obj.content;
@@ -111,20 +108,19 @@ function setMsgkPop(obj){
     vn.showMassegePop();
 }
 
-
-function hadDataChange(app){
+function hadDataChange(app) {
     console.log(JSON.stringify(app))
     console.log(JSON.stringify(originData))
-    for(var i in originData){
-        if(originData[i] && originData[i].type){
+    for (var i in originData) {
+        if (originData[i] && originData[i].type) {
             var s = moment(app[i]).format('X');
             var t = moment(originData[i].value).format('X');
-            if(s !== t){
+            if (s !== t) {
                 return false
             }
-        }else{
+        } else {
             var s = deepDif(originData[i], app[i]);
-            if(!s){
+            if (!s) {
                 return false;
             }
         }
@@ -132,58 +128,50 @@ function hadDataChange(app){
     return true;
 }
 
-function deepDif(x, y){
-    if(Object.prototype.toString.call(x) == "[object Object]" || Object.prototype.toString.call(x) == "[object Array]"){
-        for(var i in x){
+function deepDif(x, y) {
+    if (Object.prototype.toString.call(x) == "[object Object]" || Object.prototype.toString.call(x) == "[object Array]") {
+        for (var i in x) {
             var s = deepDif(x[i], y[i]);
-            if(!s){
+            if (!s) {
                 return false
             }
         }
-    }else{
-        if(JSON.stringify(x) !== JSON.stringify(y)){
+    } else {
+        if (JSON.stringify(x) !== JSON.stringify(y)) {
             return false
         }
     }
     return true;
 }
 
-
-
-function becomeAvatarSrc(code){
-    return ( (Global.HostUrl||'') + '/officephoto/' + code + '/80');
+function becomeAvatarSrc(code) {
+    return ((Global.HostUrl || '') + '/officephoto/' + code + '/80');
 }
 
-function lookPersonInfo(code){
+function lookPersonInfo(code) {
     return sys_lookPerson(code);
 }
 
 //图片上传进度模拟数据
-window.configStep = [
-    {
-        stage : 20,//进度分段
-        speed : 0.2//进度所有时间比重
-    },
-    {
-        stage : 40,
-        speed : 0.4
-    },
-    {
-        stage : 50,
-        speed : 0.1
-    },
-    {
-        stage : 80,
-        speed : 0.2
-    },
-    {
-        stage : 98,
-        speed : 0.1
-    }
-]
-//图片上传模拟实例{domObj:进度条ID,imgSize:图片大小,imgURl:图片地址}
-function PrgressBar(domObj,imgSize,imgUrl){
-    if(!imgSize){
+window.configStep = [{
+        stage: 20, //进度分段
+        speed: 0.2 //进度所有时间比重
+    }, {
+        stage: 40,
+        speed: 0.4
+    }, {
+        stage: 50,
+        speed: 0.1
+    }, {
+        stage: 80,
+        speed: 0.2
+    }, {
+        stage: 98,
+        speed: 0.1
+    }]
+    //图片上传模拟实例{domObj:进度条ID,imgSize:图片大小,imgURl:图片地址}
+function PrgressBar(domObj, imgSize, imgUrl) {
+    if (!imgSize) {
         imgSize = 500;
     }
     var self = this;
@@ -193,43 +181,43 @@ function PrgressBar(domObj,imgSize,imgUrl){
     self.fileSize = imgSize; /* 图片大小 */
     self.netSpeed = 100; /* 模拟网速 */
     self.mockSpeed = self.fileSize / self.netSpeed * 1000; /* 进度所要总时间 */
-    self.refreshBar = function(){
-        setTimeout(function(){
+    self.refreshBar = function() {
+        setTimeout(function() {
             domObj.style.display = 'block';
-            domObj.nextSibling.innerHTML = '<em class="progress-txt">图片上传中</em><em class="progress-num">'+ self.level +'%</em>';
+            domObj.nextSibling.innerHTML = '<em class="progress-txt">图片上传中</em><em class="progress-num">' + self.level + '%</em>';
             domObj.nextSibling.style.display = 'block';
             domObj.style.width = self.level + "%";
-            if(self.level >= self.levelStep[0]){
+            if (self.level >= self.levelStep[0]) {
                 self.levelSpeed.shift();
                 self.levelStep.shift();
             }
             self.level++;
-            if(self.levelSpeed.length){
+            if (self.levelSpeed.length) {
                 self.refreshBar();
             }
         }, self.levelSpeed[0])
 
     }
-    self.removeBar = function(){
+    self.removeBar = function() {
         domObj.style.display = 'none';
         domObj.nextSibling.style.display = 'none';
     }
-    self.setBar = function(num){
-        self.refreshBar = function(){};
+    self.setBar = function(num) {
+        self.refreshBar = function() {};
         domObj.style.display = 'block';
         domObj.nextSibling.style.display = 'block';
         domObj.style.width = num + "%";
-        domObj.nextSibling.innerHTML = '<em class="progress-txt">图片上传中</em><em class="progress-num">'+ num+'%</em>';
+        domObj.nextSibling.innerHTML = '<em class="progress-txt">图片上传中</em><em class="progress-num">' + num + '%</em>';
     }
-    self.turnError = function(){
+    self.turnError = function() {
         domObj.nextSibling.innerHTML = '<em class="progress-txt">失败</em><em class="progress-num">点击重试</em>';
         domObj.nextSibling.style.display = 'block';
     }
-    for(var i =0 , len = configStep.length; i < len; i++){
+    for (var i = 0, len = configStep.length; i < len; i++) {
         var dStage = 0;
-        if(i == 0){
+        if (i == 0) {
             dStage = configStep[i].stage;
-        }else{
+        } else {
             dStage = configStep[i].stage - configStep[i - 1].stage;
         }
         self.levelSpeed[i] = configStep[i].speed * self.mockSpeed / dStage;
@@ -237,9 +225,6 @@ function PrgressBar(domObj,imgSize,imgUrl){
     }
     self.refreshBar();
 }
-
-
-
 
 Vue.directive('calc-input', {
     bind: function() {

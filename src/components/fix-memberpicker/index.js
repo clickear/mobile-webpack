@@ -97,7 +97,7 @@ var fixMemberPickerVueCom = Vue.extend({
 });
 
 function becomeAvatarSrc(code){
-    return ( ('') + '/officephoto/' + code + '/80');
+    return ( (Global.HostUrl) + '/officephoto/' + code + '/80');
 }
 
 Vue.component('fix-memberpicker', fixMemberPickerVueCom);

@@ -1,8 +1,11 @@
 import './style/css/mobile.scss'
 import './style/css/mobile_hack.css'
 import './lib/datepicker/style/carousel.css'
-import './lib/photoswipe/photoswipe.css'
-import './lib/photoswipe/default-skin/default-skin.css'
+import 'photoswipe/dist/photoswipe.css'
+import 'photoswipe/dist/default-skin/default-skin.css'
+// import './lib/AreaPicker/css/areapick.css'
+ 
+import './lib/AreaPicker/js/AreaPicker.js'
 
 import './page/pageinit.js'
 import './page/sopnative.js'

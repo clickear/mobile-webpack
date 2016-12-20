@@ -29,7 +29,7 @@ var getEntry = function() {
 
 module.exports = {
   entry: {
-    common: ['vue', 'jquery', 'moment', 'jqueryui', 'photoswipe', 'src/lib/photoswipe/photoswipe-ui-default.js', 'src/common', 'components/components', 'src/lib/datepicker/scripts/datepicker'],
+    common: ['vue', 'jquery', 'moment', 'jqueryui', 'photoswipe', 'photoswipe/dist/photoswipe-ui-default', 'src/common', 'components/components', 'src/lib/datepicker/scripts/datepicker'],
     app: './src/main.js',
   },
 
