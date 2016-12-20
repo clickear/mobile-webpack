@@ -1,5 +1,10 @@
+window.cloundOfficeApp = {};
+window.imgProgressAry = [];
 window.Global = {};
-
+window.testDebugData = {};
+window.initStep = 0;
+window.initData = require('../mobile/leave/mock.json');
+window.initStepBack = 0;
 //部分全局怎么暴露问题
 var isDebug = false;
 
@@ -65,10 +70,6 @@ function SetFormAndNodeStateHtml() {
 
 }
 
-var initData = {};
-initStep = 1;
-
-
 /**
  * 获取模版函数
  * @param {Long} pageCode     表单编号pageCode
@@ -102,9 +103,15 @@ function DoSetFormAndNodeStateHtml(pageCode, pKey, callfunction, change) {
     })
 }
 
-
 var initStepBack = 1;
 
+/**
+ * 获取模版回调函数 
+ * @param {[type]} result        [description]
+ * @param {[type]} textStatus    [description]
+ * @param {[type]} jqXHR         [description]
+ * @param {[type]} initLocalHtml [description]
+ */
 function SetFormAndNodeStateHtmlCall(result, textStatus, jqXHR, initLocalHtml) {
     if (result && result.IsSucess) {
         //是否保存在本来当中,默认是重新进行保存

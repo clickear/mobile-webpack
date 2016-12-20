@@ -4,14 +4,8 @@ import './lib/datepicker/style/carousel.css'
 import './lib/photoswipe/photoswipe.css'
 import './lib/photoswipe/default-skin/default-skin.css'
 
-window.cloundOfficeApp = {};
-window.imgProgressAry = [];
-window.Global = {};
-window.testDebugData = {};
-window.initStep = 0;
-
+import './page/pageinit.js'
 import './page/ndmobileajax.js'
-// import './page/pageinit.js'
 
 
 
