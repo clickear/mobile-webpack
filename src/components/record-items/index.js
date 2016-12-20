@@ -14,7 +14,7 @@ var recordItemsVueCom = Vue.extend({
                 +           '<a v-show="viewtype == 1 && item.nodeState == 1 && flowstate != 5" @click="gotoReminder(item)" href="javascript:;">催审</a>'/*+'<a href="javascript:;">沟通</a>'*/
                 +       '</div>'
 
-                +       '<div class="opinion" v-if=" item.contentStr.length">'
+                +       '<div class="opinion" v-if="item.contentStr && item.contentStr.length">'
                 +           '<p class="p1">审批意见：</p>'
                 +           '<p class="p2">{{ item.contentStr }} </p>'
                 // +           '<a href="javascript:;">显示更多</a>'
@@ -22,7 +22,7 @@ var recordItemsVueCom = Vue.extend({
 
                 +       '<audio-player :items="item.approverUploadSound" :allowedit="false"></audio-player>'
 
-                +       '<div class="addition" v-if="item.approverSendPerson.length">'
+                +       '<div class="addition" v-if="item.approverSendPerson && item.approverSendPerson.length">'
                 +          '<p class="s1">新增抄送人：<span class="s2" v-for="index in item.approverSendPerson">{{index.name}}</span></p>'
                 +       '</div>'
                 +   '</li>'

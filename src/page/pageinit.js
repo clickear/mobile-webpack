@@ -1,3 +1,5 @@
+import FormOperator from '../page/formoperator.js'
+
 window.cloundOfficeApp = {};
 window.imgProgressAry = [];
 window.Global = {};
@@ -5,11 +7,13 @@ window.testDebugData = {};
 window.initStep = 0;
 window.initData = require('../mobile/leave/mock.json');
 window.initStepBack = 0;
+window.SetFormAndNodeStateHtml = SetFormAndNodeStateHtml;
+window.DoSetFormAndNodeStateHtml = DoSetFormAndNodeStateHtml;
 //部分全局怎么暴露问题
 var isDebug = false;
 
 if (navigator.platform.toLowerCase() == "win32")
-    isDebug = true;
+    isDebug = false;
 else
     isDebug = false;
 
@@ -41,11 +45,10 @@ function SetFormAndNodeStateHtml() {
         Global = Global || {};
         Global.PageCode = getCurrentPageCode();
         Global.Pkey = getCurrentPkey();
-
         try {
             sys_getHostUrl(function(hostUrl) {
                 if (!hostUrl) alert('返回host地址有误，默认使用testyunoa');
-                //hostUrl = hostUrl || 'http://testyunoa.99.com';
+                hostUrl = hostUrl || 'http://testyunoa.99.com';
                 if (testDebugData && testDebugData.isDebug) {
                     hostUrl = testDebugData.hostUrl;
                 }
@@ -90,7 +93,9 @@ function DoSetFormAndNodeStateHtml(pageCode, pKey, callfunction, change) {
     FormObj.sVersion = "2.0";
     document.getElementById('txtRequireType').value = FormObj.RequireType;
     // 先获取数据
-    NDMobile_Ajax.GetFormData(FormObj, SetFormAndNodeStateHtmlCall);
+    // NDMobile_Ajax.GetFormData(FormObj, SetFormAndNodeStateHtmlCall);
+    FormOperator.sys_GetFormDataAjax(FormObj, SetFormAndNodeStateHtmlCall);
+
     sys_getFormHtml(FormObj, function(formTmepStr) {
         if (formTmepStr) {
             setInnerHTML(document.getElementById("divTaskFormHtml"), formTmepStr);
@@ -102,8 +107,6 @@ function DoSetFormAndNodeStateHtml(pageCode, pKey, callfunction, change) {
         }
     })
 }
-
-var initStepBack = 1;
 
 /**
  * 获取模版回调函数 

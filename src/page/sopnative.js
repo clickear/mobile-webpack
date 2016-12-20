@@ -1,6 +1,36 @@
 // 暴露到windows方法
+
+import FormOperator from '../page/formoperator.js'
+
 window.upLoadStateCallback = upLoadStateCallback;
+window.sys_record = sys_record;
 window.recordCallBack = recordCallBack;
+window.sys_recordPlay = sys_recordPlay;
+window.recordPlayCallBack = recordPlayCallBack;
+window.sys_getSelectPerson = sys_getSelectPerson;
+window.selectPersonCallBack = selectPersonCallBack;
+window.sys_getSelectMultiplePerson = sys_getSelectMultiplePerson;
+window.selectMultiplePersonCallBack = selectMultiplePersonCallBack;
+window.sys_getImage = sys_getImage;
+window.getImageCallBack = getImageCallBack;
+window.sys_choosePhoto = sys_choosePhoto;
+window.choosePhotoCallBack = choosePhotoCallBack;
+window.sys_takePhoto = sys_takePhoto;
+window.takePhotoCallBack = takePhotoCallBack;
+window.sys_closeActivity = sys_closeActivity;
+window.sys_recycle = sys_recycle;
+window.sys_urge = sys_urge;
+window.urgeCallBack = urgeCallBack;
+window.sys_getHostUrl = sys_getHostUrl;
+window.getHostUrlCallBack = getHostUrlCallBack;
+window.sys_getFormHtml = sys_getFormHtml;
+window.getFormHtmlCallBack = getFormHtmlCallBack;
+window.sys_backCallBack = sys_backCallBack;
+window.sys_setConfirmPop = sys_setConfirmPop;
+window.returnBack = returnBack;
+window.sys_lookPerson = sys_lookPerson;
+window.sys_setMsgkPop = sys_setMsgkPop;
+window.sys_formNoPermission = sys_formNoPermission;
 
 var sys_Control = {
   record: function() {},
@@ -69,7 +99,6 @@ function recordCallBack(data) {
   }
 }
 
-
 /**
  * 语言播放
  * @param  {String} src         播放源地址
@@ -81,9 +110,7 @@ function sys_recordPlay(src, funCallBack) {
   sendRequestGlobal("SOPMethod", "recordPlay", src, "recordPlayCallBack");
 }
 
-
 //{src:'',status:'play'}
-
 /**
  * 播放录音(原生调用方法)
  * @param  {Object} data [description]
@@ -351,12 +378,16 @@ function sys_getFormHtml(formObj, getFormHtmlCallBack) {
   }
   tempObj = JSON.stringify(tempObj);
   if (getDevices() == "win32" || getDevices() == "win64") {
-    //NDMobile_Ajax.GetFormAndNodeStateHtml()
-    NDMobile_Ajax.GetFormAndNodeStateHtml(formObj, function(result, textStatus, jqXHR, initLocalHtml) {
+    FormOperator.sys_GetFormAndNodeStateHtml(formObj, function(result, textStatus, jqXHR, initLocalHtml) {
       if (result && result.IsSucess) {
         getFormHtmlCallBack(result.FormHtml);
       }
     });
+    // NDMobile_Ajax.GetFormAndNodeStateHtml(formObj, function(result, textStatus, jqXHR, initLocalHtml) {
+    //   if (result && result.IsSucess) {
+    //     getFormHtmlCallBack(result.FormHtml);
+    //   }
+    // });
   }
   sendRequestGlobal("SOPMethod", "getFormHtml", tempObj, "getFormHtmlCallBack");
 }
