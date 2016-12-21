@@ -1,7 +1,14 @@
 // photoswipe 配置
+
+
+import VueDraggable from 'vuedraggable'
 import ximg from 'components/ximg/index.js';
 import input from 'components/input-keyword/index.js';
 import fix from 'components/fix-memberpicker/index.js';
+
+// import dragmember from 'components/drag-memberpicker/index.js'
+
+
 import audio from 'components/audio-player/index.js';
 import photo from 'components/photo-slide/index.js';
 import photoswipegalery from 'components/photoswipe-gallery/index.js';
@@ -19,6 +26,12 @@ import {
     editVueMixin,
     detailVueMixin
 } from '../mixins/_vue.mixins'
+
+
+import Sortable from 'vue-sortable'
+
+Vue.use(Sortable)
+Vue.use(VueDraggable)
 
 window.editVueMixin = editVueMixin;
 window.detailVueMixin = detailVueMixin;
