@@ -274,7 +274,8 @@ const detailVueMixin = {
             var self = this;
             var canotChoose = [];
             canotChoose.push(Global.CurrentPerson)
-            sys_getSelectMultiplePerson(self.fixSendPersonArr,canotChoose,function(per){   
+            canotChoose.concat(self.fixSendPersonArr);
+            sys_getSelectMultiplePerson([],canotChoose,function(per){   
                 sys_setConfirmPop("确认要抄送此单据？",function(){
                     self.fixSendPersonArr = per;
                     sys_AddSendPersons(self.fixSendPersonArr);

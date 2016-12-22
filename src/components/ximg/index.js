@@ -1,5 +1,5 @@
 
-/* 图片组件 ss*/
+/* 图片组件 */
 var avatarMsgVueCom = Vue.extend({
     props: ['xsrc', 'dsrc'],
     template:  '<img :src="defaultsrc">',

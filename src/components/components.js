@@ -1,7 +1,3 @@
-// photoswipe 配置
-
-
-import VueDraggable from 'vuedraggable'
 import ximg from 'components/ximg/index.js';
 import input from 'components/input-keyword/index.js';
 import fix from 'components/fix-memberpicker/index.js';
@@ -19,8 +15,7 @@ import approval from 'components/approval-component/index.js';
 import reminder from 'components/reminder-component/index.js';
 import upload from 'components/upload-images/index.js';
 import delfixsend from 'components/delfixsend-component/index.js';
-import popmessage from 'components/pop-massege/index.js';
-import popchecked from 'components/pop-checked/index.js';
+
 import billlink from 'components/bill-link/index.js';
 import {
     editVueMixin,
@@ -28,10 +23,28 @@ import {
 } from '../mixins/_vue.mixins'
 
 
-import Sortable from 'vue-sortable'
+import Sortable from '../directives/vue-sortable'
+
+import Message from 'components/message/index.js';
+
+import PopMessageJS from 'components/pop/index.js';
+
 
 Vue.use(Sortable)
-Vue.use(VueDraggable)
+Vue.prototype.$Message = Message;
+
+Vue.prototype.$Pop = PopMessageJS;
+
+
+Vue.component('Message', Message);
+
+// Vue.component('pop-massege', PopMessage);
+// Vue.component('pop-check', PopCheck);
+
+
+
+
+
 
 window.editVueMixin = editVueMixin;
 window.detailVueMixin = detailVueMixin;

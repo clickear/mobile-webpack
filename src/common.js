@@ -3,6 +3,11 @@ import './style/css/mobile_hack.css'
 import './lib/datepicker/style/carousel.css'
 import 'photoswipe/dist/photoswipe.css'
 import 'photoswipe/dist/default-skin/default-skin.css'
+
+
+import './style/iview/iview.css'
+
+
 // import './lib/AreaPicker/css/areapick.css'
  
 import './lib/AreaPicker/js/AreaPicker.js'
