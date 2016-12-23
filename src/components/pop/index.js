@@ -62,7 +62,7 @@ function getMessageInstance () {
  * @param  {Function} onClose  回调函数
  * @return {[type]}          [description]
  */
-function notice (content, duration = 2000, type, onClose) {
+function notice (content, duration = 2, type, onClose) {
     if (!onClose) {
         onClose = function () {
 
@@ -109,7 +109,7 @@ export default {
         }
     },
     popCheck:{
-        show(content, title, confirmtxt = '确定', onClose){
+        show(content, title, onClose, confirmtxt = '确定'){
             return check(content,title,confirmtxt, onClose);
         },close(){
             return getMessageInstance().popCheckClose();

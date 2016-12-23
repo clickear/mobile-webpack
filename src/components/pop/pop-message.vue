@@ -27,12 +27,15 @@
                     self.type = type;
                     self.isShow = true;
                     if(onClose && typeof onClose == 'function'){
-                        this.onClose = onClose;
+                        this.onClose = onClose;  
                     }
+
+                    duration = duration*1000;
+
                     if(duration>0){
                         setTimeout(function(){
                             self.isShow = false;
-                            this.onClose();
+                            self.onClose();
                         }, duration);
                     }
                 },
