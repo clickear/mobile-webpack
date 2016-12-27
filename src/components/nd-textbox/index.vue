@@ -1,20 +1,11 @@
 <template>
   <template v-if="!readonly">
-
-<!--     <div class="edit-content">
-      <div class="txt-con">
-          <span class="r">*</span>
-          <textarea class="text-area" placeholder="请假原因" length="200"></textarea>
-          <span class="num"><i>0</i>/200</span>
-      </div>
-    </div>
- -->
-    <div class="nd-edit-content">
-      <div class="nd-txt-title" >测试</div>
+    <div class="nd-edit-content" :class="{'nd-error':!valid}">
+      <div class="nd-txt-title" >{{areatext}}<span v-show="required" style="color:red"> (必填) </div>
       <div class="nd-txt-con">
           <textarea
             class="nd-text-area"
-            :class="{showcount:(showCounter && max)}"
+            :class="{'nd-showcount':(showCounter && max)}"
             :autocomplete="autocomplete"
             :autocapitalize="autocapitalize"
             :autocorrect="autocorrect"
@@ -23,34 +14,23 @@
             :readonly="readonly"
             :name="name"
             v-model="value"
+            :required="required"
             :style="textareaStyle"
-            :maxlength="max" v-el:textarea></textarea>
+            :maxlength="max"
+            v-el:textarea></textarea>
           <span class="nd-num" v-show="showCounter && max" ><i>{{count}}</i>/{{max}}</span>
+          <span class="nd-txt-error" v-show=" !valid " style="" >{{firstError}}</span>
       </div>
-      <div></div>
+    </div>
+  </template>
+  <template v-else>
+    <div class="nd-receipt-header">
+      <div class="nd-receipt-txt">
+        <p class="nd-lab">请假理由：</p>
+        <h3>{{value}}</h3>
+      </div>
     </div>
 
-<!-- 
-      <div class="weui_cells" :class="{'vux_no_group_title':!areatext}" style="margin-top:0;margin-bottom:15px;">
-        <div class="weui_cell">
-          <div class="weui_cell_bd weui_cell_primary">
-            <div style="font-size: 14px;" v-html="areatext"></div>
-            <textarea
-            class="nd_text_area"
-            style="border:inhirent"
-            :autocomplete="autocomplete"
-            :autocapitalize="autocapitalize"
-            :autocorrect="autocorrect"
-            :spellcheck="spellcheck"
-            :placeholder="placeholder"
-            :readonly="readonly"
-            :name="name"
-            v-model="value"
-            :style="textareaStyle"
-            :maxlength="max" v-el:textarea></textarea>
-            <div class="weui_textarea_counter" v-show="showCounter && max"><span>{{count}}</span>/{{max}}</div>
-          </div>
-    </div> -->
   </template>
 </template>
 
@@ -70,10 +50,9 @@ export default {
       default: ''
     },
     name: String,
-    placeholder: String,
     readonly: {
       type: Boolean,
-      default: false
+      default: true
     },
     rows: {
       type: Number,
@@ -88,7 +67,10 @@ export default {
       type: Boolean,
       default: true 
     },
-
+    required:{
+      type: Boolean,
+      default: true
+    },
     areatext:{
       type:String,
       default:''
@@ -98,25 +80,39 @@ export default {
     autocomplete: 'off',
     autocapitalize: 'off',
     autocorrect: 'off',
-    required:false,
     spellcheck: 'false'
   },
   data(){
     return {
-      textareaStyle: {}
+      textareaStyle: {},
+      errorMsg:'',
+      isError:false,
+      firstError:'',
+      valid:true
     }
   },
   watch: {
     value (newVal) {
+      // if (this.max && this.value.length > this.max) {
+      //   this.value = newVal.slice(0, this.max)
+      // }
+
+      this.$nextTick(() => {
+        this.resizeTextarea();
+      });
+
+      // if(this.value != newVal){
+        this.validate();
+      // }
+
+
       if (this.max && this.value.length > this.max) {
         this.value = newVal.slice(0, this.max)
       }
-
-      this.$nextTick(() => {
-          this.resizeTextarea();
-      });
-
       this.$emit('on-change', this.value)
+    },
+    valid () {
+      this.getError()
     }
   },
   methods:{
@@ -125,7 +121,62 @@ export default {
       if(!autosize) return false;
       const minRows = this.rows;
       const maxRows = this.cols;
-      this.textareaStyle = calcTextareaHeight(this.$els.textarea,3,10);
+      if(this.$els.textarea){
+        this.textareaStyle = calcTextareaHeight(this.$els.textarea,1,10);
+      }
+
+    },
+    getError () {
+      let key = Object.keys(this.errors)[0]
+      this.firstError = this.errors[key]
+    },
+    validate(){
+      this.errors = {};
+      if (!this.value && !this.required) {
+        this.valid = true
+        return
+      }
+
+      if (!this.value && this.required) {
+        this.valid = false
+        this.errors.required = '请填写' + this.areatext;
+        return
+      }
+
+      // const validator = validators[this.isType]
+      // if (validator) {
+      //   this.valid = validator[ 'fn' ](this.value)
+      //   if (!this.valid) {
+      //     this.errors.format = validator[ 'msg' ] + '格式不对哦~'
+      //     return
+      //   } else {
+      //     delete this.errors.format
+      //   }
+      // }
+
+      // if (this.min) {
+      //   if (this.value.length < this.min) {
+      //     this.errors.min = this.$interpolate('最少应该输入{{min}}个字符哦')
+      //     this.valid = false
+      //     this.getError()
+      //     return
+      //   } else {
+      //     delete this.errors.min
+      //   }
+      // }
+
+      if (this.max) {
+        if (this.value.replace(/\n/g, 'aa').length > this.max) {
+          this.errors.max = '最多可以输入{{max}}个字符哦';
+          this.valid = false
+          this.forceShowError = true
+          return
+        } else {
+          this.forceShowError = false
+          delete this.errors.max
+        }
+      }
+      this.valid = true
     }
   },
   computed: {
@@ -136,10 +187,15 @@ export default {
       }
       return len > this.max ? this.max : len
     },
-    showName(){
-      if(this.required){
-        return this.placeholder 
-      }
+    placeholder(){
+      return '请输入'+ this.areatext +(this.max>0 ? '('+ this.max +'个字)':'')
+    }
+  },
+  events:{
+    'form-check': function valid(){
+      //必填验证
+      this.validate();
+
     }
   },
   ready(){
@@ -149,22 +205,21 @@ export default {
 </script>
 
 <style lang="scss">
-
-
 .nd-edit-content{
     background-color: #fff;
-    margin-bottom: 14px;
+    margin-bottom: 23px;
     border-bottom: 1px solid #eee;
 }
 
 .nd-txt-title{
-  font-size: 16px;
+  font-size: 13px;
   margin-left:24px;
 }
 
 .nd-txt-con{
   position: relative;
   margin-left:5px;
+  margin-right:5px;
 }
 
 .nd-text-area{
@@ -177,7 +232,7 @@ export default {
     resize: none;  
 }
 
-.showcount{
+.nd-showcount {
      margin-bottom: 26px;
 }
 
@@ -193,4 +248,43 @@ export default {
     font-style: normal;
     font-size: 14px;
 }
+
+.nd-error .nd-txt-con .nd-num ,
+.nd-error .nd-txt-con .nd-num i{
+  color:red;
+}
+
+.nd-txt-error{
+  position:absolute;
+  right:65px;
+  color:red;
+}
+
+
+.nd-receipt-header {
+    background-color: #fff;
+    border-bottom: 1px solid #e5e5e5;
+    padding: 0 7px;
+}
+
+.nd-receipt-txt{
+  padding: 0 5px 14px;
+}
+
+.nd-lab{
+    padding-top: 5px;
+    height: 30px;
+    line-height: 25px;
+    color: #a0a0a0;
+    font-size: 13px;
+}
+
+.nd-receipt-txt h3{
+  font-size: 13px;
+  color: #313131;
+  line-height: 25px;
+  font-weight: 400;
+  margin-bottom: 6px;  
+}
+
 </style>

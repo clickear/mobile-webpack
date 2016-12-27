@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8">
-    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0" />
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" />
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="format-detection" content="telephone=no" />
     <title>mobile-webpack</title>
@@ -25,7 +25,38 @@
         <input type="hidden" id="HostUrl" value="" />
         <input type="hidden" id="txtRequireType" value="" />
 
-        <div id="divTaskFormHtml"></div>
+<!--         <div id="divTaskFormHtml"></div> -->
     <!-- built files will be auto injected -->
+<!--     <div id="cloundOfficeApp">
+        <div class="scroll-bd">
+            <div class="layout-bd">
+                <div class="receipt receipt-create">
+                     <div class="receipt-add audit">
+                         <Custom :allowedit=allowedit :items.sync=FixArray></Custom>
+                     </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+ -->
+
+
+
+
+
+    <div id="cloundOfficeApp">
+        <ndform :fixNextPersonArr.sync="fixNextPersonArr" 
+                :fixsendpersonarr.sync="fixSendPersonArr" @submit="" 
+                :uploadsoundarr.sync="uploadSoundArr"
+                :showpthtos.sync="showPhotoPicker" 
+                :uploadpicarr.sync="uploadPicArr">
+            <ndtextbox :value.sync='inputValue' :max="200"  areatext='请示类型' v-ref:textbox1 ></ndtextbox>
+            <ndtextbox :value.sync='inputValue' :max="200"  areatext='请示类型2'></ndtextbox>
+            <ndtextbox :value.sync='inputValue' :max="200" :readonly="readonly"  areatext='请示类型3'></ndtextbox>
+        </ndform>
+    </div>
+
   </body>
 </html>
+ 

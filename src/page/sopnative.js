@@ -508,30 +508,36 @@ JSBridge.sendRequest = function(module, method, para, callback) {
     window[module][method](para, callback);
   } else if (this.platform == "win32" || this.platform == "win64") {
     console.log('window:选择人员')
-    if ("selectPersonCallBack" == callback) {
+    if("selectMultiplePersonCallBack" == callback){
+      var person = '[{"DAddTime":"/Date(1451040536000+0800)/","DByDate":"/Date(959788800000+0800)/","LCharge":"0","LDepCode":0,"LFlag":1,"LState":1,"LUcPeocode":0,"LUserRight":0,"PersonId":900183,"SByDate":"2000-06-01","SFirstSpell":"w","SPersonName":"多选控件1","SSpell1":"wf","SSpell2":"wf","SYgMobile":"18986096035"},{"DAddTime":"/Date(1451040536000+0800)/","DByDate":"/Date(959788800000+0800)/","LCharge":"0","LDepCode":0,"LFlag":1,"LState":1,"LUcPeocode":0,"LUserRight":0,"PersonId":900240,"SByDate":"2000-06-01","SFirstSpell":"w","SPersonName":"多选控件2","SSpell1":"wf","SSpell2":"wf","SYgMobile":"18986096035"}]';
+      selectMultiplePersonCallBack(person);
+    }
+    else if ("selectPersonCallBack" == callback) {
       var person = '[{"DAddTime":"/Date(1451040536000+0800)/","DByDate":"/Date(959788800000+0800)/","LCharge":"0","LDepCode":0,"LFlag":1,"LState":1,"LUcPeocode":0,"LUserRight":0,"PersonId":900183,"SByDate":"2000-06-01","SFirstSpell":"w","SPersonName":"Íõ·¼","SSpell1":"wf","SSpell2":"wf","SYgMobile":"18986096035"},{"DAddTime":"/Date(1451040536000+0800)/","DByDate":"/Date(959788800000+0800)/","LCharge":"0","LDepCode":0,"LFlag":1,"LState":1,"LUcPeocode":0,"LUserRight":0,"PersonId":900240,"SByDate":"2000-06-01","SFirstSpell":"w","SPersonName":"Íõ·¼","SSpell1":"wf","SSpell2":"wf","SYgMobile":"18986096035"}]';
       selectPersonCallBack(person);
     } else if ("takePhotoCallBack" == callback) {
-      testSrc++;
+      testSrc ++;
       var src = "ssssss" + testSrc;
       var obj = {};
-      obj.src = 'http://localhost:100/Areas/Theme/default/images/1.png';
+      obj.key = src;
+      obj.src = 'http://cs.101.com/v0.1/static/cscommon/avatar/199186/199186.jpg?size=80';
       obj.fileName = 'ÎÄ¼þÃû'
       obj.time = '100';
       obj.date = "/Date(959788800000+0800)/";
-      takePhotoCallBack(obj);
+      takePhotoCallBack(JSON.stringify(obj));
     } else if ("choosePhotoCallBack" == callback) {
       testSrc++;
 
       var src = "ssssss" + testSrc;
 
       var obj = {};
-      obj.src = 'http://localhost:100/Areas/Theme/default/images/1.png';
+      obj.key = src;
+      obj.src = 'http://cs.101.com/v0.1/static/cscommon/avatar/199186/199186.jpg?size=80';
       obj.fileName = 'ÎÄ¼þÃû'
       obj.time = '100';
       obj.date = "/Date(959788800000+0800)/";
 
-      choosePhotoCallBack(obj);
+      choosePhotoCallBack(JSON.stringify(obj));
     } else if ("recordCallBack" == callback) {
       testSrc++;
       var src = "ssssss" + testSrc;

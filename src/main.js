@@ -1,11 +1,43 @@
 import jqueryui from 'jqueryui'
-
-/* eslint-disable no-new */
-
 import page from './page/pageinit.js'
+import Custom from './demo/Custom.vue'
+import group from 'components/group/index.vue'
+import ndinput from 'components/nd-input/index.vue'
+import ndtextbox from 'components/nd-textbox/index.vue'
+import ndform from 'components/nd-form/index.vue'
 
+import vali from 'validator'
+window.vali = vali;
 
-SetFormAndNodeStateHtml();
+Global.CurrentPerson = {name:'当前人员',code:199186}
+
+window.cloundOfficeApp = new Vue({
+    el:'#cloundOfficeApp',
+    data:{
+        fixSendPersonArr:[{name:'抄送人1',code:111},{name:'抄送人2',code:222}],
+        fixNextPersonArr:[{name:'FixArray',code:111},{name:'FixArray1',code:222}],
+        uploadPicArr:[],
+        uploadSoundArr:[],
+        allowedit:true,
+        inputValue:'',
+        input:'input',
+        readonly:false,
+        showPhotoPicker:false
+    },
+    events:{
+        'draggable-end':function(event){
+                var newValue = this.FixArray[event.newIndex];
+                var oldValue = this.FixArray[event.oldIndex];
+                this.FixArray.$set(event.newIndex, oldValue )
+                this.FixArray.$set(event.oldIndex, newValue )
+        }
+    },
+    mixins : [editVueMixin],
+    components:{Custom, group, ndinput, ndtextbox, ndform}
+})
+  
+
+//SetFormAndNodeStateHtml();
 
 
 // $(document).ready(function() {
