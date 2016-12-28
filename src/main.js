@@ -1,6 +1,8 @@
 import jqueryui from 'jqueryui'
 import page from './page/pageinit.js'
 import Custom from './demo/Custom.vue'
+import test from './demo/test.vue';
+
 import group from 'components/group/index.vue'
 import ndinput from 'components/nd-input/index.vue'
 import ndtextbox from 'components/nd-textbox/index.vue'
@@ -9,19 +11,50 @@ import ndform from 'components/nd-form/index.vue'
 import vali from 'validator'
 window.vali = vali;
 
-Global.CurrentPerson = {name:'当前人员',code:199186}
+Global.HostUrl = 'http://testwork.nd/'
+
+window.initData = require('./mobile/leave/mock.json')
+
+ SetFormAndNodeStateHtmlCall(initData);
+ // SetFormAndNodeStateHtml();
+
+// Global.CurrentPerson = {name:'当前人员',code:199186}
 
 window.cloundOfficeApp = new Vue({
     el:'#cloundOfficeApp',
     data:{
-        fixSendPersonArr:[{name:'抄送人1',code:111},{name:'抄送人2',code:222}],
-        fixNextPersonArr:[{name:'FixArray',code:111},{name:'FixArray1',code:222}],
-        uploadPicArr:[],
-        uploadSoundArr:[],
+
         allowedit:true,
         inputValue:'',
         input:'input',
         readonly:false,
+
+        FlowState:initData.FlowState, 
+        ApproverState:initData.ApproverState,
+        ViewType:initData.ViewType,
+        Enable:initData.Enable,
+
+        sPersonCode : initData.sPersonCode || 0,
+        sPersonName : initData.sPersonName || '',
+        sRemark : '',
+
+
+
+
+        IsEdit : false ,        // 编辑状态，还是查看状态
+        FormName: initData.FormName || '表单',              // 表单名称
+        IsAutoFLow :  initData.IsAutoFLow, // 是否自由流程， 1是
+        sAbstract : '',   
+
+                                               //摘要
+        uploadSoundArr : initData.uploadSoundArr || [],       // 录音上传地址
+        uploadPicArr : initData.uploadPicArr || [],         // 图片上传地址
+        fixSendPersonArr : initData.fixSendPersonArr || [],     // 申请时抄送人
+        fixNextPersonArr : initData.fixNextPersonArr || [],      // 申请时下一个审批人
+        uploadPicArr:[],
+        uploadSoundArr:[],
+
+
         showPhotoPicker:false
     },
     events:{
@@ -32,10 +65,27 @@ window.cloundOfficeApp = new Vue({
                 this.FixArray.$set(event.oldIndex, newValue )
         }
     },
+    methods:{
+        getFormData(){
+            var data = {};
+            for (var k in this.$refs) {
+                var comp = this.$refs[k];
+                debugger;
+                if (comp.name != undefined && comp.name != '' && comp.getValue != undefined) {
+                    data[comp.name] = comp.getValue();
+                }
+            }
+            return data;
+        },
+        formCheck(){
+            cloundOfficeApp.$broadcast('form-check')
+        }
+    },
     mixins : [editVueMixin],
-    components:{Custom, group, ndinput, ndtextbox, ndform}
+    components:{Custom, group, ndinput, ndtextbox, ndform, test}
 })
-  
+
+ 
 
 //SetFormAndNodeStateHtml();
 

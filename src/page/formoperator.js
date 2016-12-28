@@ -50,7 +50,7 @@ function sys_GetFormAndNodeStateHtml(formObj, callback) {
  * @param  {Function} callback 回调函数
  * @return {[type]}            无
  */
-function sys_formfirstcommit(callback) {
+function sys_formfirstcommit(callback,formData) {
     //增加判断是否有未上传完的图片
     if (imgProgressAry) {
         for (var key in imgProgressAry) {
@@ -69,7 +69,7 @@ function sys_formfirstcommit(callback) {
     } catch (e) {
 
     }
-    submitSure(1, "", callback);
+    submitSure(1, "", callback, formData);
 }
 
 /**
@@ -125,7 +125,7 @@ var sys_isFormCommiting = false;
  * @param  {Function} callback [description]
  * @return {[type]}            [description]
  */
-function submitSure(first, remark, callback) {
+function submitSure(first, remark, callback, formData) {
     if (sys_isFormCommiting)
         return;
     var m_bnode = document.getElementById("txtbNode").value == "1" ? true : false;
@@ -170,8 +170,8 @@ function submitSure(first, remark, callback) {
             Form.ApproverSendPerson = cloundOfficeApp.approverSendPerson;
 
             Form.approverUploadSound = cloundOfficeApp.approverUploadSound;
-
-            Form.testJson = JSON.stringify(getViewModelData(cloundOfficeApp));
+            
+            Form.testJson = (formData) ? JSON.stringify(formData): JSON.stringify(getViewModelData(cloundOfficeApp));
             //   Dialog.showWaiting('正在提交，请稍候...');
             NDMobile_Ajax.DoFlowNodeSave(Form, DoFlowSave_CallBack, DoFlowSave_ErrorCallBack);
             sys_isFormCommiting = true;
@@ -367,7 +367,7 @@ var NDMobile_Ajax = {
             dataType: "json",
             timeout: 45000,
             beforeSend: function(xhr) {
-                if (false) {
+                if (typeof(testDebugData) != 'undefined' && testDebugData.isDebug) {
                     xhr.setRequestHeader("Nd-CompanyId", testDebugData.comId);
                     xhr.setRequestHeader("PersonId", testDebugData.userId);
                 } else {

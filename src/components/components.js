@@ -2,7 +2,7 @@ import ximg from 'components/ximg/index.js';
 import input from 'components/input-keyword/index.js';
 import fix from 'components/fix-memberpicker/index.js';
 
-// import dragmember from 'components/drag-memberpicker/index.js'
+import dragmember from 'components/drag-memberpicker/index'
 
 
 import audio from 'components/audio-player/index.js';
@@ -41,10 +41,16 @@ Vue.component('Message', Message);
 // Vue.component('pop-massege', PopMessage);
 // Vue.component('pop-check', PopCheck);
 
+Vue.component('drag-memberpicker',dragmember);
+
+import ndinput from 'components/nd-input/index.vue'
+import ndtextbox from 'components/nd-textbox/index.vue'
+import ndform from 'components/nd-form/index.vue'
 
 
-
-
+Vue.component('ndinput',ndinput);
+Vue.component('ndtextbox',ndtextbox);
+Vue.component('ndform',ndform);
 
 window.editVueMixin = editVueMixin;
 window.detailVueMixin = detailVueMixin;

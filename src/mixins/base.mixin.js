@@ -12,17 +12,21 @@ export default{
             editVueMixin.methods.pickPhoto.call(this.$root);
         },
 
-        pickPhotoByAlbum : function(){
+        editPickPhotoByAlbum : function(){
   			editVueMixin.methods.pickPhotoByAlbum.call(this.$root);
         },
 
-        pickPhotoByCamera : function(){
+        editPickPhotoByCamera : function(){
             editVueMixin.methods.pickPhotoByCamera.call(this.$root);
         },
 
         // 上传语音
         eidtUploadSound : function(){
             editVueMixin.methods.uploadSound.call(this.$root);
+        },
+        
+        eidtClosePage:function(){
+        	sys_closeActivity();
         },
 
         submit : function(){

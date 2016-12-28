@@ -1,6 +1,6 @@
 <template>
   <template v-if="!readonly">
-    <div class="nd-edit-content" :class="{'nd-error':!valid}">
+    <div class="nd-edit-content" :class="{'nd-error':!isValid}">
       <div class="nd-txt-title" >{{areatext}}<span v-show="required" style="color:red"> (必填) </div>
       <div class="nd-txt-con">
           <textarea
@@ -19,7 +19,7 @@
             :maxlength="max"
             v-el:textarea></textarea>
           <span class="nd-num" v-show="showCounter && max" ><i>{{count}}</i>/{{max}}</span>
-          <span class="nd-txt-error" v-show=" !valid " style="" >{{firstError}}</span>
+          <span class="nd-txt-error" v-show=" !isValid " style="" >{{firstError}}</span>
       </div>
     </div>
   </template>
@@ -30,7 +30,6 @@
         <h3>{{value}}</h3>
       </div>
     </div>
-
   </template>
 </template>
 
@@ -84,11 +83,12 @@ export default {
   },
   data(){
     return {
+      compType:'textbox',
       textareaStyle: {},
       errorMsg:'',
       isError:false,
       firstError:'',
-      valid:true
+      isValid:true 
     }
   },
   watch: {
@@ -96,13 +96,12 @@ export default {
       // if (this.max && this.value.length > this.max) {
       //   this.value = newVal.slice(0, this.max)
       // }
-
       this.$nextTick(() => {
         this.resizeTextarea();
       });
 
       // if(this.value != newVal){
-        this.validate();
+        this.validValue();
       // }
 
 
@@ -111,11 +110,14 @@ export default {
       }
       this.$emit('on-change', this.value)
     },
-    valid () {
+    isValid () {
       this.getError()
     }
   },
   methods:{
+    getValue(){
+      return this.value;
+    },
     resizeTextarea(){
       const autosize = this.autosize;
       if(!autosize) return false;
@@ -129,16 +131,19 @@ export default {
     getError () {
       let key = Object.keys(this.errors)[0]
       this.firstError = this.errors[key]
+      if(this.$els.textarea){
+        this.$els.textarea.focus()
+      }
     },
-    validate(){
+    validValue(){
       this.errors = {};
       if (!this.value && !this.required) {
-        this.valid = true
+        this.isValid = true
         return
       }
 
       if (!this.value && this.required) {
-        this.valid = false
+        this.isValid = false
         this.errors.required = '请填写' + this.areatext;
         return
       }
@@ -168,7 +173,7 @@ export default {
       if (this.max) {
         if (this.value.replace(/\n/g, 'aa').length > this.max) {
           this.errors.max = '最多可以输入{{max}}个字符哦';
-          this.valid = false
+          this.isValid = false
           this.forceShowError = true
           return
         } else {
@@ -176,7 +181,7 @@ export default {
           delete this.errors.max
         }
       }
-      this.valid = true
+      this.isValid = true
     }
   },
   computed: {
@@ -194,7 +199,7 @@ export default {
   events:{
     'form-check': function valid(){
       //必填验证
-      this.validate();
+      this.validValue();
 
     }
   },
@@ -285,6 +290,7 @@ export default {
   line-height: 25px;
   font-weight: 400;
   margin-bottom: 6px;  
+  word-break: break-word;
 }
 
 </style>

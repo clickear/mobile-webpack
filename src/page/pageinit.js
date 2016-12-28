@@ -5,25 +5,26 @@ window.imgProgressAry = [];
 window.Global = {};
 window.testDebugData = {};
 window.initStep = 0;
-window.initData = require('../mobile/leave/mock.json');
+window.initData = {};
 window.initStepBack = 0;
 window.SetFormAndNodeStateHtml = SetFormAndNodeStateHtml;
+window.SetFormAndNodeStateHtmlCall = SetFormAndNodeStateHtmlCall;
 window.DoSetFormAndNodeStateHtml = DoSetFormAndNodeStateHtml;
 //部分全局怎么暴露问题
 var isDebug = false;
 
 if (navigator.platform.toLowerCase() == "win32")
-    isDebug = false;
+    isDebug = true;
 else
     isDebug = false;
 
-var testDebugData = {
+testDebugData = {
     isDebug: isDebug,
-    userId: 900650,
-    comId: 901,
-    pageCOde: 1317,
-    pKey: 276,
-    hostUrl: "http://testyunoa.99.com"
+    userId: 910172,
+    comId: 1023,
+    pageCOde: 1885,
+    pKey: 0,
+    hostUrl: "http://testwork.nd/"
 }
 
 // 请假单  10  1663
@@ -205,6 +206,11 @@ function SetFormAndNodeStateHtmlCall(result, textStatus, jqXHR, initLocalHtml) {
 
         initData.Enable = result.Enable ? 1 : 0;
         initData.FlowState = result.FlowState;
+
+        initData.FormName = result.FormName;
+        initData.IsEdit = result.IsEdit;
+
+
         try {
             if (document.getElementById('txtRequireType') && (document.getElementById('txtRequireType').value == "2" || document.getElementById('txtRequireType').value == "3")) {
                 initData.HasData = true;
@@ -285,6 +291,9 @@ function getQueryValue(p_sQueryString, p_sParam) {
  * @return {Long} 用户Id
  */
 function getCurrentUserID() {
+    if (typeof(testDebugData) != 'undefined' && testDebugData.isDebug) {
+        return testDebugData.userId;
+    }
     return getQueryValue(window.location.href, "userid");
 }
 
@@ -293,9 +302,9 @@ function getCurrentUserID() {
  * @return {Long} 单据号
  */
 function getCurrentPageCode() {
-    // if(testDebugData.isDebug){
-    //     return testDebugData.pageCOde;
-    // }
+    if(testDebugData.isDebug){
+        return testDebugData.pageCOde;
+    }
     return getQueryValue(window.location.href, "pagecode");
 }
 

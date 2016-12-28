@@ -25,7 +25,7 @@
         <input type="hidden" id="HostUrl" value="" />
         <input type="hidden" id="txtRequireType" value="" />
 
-<!--         <div id="divTaskFormHtml"></div> -->
+        <div id="divTaskFormHtml"></div>
     <!-- built files will be auto injected -->
 <!--     <div id="cloundOfficeApp">
         <div class="scroll-bd">
@@ -47,16 +47,28 @@
 
     <div id="cloundOfficeApp">
         <ndform :fixNextPersonArr.sync="fixNextPersonArr" 
-                :fixsendpersonarr.sync="fixSendPersonArr" @submit="" 
+                :fixsendpersonarr.sync="fixSendPersonArr" 
                 :uploadsoundarr.sync="uploadSoundArr"
-                :showpthtos.sync="showPhotoPicker" 
-                :uploadpicarr.sync="uploadPicArr">
-            <ndtextbox :value.sync='inputValue' :max="200"  areatext='请示类型' v-ref:textbox1 ></ndtextbox>
-            <ndtextbox :value.sync='inputValue' :max="200"  areatext='请示类型2'></ndtextbox>
-            <ndtextbox :value.sync='inputValue' :max="200" :readonly="readonly"  areatext='请示类型3'></ndtextbox>
-        </ndform>
-    </div>
+                :showphotos.sync="showPhotoPicker" 
+                :uploadpicarr.sync="uploadPicArr"
+                :formname = "FormName"
+                :isedit = "IsEdit"
+                :flowstate = "FlowState"
+                :viewtype="ViewType"
+                :approvalstate="ApproverState"
+                :enable="Enable"
+                    
+                :spersoncode="sPersonCode"
+                :spersonname="sPersonName"
 
+                @submit="" 
+                v-ref:ndform1
+                >
+
+        <ndtextbox :value.sync='inputValue' :max="200" :readonly="false"  areatext='请示类型3' v-ref:reason name="reason"></ndtextbox>
+        <ndtextbox :max="200" :readonly="false"  areatext='请假时间' v-ref:lAllTime name="lAllTime"></ndtextbox>
+            </ndform>
+    </div>
   </body>
 </html>
  
