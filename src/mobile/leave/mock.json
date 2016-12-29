@@ -12,25 +12,65 @@
   "IsTest": false,
   "IsFinish": false,
   "TabCode": "sop_formleave1",
-  "FormDataCode": "7919",
-  "FlowVersion": "4",
+  "FormDataCode": "7932",
+  "FlowVersion": "5",
   "IsFirstNode": null,
   "NodeHtml": null,
   "NodeIterfaceJson": null,
-  "EnableNodeCode": "",
+  "EnableNodeCode": "25053",
   "FlowState": "1",
   "ApproverState": null,
   "SendListHtml": null,
   "ApprovalListHtml": null,
-  "ViewType": 1,
-  "FormDataJson": "[{\"AutoCode\":1980,\"pageCodeId\":1885,\"kqItemId\":\"\",\"sPersonCode\":\"910172\",\"sPersonName\":\"Administrator\",\"reason\":\"s\",\"dStartDate\":\"\",\"dEndDate\":\"\",\"lAllTime\":0,\"comId\":1023,\"kqItemName\":\"\",\"dDate\":\"\"}]",
+  "ViewType": 2,
+  "FormDataJson": "[{\"AutoCode\":1984,\"pageCodeId\":1885,\"kqItemId\":\"\",\"sPersonCode\":\"910172\",\"sPersonName\":\"Administrator\",\"reason\":\"1\",\"dStartDate\":\"\",\"dEndDate\":\"\",\"lAllTime\":1,\"comId\":1023,\"kqItemName\":\"\",\"dDate\":\"\"}]",
   "UploadSoundArr": [],
-  "UploadPicArr": [],
-  "FixSendPersonArr": [],
+  "UploadPicArr": [
+    {
+      "fileName": "ÎÄ¼þÃû",
+      "src": "http://cs.101.com/v0.1/static/cscommon/avatar/199186/199186.jpg?size=80",
+      "time": "100",
+      "date": "2016/12/29 15:02:53",
+      "fileSize": "0",
+      "w": "0",
+      "h": "0",
+      "lStype": null
+    },
+    {
+      "fileName": "ÎÄ¼þÃû",
+      "src": "http://cs.101.com/v0.1/static/cscommon/avatar/199186/199186.jpg?size=80",
+      "time": "100",
+      "date": "2016/12/29 15:02:53",
+      "fileSize": "0",
+      "w": "0",
+      "h": "0",
+      "lStype": null
+    },
+    {
+      "fileName": "ÎÄ¼þÃû",
+      "src": "http://cs.101.com/v0.1/static/cscommon/avatar/199186/199186.jpg?size=80",
+      "time": "100",
+      "date": "2016/12/29 15:02:53",
+      "fileSize": "0",
+      "w": "0",
+      "h": "0",
+      "lStype": null
+    }
+  ],
+  "FixSendPersonArr": [
+    {
+      "code": "900183",
+      "name": "严锦健"
+    },
+    {
+      "code": "900240",
+      "name": "王芳"
+    }
+  ],
   "FixNextPersonArr": [
     {
-      "code": "900847",
-      "name": "龚道明"
+      "code": "910172",
+      "name": "我"
     }
   ],
   "ApproverList": [
@@ -38,7 +78,7 @@
       "nodeState": "2",
       "approverId": "910172",
       "approverName": "我",
-      "completeTime": "18:21:36 2016-12-28",
+      "completeTime": "15:02:53 2016-12-29",
       "contentStr": "",
       "option": "提交请假申请单",
       "approverUploadSound": null,
@@ -47,9 +87,9 @@
     },
     {
       "nodeState": "1",
-      "approverId": "900847",
-      "approverName": "龚道明",
-      "completeTime": "18:21:36 2016-12-28",
+      "approverId": "910172",
+      "approverName": "我",
+      "completeTime": "15:02:53 2016-12-29",
       "contentStr": "",
       "option": "审批中",
       "approverUploadSound": [],
@@ -58,8 +98,8 @@
     }
   ],
   "PageCode": "1885",
-  "Pkey": "1980",
-  "FormInstanceId": "3116",
+  "Pkey": "1984",
+  "FormInstanceId": "3120",
   "FormAuxiliaryStatisticalList": [
     {
       "FormType": "FormLeave",

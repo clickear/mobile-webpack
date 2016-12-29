@@ -415,12 +415,15 @@ function sys_backCallBack() {
  */
 function sys_setConfirmPop(content, callback) {
   try {
-    setCheckPop({
-      content: '<p class="mb10 tc">' + content + '</p>',
-      confirm: function() {
-        callback();
-      }
-    });
+    // setCheckPop({
+    //   content: '<p class="mb10 tc">' + content + '</p>',
+    //   confirm: function() {
+    //     callback();
+    //   }
+    // });
+
+    cloundOfficeApp.$Pop.popCheck.show('<p class="mb10 tc">'+content+'</p>','',callback);
+
   } catch (e) {
     // alert(e)
   }
@@ -435,12 +438,17 @@ function returnBack() {
     sys_closeActivity();
   } else {
     try {
-      setCheckPop({
-        content: '<p class="mb10 tc">已经输入数据，取消后将无法保存，确认关闭？</p>',
-        confirm: function() {
-          sys_closeActivity();
-        }
-      });
+      // setCheckPop({
+      //   content: '<p class="mb10 tc">已经输入数据，取消后将无法保存，确认关闭？</p>',
+      //   confirm: function() {
+      //     sys_closeActivity();
+      //   }
+      // });
+
+      sys_setConfirmPop("已经输入数据，取消后将无法保存，确认关闭？",function(){
+        sys_closeActivity();
+      })
+
     } catch (e) {
       sys_closeActivity();
     }
@@ -464,11 +472,18 @@ function sys_lookPerson(personId) {
  */
 function sys_setMsgkPop(content, type) {
   try {
-    var typeAttr = type || '';
-    setMsgkPop({
-      "content": content,
-      "type": typeAttr
-    })
+    // var typeAttr = type || '';
+    // setMsgkPop({
+    //   "content": content,
+    //   "type": typeAttr
+    // })
+
+    if(type == 'warn'){
+      cloundOfficeApp.$Pop.popMessage.warning(content);
+    }else{
+      cloundOfficeApp.$Pop.popMessage.success(content);
+    }
+
   } catch (e) {
     alert(content);
     sys_closeActivity();

@@ -1,7 +1,6 @@
 import jqueryui from 'jqueryui'
 import page from './page/pageinit.js'
 import Custom from './demo/Custom.vue'
-import test from './demo/test.vue';
 
 import group from 'components/group/index.vue'
 import ndinput from 'components/nd-input/index.vue'
@@ -13,10 +12,18 @@ window.vali = vali;
 
 Global.HostUrl = 'http://testwork.nd/'
 
-window.initData = require('./mobile/leave/mock.json')
+var isEdit = false;
+
+if(isEdit){
+    window.initData = require('./mobile/leave/edit.json')
+}else{
+    window.initData = require('./mobile/leave/mock.json')
+}
+
+
 
  SetFormAndNodeStateHtmlCall(initData);
- // SetFormAndNodeStateHtml();
+  // SetFormAndNodeStateHtml();
 
 // Global.CurrentPerson = {name:'当前人员',code:199186}
 
@@ -38,10 +45,10 @@ window.cloundOfficeApp = new Vue({
         sPersonName : initData.sPersonName || '',
         sRemark : '',
 
+        ApproverList: initData.approvalRecord || [], 
 
 
-
-        IsEdit : false ,        // 编辑状态，还是查看状态
+        IsEdit : isEdit ,        // 编辑状态，还是查看状态
         FormName: initData.FormName || '表单',              // 表单名称
         IsAutoFLow :  initData.IsAutoFLow, // 是否自由流程， 1是
         sAbstract : '',   
@@ -51,11 +58,15 @@ window.cloundOfficeApp = new Vue({
         uploadPicArr : initData.uploadPicArr || [],         // 图片上传地址
         fixSendPersonArr : initData.fixSendPersonArr || [],     // 申请时抄送人
         fixNextPersonArr : initData.fixNextPersonArr || [],      // 申请时下一个审批人
-        uploadPicArr:[],
-        uploadSoundArr:[],
+        approverUploadSound:initData.approverUploadSound || [],     // 同意拒绝时录音
+        approverSendPerson:initData.approverSendPerson || [],
 
+        approverNextPerson:initData.approverNextPerson || [],
+        delSendPersonArr:initData.delSendPersonArr || [],
 
-        showPhotoPicker:false
+        showPhotoPicker:false,
+        submitApprovalState:0,
+        sRemark:'', //审批或者驳回意见
     },
     events:{
         'draggable-end':function(event){
@@ -81,8 +92,7 @@ window.cloundOfficeApp = new Vue({
             cloundOfficeApp.$broadcast('form-check')
         }
     },
-    mixins : [editVueMixin],
-    components:{Custom, group, ndinput, ndtextbox, ndform, test}
+    components:{Custom, group, ndinput, ndtextbox, ndform}
 })
 
  

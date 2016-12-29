@@ -1,0 +1,50 @@
+{
+  "IsSucess": true,
+  "Msg": null,
+  "FormHtml": "",
+  "FlowHtml": "",
+  "Script": null,
+  "Enable": true,
+  "IsEdit": true,
+  "IsFlow": true,
+  "IsNode": false,
+  "IsAutoFlow": false,
+  "IsTest": false,
+  "IsFinish": false,
+  "TabCode": "sop_formleave1",
+  "FormDataCode": "",
+  "FlowVersion": "4",
+  "IsFirstNode": null,
+  "NodeHtml": null,
+  "NodeIterfaceJson": null,
+  "EnableNodeCode": "",
+  "FlowState": "0",
+  "ApproverState": null,
+  "SendListHtml": null,
+  "ApprovalListHtml": null,
+  "ViewType": 0,
+  "FormDataJson": "",
+  "UploadSoundArr": [],
+  "UploadPicArr": [],
+  "FixSendPersonArr": [],
+  "FixNextPersonArr": [
+    {
+      "code": "900847",
+      "name": "龚道明"
+    }
+  ],
+  "ApproverList": [],
+  "PageCode": "1885",
+  "Pkey": "",
+  "FormInstanceId": "",
+  "FormAuxiliaryStatisticalList": null,
+  "FromPersonCode": "910172",
+  "FromUserName": "Administrator",
+  "FromUserPortrait": null,
+  "FormName": "请假",
+  "CurrentPerson": {
+    "code": "910172",
+    "name": "Administrator"
+  },
+  "FormType": "FormLeave"
+}

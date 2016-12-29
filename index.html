@@ -48,6 +48,14 @@
     <div id="cloundOfficeApp">
         <ndform :fixNextPersonArr.sync="fixNextPersonArr" 
                 :fixsendpersonarr.sync="fixSendPersonArr" 
+
+                :approveruploadsound.sync = "approverUploadSound"
+                :approversendperson.sync = "approverSendPerson"
+                
+                :approvernextperson.sync = "approverNextPerson"
+                
+                :delsendpersonarr.sync = "delSendPersonArr"
+
                 :uploadsoundarr.sync="uploadSoundArr"
                 :showphotos.sync="showPhotoPicker" 
                 :uploadpicarr.sync="uploadPicArr"
@@ -57,7 +65,10 @@
                 :viewtype="ViewType"
                 :approvalstate="ApproverState"
                 :enable="Enable"
-                    
+                :isautoflow = "IsAutoFlow"
+                :sremark.sync="sRemark"
+                :approvalrecord = "ApproverList"
+                
                 :spersoncode="sPersonCode"
                 :spersonname="sPersonName"
 
@@ -65,9 +76,9 @@
                 v-ref:ndform1
                 >
 
-        <ndtextbox :value.sync='inputValue' :max="200" :readonly="false"  areatext='请示类型3' v-ref:reason name="reason"></ndtextbox>
-        <ndtextbox :max="200" :readonly="false"  areatext='请假时间' v-ref:lAllTime name="lAllTime"></ndtextbox>
-            </ndform>
+            <ndtextbox :value.sync='inputValue' :max="200" :readonly="!IsEdit"  areatext='请示类型3' v-ref:reason name="reason"></ndtextbox>
+            <ndtextbox :max="200" :readonly="!IsEdit"  areatext='请假时间' v-ref:lAllTime name="lAllTime"></ndtextbox>
+        </ndform>
     </div>
   </body>
 </html>

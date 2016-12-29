@@ -30,4 +30,40 @@ var receiptStatusVueCom = Vue.extend({
         }
     }
 });
+
+const receiptStatusCfg = {
+    1: {
+        action: 'progress',
+        name: '正在审批中'
+    },
+    2: {
+        action: 'success',
+        name: '通过'
+    },
+    3: {
+        action: 'reject',
+        name: '拒绝'
+    },
+    4: {
+        action: 'progress',
+        name: '未开始'
+    },
+    5: {
+        action: 'revoke',
+        name: '已撤销'
+    },
+    6: {
+        action: 'no-exist',
+        name: '不存在'
+    },
+    7: {
+        action: 'done',
+        name: '已审'
+    },
+    8: {
+        action: 'waiting',
+        name: '待审'
+    }
+}
+
 Vue.component('receipt-status', receiptStatusVueCom);
