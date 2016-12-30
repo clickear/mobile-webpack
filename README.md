@@ -86,3 +86,48 @@ lazy-load
 	+ warning
 	+ error
 
+
++ TextBox
+	+ 组件名称： ndtextbox
+	+ 属性说明:
+	
+		```
+		//  <ndtextbox id="username" v-ref:username name="username" label="姓名" :must="false" :readonly="false"></ndtextbox>
+		label: '',    // 标签名称
+		value: '',  // 控件值
+		name: '',
+		id:'', 
+		classname: '', 
+		placeholder: '', 
+		//  align: '', 
+		displaymodel: false,   //显示模式
+		multiple: false,        // 是否多行文本  input textarea 切换
+		lettercount: true,      // 输入字数统计，仅对多行文本有效  
+		unit: '',               // 单位
+		valid: '',            
+		max: '',
+		min: '',
+		maxlen: 999,            // 最大长度
+		//   labelwidth: 120,     // 仅仅对pc端有效 
+		//   width: '100%',        // 仅仅对pc端有效 
+		//   height: 100,            // 文本框高度，仅对多行文本有效 
+		must: false,            // 也可为数字 代表必须的长度(会将覆盖length)
+		readonly: false,
+		// caertPosition: 0, 
+		focalize: false,        // 焦点控制
+		compType: 'textbox',
+		title: '',              // 标题
+		```        
+
+
+		+ 事件
+		> 通过，配置vm下的config的属性将会被复制到vm上。可以直接获取相应的值。
+		    +  事件:
+		         + clickEvent: 点击事件
+		         + inputvent： input事件
+		         + focusEvent: 获取焦点事件
+		         + blurEvent：blur 事件
+		     
+
+
+

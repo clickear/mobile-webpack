@@ -522,7 +522,7 @@ JSBridge.sendRequest = function(module, method, para, callback) {
   } else if (this.platform == "Android") {
     window[module][method](para, callback);
   } else if (this.platform == "win32" || this.platform == "win64") {
-    console.log('window:选择人员')
+    console.log('调用原生方法：'+ method +'(' + para +')')
     if("selectMultiplePersonCallBack" == callback){
       var person = '[{"DAddTime":"/Date(1451040536000+0800)/","DByDate":"/Date(959788800000+0800)/","LCharge":"0","LDepCode":0,"LFlag":1,"LState":1,"LUcPeocode":0,"LUserRight":0,"PersonId":900183,"SByDate":"2000-06-01","SFirstSpell":"w","SPersonName":"多选控件1","SSpell1":"wf","SSpell2":"wf","SYgMobile":"18986096035"},{"DAddTime":"/Date(1451040536000+0800)/","DByDate":"/Date(959788800000+0800)/","LCharge":"0","LDepCode":0,"LFlag":1,"LState":1,"LUcPeocode":0,"LUserRight":0,"PersonId":900240,"SByDate":"2000-06-01","SFirstSpell":"w","SPersonName":"多选控件2","SSpell1":"wf","SSpell2":"wf","SYgMobile":"18986096035"}]';
       selectMultiplePersonCallBack(person);

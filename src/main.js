@@ -12,7 +12,7 @@ window.vali = vali;
 
 Global.HostUrl = 'http://testwork.nd/'
 
-var isEdit = false;
+var isEdit = true;
 
 if(isEdit){
     window.initData = require('./mobile/leave/edit.json')
@@ -67,7 +67,21 @@ window.cloundOfficeApp = new Vue({
         showPhotoPicker:false,
         submitApprovalState:0,
         sRemark:'', //审批或者驳回意见
+
+        step:0,
+
+
+        test_cfg:{
+            'beformEvent':function(){
+                console.log('testconfig');
+            },
+            'clickEvent':function(vm){
+                console.log('clickEvent')
+            }
+        }
     },
+
+
     events:{
         'draggable-end':function(event){
                 var newValue = this.FixArray[event.newIndex];

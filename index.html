@@ -25,7 +25,7 @@
         <input type="hidden" id="HostUrl" value="" />
         <input type="hidden" id="txtRequireType" value="" />
 
-        <div id="divTaskFormHtml"></div>
+       
     <!-- built files will be auto injected -->
 <!--     <div id="cloundOfficeApp">
         <div class="scroll-bd">
@@ -43,19 +43,15 @@
 
 
 
-
+ <div id="divTaskFormHtml">
 
     <div id="cloundOfficeApp">
-        <ndform :fixNextPersonArr.sync="fixNextPersonArr" 
+        <ndform :fixnextpersonarr.sync="fixNextPersonArr" 
                 :fixsendpersonarr.sync="fixSendPersonArr" 
-
                 :approveruploadsound.sync = "approverUploadSound"
                 :approversendperson.sync = "approverSendPerson"
-                
                 :approvernextperson.sync = "approverNextPerson"
-                
                 :delsendpersonarr.sync = "delSendPersonArr"
-
                 :uploadsoundarr.sync="uploadSoundArr"
                 :showphotos.sync="showPhotoPicker" 
                 :uploadpicarr.sync="uploadPicArr"
@@ -68,18 +64,20 @@
                 :isautoflow = "IsAutoFlow"
                 :sremark.sync="sRemark"
                 :approvalrecord = "ApproverList"
-                
                 :spersoncode="sPersonCode"
                 :spersonname="sPersonName"
-
-                @submit="" 
-                v-ref:ndform1
+                :step.sync="step"
                 >
-
-            <ndtextbox :value.sync='inputValue' :max="200" :readonly="!IsEdit"  areatext='请示类型3' v-ref:reason name="reason"></ndtextbox>
-            <ndtextbox :max="200" :readonly="!IsEdit"  areatext='请假时间' v-ref:lAllTime name="lAllTime"></ndtextbox>
+<!-- 
+            <ndtextbox :value.sync='inputValue' :max="200" :readonly="!IsEdit"  label='请示类型3' v-ref:reason name="reason" 
+                :config="$test_cfg"
+            ></ndtextbox>
+            <ndtextbox :max="200" :readonly="!IsEdit"  label='请假时间' v-ref:lAllTime name="lAllTime"></ndtextbox> -->
+            <ndtextbox id="username" v-ref:username name="username" label="姓名" :must="5" :readonly="false" placeholder="测试" :config="test_cfg"></ndtextbox>
         </ndform>
     </div>
+
+</div>
   </body>
 </html>
  

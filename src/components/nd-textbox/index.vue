@@ -1,33 +1,54 @@
 <template>
-  <template v-if="!readonly">
+  <template v-if="!displaymodel">
     <div class="nd-edit-content" :class="{'nd-error':!isValid}">
-      <div class="nd-txt-title" >{{areatext}}<span v-show="required" style="color:red"> (必填) </div>
-      <div class="nd-txt-con">
-          <textarea
-            class="nd-text-area"
-            :class="{'nd-showcount':(showCounter && max)}"
-            :autocomplete="autocomplete"
-            :autocapitalize="autocapitalize"
-            :autocorrect="autocorrect"
-            :spellcheck="spellcheck"
-            :placeholder="placeholder"
-            :readonly="readonly"
-            :name="name"
-            v-model="value"
-            :required="required"
-            :style="textareaStyle"
-            :maxlength="max"
-            v-el:textarea></textarea>
-          <span class="nd-num" v-show="showCounter && max" ><i>{{count}}</i>/{{max}}</span>
-          <span class="nd-txt-error" v-show=" !isValid " style="" >{{firstError}}</span>
-      </div>
+      <div class="nd-txt-title" >{{label}}<span v-show="must" style="color:red"> (必填) </div>
+        <div class="nd-txt-con">
+            <textarea
+              class="nd-text-area"
+              :id="id"
+              :class="{'nd-showcount':(lettercount && maxlen)}"
+              :class="classname"            
+              :style="textareaStyle"
+              
+              :id="id"
+              :name="name"
+              :must="must"
+
+              :placeholder="placeholder"
+              :readonly="readonly"
+
+              :maxlength="maxlen"
+              :displaymodel="displaymodel"
+
+              :min="min"
+
+              :autocomplete="autocomplete"
+              :autocapitalize="autocapitalize"
+              :autocorrect="autocorrect"
+              :spellcheck="spellcheck"
+
+              @input="$oninput"
+              @click="$onclick"
+              @focus="$onfocus"             
+              @blur="$onblur"
+
+
+              v-el:textarea
+              v-model="value"
+              >
+            </textarea>
+            <span class="nd-num" v-show="lettercount && maxlen" ><i>{{count}}</i>/{{maxlen}}</span>
+            <span class="nd-txt-error" v-show=" !isValid " style="" >{{firstError}}</span>
+        </div>
+      </dvi>
     </div>
   </template>
   <template v-else>
     <div class="nd-receipt-header">
       <div class="nd-receipt-txt">
-        <p class="nd-lab">请假理由：</p>
+        <p class="nd-lab">{{label}}:</p>
         <h3>{{value}}</h3>
+        <input type="hidden" :valu="value">
       </div>
     </div>
   </template>
@@ -38,43 +59,79 @@
 import calcTextareaHeight from '../../utils/calcTextareaHeight';
 
 export default {
+  created(){
+    // 为数字 代表必须的长度(会将覆盖maxlen)
+    if(typeof this.must == 'number'){
+      this.maxlen = this.must;
+      this.must = true;
+    }
+
+    // placeholder 默认值
+    if(!this.placeholder){
+      this.placeholder = '请输入'+ this.label +(this.max>0 ? '('+ this.maxlen +'个字)':'')
+    }
+
+    // 将this.config 属性挂载在vm上    
+    Object.assign(this,this.config)
+
+
+
+  },
   props: {
-    showCounter: {
-      type: Boolean,
-      default: true
-    },
-    max: Number,
-    value: {
-      type: String,
-      default: ''
-    },
+    // 标签
+    label: {
+      type:String,
+      default:''
+    }, 
+    value: '',
+    id: String,
     name: String,
-    readonly: {
+    classname: '', 
+    placeholder: '',
+    // 显示模式 
+    displaymodel: {
+      type: Boolean,
+      default: false
+    },
+    // 是否多行文字，input和textarea切换
+    multiple: {
       type: Boolean,
       default: true
     },
-    rows: {
-      type: Number,
-      default: 1
+    // 数字统计
+    lettercount: {
+      type:Boolean,
+      default: true,
     },
-    cols: {
-      type: Number,
-      default: 0
-    },
+    // 单位
+    unit:'',
+
+    max: Number,
+    min: Number,
+
     height: Number,
     autosize: {
       type: Boolean,
       default: true 
     },
-    required:{
+    // 也可为数字 代表必须的长度(会将覆盖maxlen)
+    must:{
+      type: [Boolean,String,Number],
+      default: true
+    },
+    // 最大长度
+    maxlen:{
+      type: Number,
+      default:0
+    },
+    readonly: {
       type: Boolean,
       default: true
     },
-    areatext:{
-      type:String,
-      default:''
+    //默认配置项,从model中获取
+    config:{
+      type: Object,
     },
-
     // https://github.com/yisibl/blog/issues/3
     autocomplete: 'off',
     autocapitalize: 'off',
@@ -83,12 +140,19 @@ export default {
   },
   data(){
     return {
+      // 焦点控制
+      focalize:false,
       compType:'textbox',
+      
+      // 是否激活
+      isActive:false,
+
       textareaStyle: {},
       errorMsg:'',
       isError:false,
       firstError:'',
       isValid:true 
+
     }
   },
   watch: {
@@ -121,8 +185,6 @@ export default {
     resizeTextarea(){
       const autosize = this.autosize;
       if(!autosize) return false;
-      const minRows = this.rows;
-      const maxRows = this.cols;
       if(this.$els.textarea){
         this.textareaStyle = calcTextareaHeight(this.$els.textarea,1,10);
       }
@@ -137,14 +199,14 @@ export default {
     },
     validValue(){
       this.errors = {};
-      if (!this.value && !this.required) {
+      if (!this.value && !this.must) {
         this.isValid = true
         return
       }
 
-      if (!this.value && this.required) {
+      if (!this.value && this.must) {
         this.isValid = false
-        this.errors.required = '请填写' + this.areatext;
+        this.errors.must = '请填写' + this.label;
         return
       }
 
@@ -182,7 +244,38 @@ export default {
         }
       }
       this.isValid = true
+    },
+
+    // 内部接口事件
+    $trigger (ev, type) {
+        if (typeof this[type] == 'function') {
+           this[type].call(this, ev, this, 'text');
+        } else if (typeof this[type] == 'string' && this[type] != '') {
+           eval(this[type]);
+        }
+    },
+    $onclick(ev){
+
+        this.$trigger(ev, 'clickEvent');
+    },
+    $oninput(ev){
+
+        this.$trigger(ev, 'inputvent');
+    },
+    $onfocus(ev){
+        if (this.readonly) {
+            return true;
+        }
+        this.isActive = true;
+        this.$trigger(ev, 'focusEvent');
+    },
+    $onblur(ev){
+        
+        this.isActive = false;
+        this.$trigger(ev, 'blurEvent'); 
     }
+
+
   },
   computed: {
     count () {
@@ -191,18 +284,11 @@ export default {
         len = this.value.replace(/\n/g, 'aa').length
       }
       return len > this.max ? this.max : len
-    },
-    placeholder(){
-      return '请输入'+ this.areatext +(this.max>0 ? '('+ this.max +'个字)':'')
     }
   },
   events:{
-    'form-check': function valid(){
-      //必填验证
-      this.validValue();
 
-    }
-  },
+  }, 
   ready(){
     this.resizeTextarea();
   }
@@ -217,7 +303,7 @@ export default {
 }
 
 .nd-txt-title{
-  font-size: 13px;
+  font-size: 15px;
   margin-left:24px;
 }
 
