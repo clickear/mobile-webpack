@@ -73,7 +73,7 @@
                 :config="$test_cfg"
             ></ndtextbox>
             <ndtextbox :max="200" :readonly="!IsEdit"  label='请假时间' v-ref:lAllTime name="lAllTime"></ndtextbox> -->
-            <ndtextbox id="username" v-ref:username name="username" label="姓名" :must="5" :readonly="false" placeholder="测试" :config="test_cfg"></ndtextbox>
+            <ndtextbox id="username" v-ref:username name="username" label="姓名" :must="5" :readonly="false" placeholder="测试" :config="test_cfg" :maxlen="5"></ndtextbox>
         </ndform>
     </div>
 

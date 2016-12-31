@@ -1,83 +1,117 @@
 <template>
-  <template v-if="!displaymodel">
-    <div class="nd-edit-content" :class="{'nd-error':!isValid}">
-      <div class="nd-txt-title" >{{label}}<span v-show="must" style="color:red"> (必填) </div>
-        <div class="nd-txt-con">
-            <textarea
-              class="nd-text-area"
-              :id="id"
-              :class="{'nd-showcount':(lettercount && maxlen)}"
-              :class="classname"            
-              :style="textareaStyle"
-              
-              :id="id"
-              :name="name"
-              :must="must"
+    <template v-if="!displaymodel">
+        <template v-if="multiple"> 
+            <div class="nd-edit-content" :class="{'nd-error':!isValid}">
+              <div class="nd-txt-title" >{{label}}<span v-show="must" style="color:red"> (必填) </div>
+                <div class="nd-txt-con">
+                    <!-- maxlength 存在bug ，暂不使用 -->
+                    <textarea
+                      class="nd-text-area"
+                      :id="id"
+                      :class="{'nd-showcount':(lettercount && maxlen)}"
+                      :class="classname"            
+                      :style="textareaStyle"
+                      
+                      :id="id"
+                      :name="name"
+                      :must="must"
 
-              :placeholder="placeholder"
-              :readonly="readonly"
+                      :placeholder="placeholder"
+                      :readonly="readonly"
 
-              :maxlength="maxlen"
-              :displaymodel="displaymodel"
+                      :displaymodel="displaymodel"
 
-              :min="min"
+                      :min="min"
 
-              :autocomplete="autocomplete"
-              :autocapitalize="autocapitalize"
-              :autocorrect="autocorrect"
-              :spellcheck="spellcheck"
+                      :autocomplete="autocomplete"
+                      :autocapitalize="autocapitalize"
+                      :autocorrect="autocorrect"
+                      :spellcheck="spellcheck"
 
-              @input="$oninput"
-              @click="$onclick"
-              @focus="$onfocus"             
-              @blur="$onblur"
+                      @input="$oninput"
+                      @click="$onclick"
+                      @focus="$onfocus"             
+                      @blur="$onblur"
 
 
-              v-el:textarea
-              v-model="value"
+                      v-el:textarea
+                      v-model="value"
+                      >
+                    </textarea>
+                    <span class="nd-num" v-show="lettercount && maxlen" ><i>{{count}}</i>/{{maxlen}}</span>
+                    <span class="nd-txt-error" v-show=" !isValid || !forceVlid " style="" >{{forceValidInfo || validInfo }}</span>
+                </div>
+              </dvi>
+            </div>
+        </template>
+        <template v-else>
+             <input
+                  class="nd-text-area"
+                  :id="id"
+                  :class="{'nd-showcount':(lettercount && maxlen)}"
+                  :class="classname"            
+                  :style="textareaStyle"
+                  
+                  :id="id"
+                  :name="name"
+                  :must="must"
+
+                  :placeholder="placeholder"
+                  :readonly="readonly"
+
+                  :displaymodel="displaymodel"
+
+                  :min="min"
+
+                  :autocomplete="autocomplete"
+                  :autocapitalize="autocapitalize"
+                  :autocorrect="autocorrect"
+                  :spellcheck="spellcheck"
+
+                  @input="$oninput"
+                  @click="$onclick"
+                  @focus="$onfocus"             
+                  @blur="$onblur"
+
+
+                  v-el:input
+                  v-model="value"
               >
             </textarea>
-            <span class="nd-num" v-show="lettercount && maxlen" ><i>{{count}}</i>/{{maxlen}}</span>
-            <span class="nd-txt-error" v-show=" !isValid " style="" >{{firstError}}</span>
+        </template>
+    </template>
+    <template v-else>
+        <div class="nd-receipt-header">
+          <div class="nd-receipt-txt">
+            <p class="nd-lab">{{label}}:</p>
+            <h3>{{value}}</h3>
+            <input type="hidden" :valu="value">
+          </div>
         </div>
-      </dvi>
-    </div>
-  </template>
-  <template v-else>
-    <div class="nd-receipt-header">
-      <div class="nd-receipt-txt">
-        <p class="nd-lab">{{label}}:</p>
-        <h3>{{value}}</h3>
-        <input type="hidden" :valu="value">
-      </div>
-    </div>
-  </template>
+    </template>
 </template>
 
 <script>
 
 import calcTextareaHeight from '../../utils/calcTextareaHeight';
+import validate from '../../utils/validate'
 
 export default {
-  created(){
-    // 为数字 代表必须的长度(会将覆盖maxlen)
-    if(typeof this.must == 'number'){
-      this.maxlen = this.must;
-      this.must = true;
-    }
+    created(){
+        // 为数字 代表必须的长度(会将覆盖maxlen)
+        // if(typeof this.must == 'number'){
+        //   this.max = this.must;
+        // }
 
-    // placeholder 默认值
-    if(!this.placeholder){
-      this.placeholder = '请输入'+ this.label +(this.max>0 ? '('+ this.maxlen +'个字)':'')
-    }
+        // placeholder 默认值
+        if(!this.placeholder){
+          this.placeholder = '请输入'+ this.label +(this.max>0 ? '('+ this.maxlen +'个字)':'')
+        }
 
-    // 将this.config 属性挂载在vm上    
-    Object.assign(this,this.config)
-
-
-
-  },
-  props: {
+        // 将this.config 属性挂载在vm上    
+        Object.assign(this,this.config)
+    },
+    props: {
     // 标签
     label: {
       type:String,
@@ -111,8 +145,8 @@ export default {
 
     height: Number,
     autosize: {
-      type: Boolean,
-      default: true 
+        type: Boolean,
+        default: true 
     },
     // 也可为数字 代表必须的长度(会将覆盖maxlen)
     must:{
@@ -128,6 +162,11 @@ export default {
       type: Boolean,
       default: true
     },
+    // 校验规则
+    valid:{
+        type:[Boolean,String,Number],
+        default:'number'
+    },
     //默认配置项,从model中获取
     config:{
       type: Object,
@@ -137,162 +176,154 @@ export default {
     autocapitalize: 'off',
     autocorrect: 'off',
     spellcheck: 'false'
-  },
-  data(){
-    return {
-      // 焦点控制
-      focalize:false,
-      compType:'textbox',
-      
-      // 是否激活
-      isActive:false,
 
-      textareaStyle: {},
-      errorMsg:'',
-      isError:false,
-      firstError:'',
-      isValid:true 
+    },
+    data(){
+        return {
+            // 焦点控制
+            focalize:false,
+            compType:'textbox',
 
-    }
-  },
-  watch: {
-    value (newVal) {
-      // if (this.max && this.value.length > this.max) {
-      //   this.value = newVal.slice(0, this.max)
-      // }
-      this.$nextTick(() => {
+            // 是否激活
+            isActive:false,
+
+
+            // 出错信息提示
+            validInfo:'',
+
+            // 定时隐藏消失
+            forceVlid:true,
+            forceValidInfo:'',
+
+            isValid:true,
+
+            textareaStyle: {},
+        }
+    },
+    watch: {
+        value (newVal, oldVal) {
+            if (this.maxlen && this.value.length > this.maxlen) {
+                newVal = newVal.slice(0, this.maxlen)
+            }
+            // 新的赋值，需要在nextTick中重复赋值，而不能直接赋值，具体原因未查。或者也可在oninput中赋值。
+            this.$nextTick(() => {
+                this.validValue();
+                this.value = newVal;
+                this.validValue();
+                this.resizeTextarea();
+            });
+
+            this.$trigger({ newVal: newVal, oldVal: oldVal }, 'changeEvent');
+        },
+        isValid () {
+          
+        }
+    },
+    methods:{
+        setValue(val){
+            if(val != this.value){
+                this.value = val;
+                this.validValue();
+            }
+        },
+        getValue(){
+          return this.value;
+        },
+        resizeTextarea(){
+          const autosize = this.autosize;
+          if(!autosize) return false;
+          if(this.$els.textarea){
+            this.textareaStyle = calcTextareaHeight(this.$els.textarea,1,10);
+          }
+        },
+        validValue(){
+            let vm = this;
+
+            var val = vm.getValue();
+            vm.validInfo = validate(val, vm.valid, vm.message, vm);
+            vm.isValid = vm.validInfo == '' ? true : false;
+
+            if (vm.isValid) {
+
+                // 1秒后自动消失
+                if (vm.maxlen && val.replace('/n','aa').length >vm.maxlen) {
+                    vm.forceVlid = false;
+                    vm.forceValidInfo = '超过了最大限制';
+                    clearTimeout(this.click);
+                    this.click = setTimeout(function(){
+                        vm.forceVlid = true;
+                        vm.forceValidInfo = '';
+                    },1000);
+                    return ;
+                }
+                if (vm.must === true && (val == null || val == '')) {
+                    vm.isValid = false;
+                    vm.validInfo = '请输入' + vm.label;
+                } else if (typeof vm.must == 'number' && val.length != vm.must) {
+                    vm.isValid = false;
+                    vm.validInfo = vm.label + '输入必须为' + vm.must +'个字';
+                }  else if (vm.valid.indexOf('int') != -1 || vm.valid.indexOf('float') != -1 || vm.valid.indexOf('number') != -1) {
+                    if (vm.max != '' && val > vm.max) {
+                        vm.isValid = false;
+                        vm.validInfo = vm.label + '超过限制'+ vm.max;
+                    } else if (vm.min != '' && val < vm.min) {
+                        vm.isValid = false;
+                        vm.validInfo = vm.label + '最小输入' + vm.min;
+                    }
+                } 
+            }
+        },
+
+        // 内部接口事件
+        $trigger (ev, type) {
+            if (typeof this[type] == 'function') {
+               this[type].call(this, ev, this, 'text');
+            } else if (typeof this[type] == 'string' && this[type] != '') {
+               eval(this[type]);
+            }
+        },
+        $onclick(ev){
+            this.$trigger(ev, 'clickEvent');
+        },
+        $oninput(ev){
+            // if (this.maxlen && this.value.length > this.maxlen) {
+            //     this.value = this.value.slice(0, this.maxlen);
+            //     //this.$els.textarea.value = this.value;
+            // }
+
+            this.$trigger(ev, 'inputvent');
+        },
+        $onfocus(ev){
+            if (this.readonly) {
+                return true;
+            }
+            this.isActive = true;
+            this.$trigger(ev, 'focusEvent');
+        },
+        $onblur(ev){
+            this.isActive = false;
+            this.validValue();
+            this.$trigger(ev, 'blurEvent'); 
+        }
+    },
+    computed: {
+        count () {
+          let len = 0
+          if (this.value) {
+            len = this.value.replace(/\n/g, 'aa').length
+          }
+          return len > this.maxlen ? this.maxlen : len
+        }
+    },
+    events:{
+
+    }, 
+    ready(){
         this.resizeTextarea();
-      });
-
-      // if(this.value != newVal){
-        this.validValue();
-      // }
-
-
-      if (this.max && this.value.length > this.max) {
-        this.value = newVal.slice(0, this.max)
-      }
-      this.$emit('on-change', this.value)
-    },
-    isValid () {
-      this.getError()
     }
-  },
-  methods:{
-    getValue(){
-      return this.value;
-    },
-    resizeTextarea(){
-      const autosize = this.autosize;
-      if(!autosize) return false;
-      if(this.$els.textarea){
-        this.textareaStyle = calcTextareaHeight(this.$els.textarea,1,10);
-      }
-
-    },
-    getError () {
-      let key = Object.keys(this.errors)[0]
-      this.firstError = this.errors[key]
-      if(this.$els.textarea){
-        this.$els.textarea.focus()
-      }
-    },
-    validValue(){
-      this.errors = {};
-      if (!this.value && !this.must) {
-        this.isValid = true
-        return
-      }
-
-      if (!this.value && this.must) {
-        this.isValid = false
-        this.errors.must = '请填写' + this.label;
-        return
-      }
-
-      // const validator = validators[this.isType]
-      // if (validator) {
-      //   this.valid = validator[ 'fn' ](this.value)
-      //   if (!this.valid) {
-      //     this.errors.format = validator[ 'msg' ] + '格式不对哦~'
-      //     return
-      //   } else {
-      //     delete this.errors.format
-      //   }
-      // }
-
-      // if (this.min) {
-      //   if (this.value.length < this.min) {
-      //     this.errors.min = this.$interpolate('最少应该输入{{min}}个字符哦')
-      //     this.valid = false
-      //     this.getError()
-      //     return
-      //   } else {
-      //     delete this.errors.min
-      //   }
-      // }
-
-      if (this.max) {
-        if (this.value.replace(/\n/g, 'aa').length > this.max) {
-          this.errors.max = '最多可以输入{{max}}个字符哦';
-          this.isValid = false
-          this.forceShowError = true
-          return
-        } else {
-          this.forceShowError = false
-          delete this.errors.max
-        }
-      }
-      this.isValid = true
-    },
-
-    // 内部接口事件
-    $trigger (ev, type) {
-        if (typeof this[type] == 'function') {
-           this[type].call(this, ev, this, 'text');
-        } else if (typeof this[type] == 'string' && this[type] != '') {
-           eval(this[type]);
-        }
-    },
-    $onclick(ev){
-
-        this.$trigger(ev, 'clickEvent');
-    },
-    $oninput(ev){
-
-        this.$trigger(ev, 'inputvent');
-    },
-    $onfocus(ev){
-        if (this.readonly) {
-            return true;
-        }
-        this.isActive = true;
-        this.$trigger(ev, 'focusEvent');
-    },
-    $onblur(ev){
-        
-        this.isActive = false;
-        this.$trigger(ev, 'blurEvent'); 
-    }
-
-
-  },
-  computed: {
-    count () {
-      let len = 0
-      if (this.value) {
-        len = this.value.replace(/\n/g, 'aa').length
-      }
-      return len > this.max ? this.max : len
-    }
-  },
-  events:{
-
-  }, 
-  ready(){
-    this.resizeTextarea();
-  }
 }
+
+
 </script>
 
 <style lang="scss">
