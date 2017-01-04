@@ -63,7 +63,7 @@
 					    </div>
 					</div>
 						    
-				    <div class="receipt-content">
+				    <div class="receipt-content" v-if="!isedit"> 
 		                <!-- 审批记录 -->
 		                <record-items
 		                    :viewtype = "viewtype"
