@@ -4,14 +4,54 @@
     <div class="weui_cell_hd" v-if="label" :class="{'nd-cell-primary':displaymodel}">
       <label for="" class="nd-label" >{{label}}</label>
     </div>
-    <div class=" nd-cell-primary nd-cell-body" v-if="!displaymodel">
-      <select class="nd-select" :class="{'vux-selector-no-padding':!label}" :name="name" v-model="value" :style="{direction: direction}">
+    <div class=" nd-cell-primary nd-cell-body nd-select-container" v-if="!displaymodel" >
+
+    	<div class="input-wrapper"   @click="toggleList($event)"  >
+    		<input class="ui-text" 
+                   type="text" 
+                   :placeholder="placeholder" 
+                   :readonly="true" 
+                   :id="id"
+
+                   :disabled="!enable"
+                   :name="name"
+                   v-show ="!isShowOption || !filter"
+                   :value="text==''?placeholder:text" />
+            <input class="ui-text form-filter" 
+                   type="text"
+                   v-show ="isShowOption"
+                   ms-css-text-align="align"
+                   ms-css-padding-left="label=='' ? 0 : labelwidth + 10"
+                   v-if="filter"
+                   @click="filterHander($event)"
+                   v-model="filterText" />
+
+    	</div>
+    	<div class="dropdown-menu nd-select-list" v-if="data!=null" v-show="isShowOption">
+    		
+			<ul>
+                <li v-for="el in data"  :class="{'nd-selected': isSelected(el[valuekey])}">
+                    <a hidefocus="none" href="javascript:void(0)" :name="el[valuekey]" @click="selectOne($event, el[valuekey])">{{el[textkey]}}{{el.othertext}}</a>
+                    <span class="pull-right" v-if="multiple">&#xe605;</span>
+                </li>
+                <li v-if="data.length === 0">
+                    <a href="javascript:void(0)" class="empty">
+                        {{ emptymsg }}
+                    </a>                  
+                </li>
+            </ul>
+    	</div>
+
+    	<!--
+      <select class="nd-select" :class="{'vux-selector-no-padding':!label}" :name="name" v-model="value" @change="selectOne($event, value)" :style="{direction: direction}">
         <option value="" v-if="placeholder" :selected="placeholder && !value">{{placeholder}}</option>
-        <option :value="one.key" v-for="one in processOptions">{{one.value}}</option>
+        <option :value="one[valuekey]" v-for="one in data" @click="selectOne($event, one[valuekey])" >{{one[textkey]}}</option>
       </select>
+      -->
     </div>
     <div class="nd-cell-right" v-else>
       {{ text }}
+      <input type="hidden" :id="id" :value=":value">
     </div>
   </div>
 </template>
@@ -27,8 +67,14 @@ export default{
         name: String,
         classname: String,
         placeholder: String,
-        enable: true,
-        multiple: false,
+        enable: {
+        	type:Boolean,
+        	default:true
+        },
+        multiple:{
+			type: Boolean,
+        	default: true
+        },
         // 必填
         must: {
         	type:Boolean,
@@ -44,8 +90,14 @@ export default{
         	type: Boolean,
         	default:false
         },
-        auto: true,
-        filter: false,
+        auto: {
+        	type:Boolean,
+        	default:true
+        },
+        filter: {
+        	type: Boolean,
+        	default:false
+        },
         
         
         emptymsg: '没有可选择的数据',   // 数据为空的时候的选项
@@ -105,6 +157,7 @@ export default{
         	key: '',
         	validInfo: '',
         	isLoading:false,
+        	isShowOption:false,
         	setDefaultValue:_interface
 		}
 	},
@@ -188,6 +241,76 @@ export default{
                 }
             }
             return flag;
+		},
+		toggleList(ev){
+			let vm = this;
+			if (vm.enable&&vm.readonly!=true) {
+			    if (vm.isShowOption) {
+			        vm.isShowOption = false;
+			    } else {
+			        vm.isShowOption = true;
+			        // todo 
+			        vm.filterText = '过滤';
+
+			        if (!vm.auto) {
+			            vm.reloadData();
+			        }else{
+			            //vm._fixedDirect();
+			        }
+			    }
+			}
+			ev.stopPropagation();  //w3c
+			if(ev && ev.stopPropagation){
+			  ev.stopPropagation();  //w3c
+			}else{
+			  window.event.cancelBubble=true; //IE
+			}
+		},
+		selectOne(ev, val){
+			let vm = this;
+			val = val.toString();
+            var selected = false;
+            if (!vm.multiple) {
+                if (vm.selectItem.length >= 1) {
+                    vm.selectItem = [];
+                    vm.selectItem.push(val);
+                } else {
+                    vm.selectItem.set(0, val);
+                }
+
+                vm.isShowOption = false;
+                selected = true;
+            } else {
+                var removed = false;
+                for (var i = 0; i < vm.selectItem.length ; i++) {
+                    if (vm.selectItem[i] == val) {
+                       // vm.selectItem.removeAt(i);
+                        vm.selectItem.splice(i,1);
+                        removed = true; break;
+                    }
+                }
+                if (!removed) {
+                    vm.selectItem.push(val);
+                    selected = true;
+                }
+            }
+
+            vm.value = '';
+            
+            vm._buildSelected();
+            
+            if (vm.validInfo != '') {
+                vm.validValue(null);
+            }
+
+            if (selected) {
+                vm.selectValue = val;
+                vm.$trigger(ev, 'selectEvent', 'select');
+            }
+
+            vm.$trigger(ev, 'changeEvent', 'select');
+    
+           //stopBubble(ev);
 		},
 		setDisplaymodel  (model) {
             this.displaymodel = model;
@@ -332,6 +455,16 @@ export default{
         if (vm.value !== '' && vm.data.length !== 0) {
             vm._buildSelected();
         }
+        this.blurHandler = document.body.addEventListener('click', function(e){
+    	   if ((e.target.tagName == 'INPUT' && e.target.id == vm.id) || (e.target.tagName == 'I' && e.target.id == vm.id + "_icon")) {
+                return;
+            }
+
+           // vm.isShowOption = false;
+        },false);
+	},
+	destory(){
+		document.body.removeEventListener('click', function(){},false)
 	}
 
 
@@ -407,6 +540,145 @@ export default{
 	    text-align: right;
 	    color: #999999;
 	}
+
+.nd-select-container{
+	position:relative;
+	padding:4px;
+}
+
+.nd-select-container.displaymodel .control-label {
+  position: static;
+  display: inline-block;
+}
+.nd-select-container .ui-text {
+  cursor: pointer;
+  font-size:15px;
+  line-height:15px;
+  width:100%;
+  padding-right: 30px;
+  moz-user-select: -moz-none;
+  -moz-user-select: none;
+  -o-user-select: none;
+  -khtml-user-select: none;
+  -webkit-user-select: none;
+  -ms-user-select: none;
+  user-select: none;
+  border: none;
+}
+.nd-select-container .control-content .iconfont {
+  position: absolute;
+  right: 5px;
+  top: 0px;
+}
+.nd-select-container .nd-select-trigger {
+  margin-top: -27px;
+  margin-right: 2px;
+  cursor: pointer;
+  font-style: normal;
+}
+.nd-select-container .input-wrapper {
+  position: relative;
+}
+.nd-select-container .nd-select-list {
+  width: 95%;
+  max-height: 200px;
+  overflow-y: auto;
+  position: absolute;
+  top: 100%;
+  left: 0;
+  z-index: 1000;
+
+  min-width: 100px;
+  margin: 2px 0 0;
+  float: left;
+  text-align: left;
+  background-color: #fff;
+  -webkit-background-clip: padding-box;
+  background-clip: padding-box;
+  border: 1px solid #ddd;
+}
+.nd-select-container .dropup {
+  top: auto;
+  bottom: 100%;
+}
+.nd-select-container .nd-select-list li:nth-of-type(1) {
+  border-top: 0;
+}
+.nd-select-container .nd-select-list li {
+  border-top: 1px #ddd solid;
+}
+.nd-select-container .nd-select-list li a {
+  text-decoration: none;
+  display: block;
+  padding: 8px 20px;
+  height: 40px;
+  line-height: 20px;
+  clear: both;
+  font-weight: 400;
+  color: #333;
+  white-space: nowrap;
+}
+.nd-select-container .nd-select-list li a.empty {
+  color: #F75858;
+  font-size: 13px;
+  line-height: 24px;
+}
+.nd-select-container .nd-select-list li a:hover {
+  background: #F5F5F5;
+}
+.nd-select-container .nd-select-list li span {
+  display: none;
+  font-family: iconfont !important;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: .2px;
+  -moz-osx-font-smoothing: grayscale;
+}
+.nd-select-container .nd-select-list li.nd-selected span {
+  display: block;
+  float: right;
+  margin-top: -37px;
+  margin-right: 8px;
+  color: #5ab8f6;
+  font-size: 18px;
+}
+.nd-select-container .nd-selected a:link {
+  color: #009ee8;
+}
+.nd-select-container .nd-select-loadinfo {
+  font-size: 14px;
+  padding-left: 10px;
+  height: 22px;
+  line-height: 22px;
+  font-style: normal;
+}
+.nd-select-container .displaymodel {
+  display: inline-block;
+}
+.nd-select-container .edit {
+  display: none;
+  color: #59baf5;
+  font-size: 12px;
+}
+.nd-select-container .edit:hover {
+  color: #FF6C00;
+}
+.nd-select-container:hover .edit {
+  display: inline;
+  cursor: pointer;
+}
+.nd-select-container .edit:before {
+  content: "\e616";
+  font-size: 12px;
+  padding-right: 5px;
+}
+.ui-select .selected-label:after {
+  font-family: iconfont !important;
+  font-style: normal;
+  -webkit-font-smoothing: antialiased;
+  -webkit-text-stroke-width: .2px;
+  -moz-osx-font-smoothing: grayscale;
+}
 
 </style>
 
