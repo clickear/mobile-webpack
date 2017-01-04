@@ -236,6 +236,9 @@ export default {
             this.textareaStyle = calcTextareaHeight(this.$els.textarea,1,10);
           }
         },
+        setDisplaymodel( model ){
+            this.displaymodel = model;
+        },
         validValue(){
             let vm = this;
 

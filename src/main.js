@@ -6,6 +6,7 @@ import group from 'components/group/index.vue'
 import ndinput from 'components/nd-input/index.vue'
 import ndtextbox from 'components/nd-textbox/index.vue'
 import ndform from 'components/nd-form/index.vue'
+import ndselect from 'components/nd-select/index.vue'
 
 import vali from 'validator'
 window.vali = vali;
@@ -78,7 +79,20 @@ window.cloundOfficeApp = new Vue({
             'clickEvent':function(vm){
                 console.log('clickEvent')
             }
+        },
+        select_cfg:{
+            data: [
+                { value: '1', text: '中国', key: 'zg,zhongguo' },
+                { value: '2', text: '日本', key: 'rb,riben' },
+                { value: '3', text: '韩国', key: 'hg,hanguo' },
+                { value: '4', text: '美国', key: 'mg,meiguo' },
+                { value: '5', text: '英格兰', key: 'ygl,yinggelan' },
+                { value: '6', text: '法国', key: 'fg,faguo' },
+                { value: '7', text: '米国', key: 'mg,miguo' }
+            ],
+            selectItem:[2,3]
         }
+
     },
 
 
@@ -106,7 +120,7 @@ window.cloundOfficeApp = new Vue({
             cloundOfficeApp.$broadcast('form-check')
         }
     },
-    components:{Custom, group, ndinput, ndtextbox, ndform}
+    components:{Custom, group, ndinput, ndtextbox, ndselect, ndform}
 })
 
  
