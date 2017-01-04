@@ -6,6 +6,7 @@ import group from 'components/group/index.vue'
 import ndinput from 'components/nd-input/index.vue'
 import ndtextbox from 'components/nd-textbox/index.vue'
 import ndform from 'components/nd-form/index.vue'
+import ndselect from 'components/nd-select/index.vue'
 import ndselectold from 'components/nd-select-old/index.vue'
 
 import vali from 'validator'
@@ -88,9 +89,15 @@ window.cloundOfficeApp = new Vue({
                 { value: '4', text: '美国', key: 'mg,meiguo' },
                 { value: '5', text: '英格兰', key: 'ygl,yinggelan' },
                 { value: '6', text: '法国', key: 'fg,faguo' },
-                { value: '7', text: '米国', key: 'mg,miguo' }
-            ],
-            selectItem:[2,3]
+                { value: '7', text: '米国', key: 'mg,miguo' },
+                { value: '8', text: '英格兰', key: 'ygl,yinggelan' },
+                { value: '9', text: '法国', key: 'fg,faguo' },  
+                { value: '10', text: '英格兰', key: 'ygl,yinggelan' },
+                { value: '11', text: '法国', key: 'fg,faguo' },
+
+            ],  
+            selectItem:[],
+            value:''
         }
 
     },
@@ -120,7 +127,7 @@ window.cloundOfficeApp = new Vue({
             cloundOfficeApp.$broadcast('form-check')
         }
     },
-    components:{Custom, group, ndinput, ndtextbox, ndselectold, ndform}
+    components:{Custom, group, ndinput, ndtextbox, ndselect, ndselectold, ndform}
 })
 
  
