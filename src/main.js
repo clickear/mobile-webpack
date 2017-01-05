@@ -8,6 +8,7 @@ import ndtextbox from 'components/nd-textbox/index.vue'
 import ndform from 'components/nd-form/index.vue'
 import ndselect from 'components/nd-select/index.vue'
 import ndselectold from 'components/nd-select-old/index.vue'
+import ndcheckbox from 'components/nd-checkbox/index.vue'
 
 import vali from 'validator'
 window.vali = vali;
@@ -127,7 +128,7 @@ window.cloundOfficeApp = new Vue({
             cloundOfficeApp.$broadcast('form-check')
         }
     },
-    components:{Custom, group, ndinput, ndtextbox, ndselect, ndselectold, ndform}
+    components:{Custom, group, ndinput, ndtextbox, ndselect, ndselectold, ndcheckbox, ndform}
 })
 
  

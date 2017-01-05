@@ -18,3 +18,36 @@
     margin: auto;
     /* border: solid 1px #ff0000; */
 }
+
+
+.ui-checkbox.checked{
+    &:after{
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 16px;
+        margin: auto 0;
+        width: 21px;
+        height: 21px;
+        @extend %m-icon2;
+        background-size: 100px;
+        background-position: -30px -170px;
+    }
+}
+
+.ui-checkbox{
+	&:after{
+        content: '';
+        position: absolute;
+        top: 0;
+        bottom: 0;
+        right: 16px;
+        margin: auto 0;
+        width: 21px;
+        height: 21px;
+        @extend %m-icon2;
+        background-size: 100px;
+        background-position: -60px -170px;
+    }
+}
