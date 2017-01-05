@@ -20,7 +20,7 @@
 }
 
 
-.ui-checkbox.checked{
+.ui-radio.checked{
     &:after{
         content: '';
         position: absolute;
@@ -36,7 +36,7 @@
     }
 }
 
-.ui-checkbox{
+.ui-radio.disabled{
 	&:after{
         content: '';
         position: absolute;

@@ -9,6 +9,7 @@ import ndform from 'components/nd-form/index.vue'
 import ndselect from 'components/nd-select/index.vue'
 import ndselectold from 'components/nd-select-old/index.vue'
 import ndcheckbox from 'components/nd-checkbox/index.vue'
+import ndradiogroup from 'components/nd-radiogroup/index.vue'
 
 import vali from 'validator'
 window.vali = vali;
@@ -99,7 +100,25 @@ window.cloundOfficeApp = new Vue({
             ],  
             selectItem:[],
             value:''
-        }
+        },
+        radio_cfg:{
+             radios: [
+                        {
+                            label: '小学', value: '1',
+                            checkEvent: function (ev, vm, radio) {
+                                console.log('小学radio checked:');
+                                console.log(vm.getData().label);
+                            },
+                            changeEvent: function (ev, vm, radio) {
+                                console.log('小学radio changed:' + vm.value);
+                            }
+
+                        },
+                        { label: '初中',  value: '2' },
+                        { label: '高中', value: '3' },
+                        { label: '大学', enable: false, value: '4' }
+                    ]
+                }
 
     },
 
@@ -128,7 +147,7 @@ window.cloundOfficeApp = new Vue({
             cloundOfficeApp.$broadcast('form-check')
         }
     },
-    components:{Custom, group, ndinput, ndtextbox, ndselect, ndselectold, ndcheckbox, ndform}
+    components:{Custom, group, ndinput, ndtextbox, ndselect, ndselectold, ndcheckbox, ndradiogroup, ndform}
 })
 
  
