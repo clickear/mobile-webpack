@@ -1,5 +1,4 @@
 
-
 if (typeof Object.assign != 'function') {
   Object.assign = function(target) {
     'use strict';
@@ -21,6 +20,93 @@ if (typeof Object.assign != 'function') {
     return target;
   };
 }
+
+
+Date.prototype.format = function ( fmt ) {
+    var o = {
+        "M+": this.getMonth() + 1,
+        "d+": this.getDate(),
+        "H+": this.getHours(),
+        "h+": this.getHours(),
+        "m+": this.getMinutes(),
+        "s+": this.getSeconds(),
+        "q+": Math.floor((this.getMonth() + 3) / 3),
+        "S": this.getMilliseconds()
+    };
+
+    if (/(y+)/.test(fmt)) {
+        fmt = fmt.replace(RegExp.$1, (this.getFullYear() + "").substr(4 - RegExp.$1.length));
+    }
+    
+    for (var k in o) {
+        if (new RegExp("(" + k + ")").test(fmt)) {
+            fmt = fmt.replace(RegExp.$1, (RegExp.$1.length == 1) ? (o[k]) : (("00" + o[k]).substr(("" + o[k]).length)));
+        }
+    }
+
+    return fmt;
+}
+
+/**
+ * 移除右端空格
+ * @@return { string }
+ */     
+Date.prototype.addDays = function ( d ) {
+    this.setDate(this.getDate() + d);
+};
+
+/**
+ * 移除右端空格
+ * @@return { string }
+ */     
+Date.prototype.addWeeks = function ( w ) {
+    this.addDays(w * 7);
+};
+
+/**
+ * 移除右端空格
+ * @@return { string }
+ */     
+Date.prototype.addMonths = function ( m ) {
+    var d = this.getDate();
+    this.setMonth(this.getMonth() + m);
+
+    if (this.getDate() < d)
+        this.setDate(0);
+};
+
+/**
+ * 移除右端空格
+ * @@return { string }
+ */     
+Date.prototype.addYears = function ( y ) {
+    var m = this.getMonth();
+    this.setFullYear(this.getFullYear() + y);
+
+    if (m < this.getMonth()) {
+        this.setDate(0);
+    }
+};
+
+/**
+ * 移除右端空格
+ * @@return { string }
+ */     
+Date.prototype.toRecentMonth = function( num ) {
+    var m = this.getMonth();
+
+    if(num > 0) {
+        num -= 1;
+    } else {
+        num += 1;
+    }
+
+    this.setMonth(m + num);
+    this.setDate(1);
+    
+    return 
+};
+
 
 
 export default function validate(val, valids, message, vm){

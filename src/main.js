@@ -10,6 +10,7 @@ import ndselect from 'components/nd-select/index.vue'
 import ndselectold from 'components/nd-select-old/index.vue'
 import ndcheckbox from 'components/nd-checkbox/index.vue'
 import ndradiogroup from 'components/nd-radiogroup/index.vue'
+import nddatepicker from 'components/nd-datepicker/index.vue'
 
 import vali from 'validator'
 window.vali = vali;
@@ -147,7 +148,7 @@ window.cloundOfficeApp = new Vue({
             cloundOfficeApp.$broadcast('form-check')
         }
     },
-    components:{Custom, group, ndinput, ndtextbox, ndselect, ndselectold, ndcheckbox, ndradiogroup, ndform}
+    components:{Custom, group, ndinput, ndtextbox, ndselect, ndselectold, ndcheckbox, ndradiogroup, nddatepicker, ndform}
 })
 
  

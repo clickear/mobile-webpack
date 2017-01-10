@@ -1,7 +1,6 @@
 "use strict";
 
 import Carousel from './carousel'
-
 /*
  * @description 默认配置
  */
@@ -360,7 +359,7 @@ CarouselDatepicker.prototype.$initYear = function() {
     
     var realitySnapNumber = endYear - beginYear;
 
-    var snapHeight = this.containers['yyyy'].children[0].offsetHeight;
+    var snapHeight = 50;
 
     var options = {
         realitySnapNumber: realitySnapNumber,
@@ -437,7 +436,7 @@ CarouselDatepicker.prototype.$initYear = function() {
  */
 CarouselDatepicker.prototype.$initMonth = function() {
     var _this = this;
-    var snapHeight = this.containers.MM.children[0].offsetHeight;
+    var snapHeight = 50;
 
     var options = {
         realitySnapNumber: 12,
@@ -514,7 +513,7 @@ CarouselDatepicker.prototype.$initMonth = function() {
  */
 CarouselDatepicker.prototype.$initDay = function() {
     var _this = this;
-    var snapHeight = this.containers['dd'].children[0].offsetHeight;
+    var snapHeight = 50;
 
     var options = {
         realitySnapNumber: 31,
@@ -591,7 +590,7 @@ CarouselDatepicker.prototype.$initDay = function() {
  */
 CarouselDatepicker.prototype.$initHour = function() {
     var _this = this;
-    var snapHeight = this.containers['HH'].children[0].offsetHeight;
+    var snapHeight = 50;
 
     var options = {
         realitySnapNumber: 24,
@@ -668,7 +667,7 @@ CarouselDatepicker.prototype.$initHour = function() {
  */
 CarouselDatepicker.prototype.$initMinute = function() {
     var _this = this;
-    var snapHeight = this.containers['mm'].children[0].offsetHeight;
+    var snapHeight = 50;
 
     var options = {
         realitySnapNumber: 60,
@@ -744,7 +743,7 @@ CarouselDatepicker.prototype.$initMinute = function() {
  */
 CarouselDatepicker.prototype.$initSecond = function() {
     var _this = this;
-    var snapHeight = this.containers['ss'].children[0].offsetHeight;
+    var snapHeight = 50;
 
     var options = {
         realitySnapNumber: 60,
@@ -912,7 +911,7 @@ CarouselDatepicker.prototype.$setValue = function(type, val) {
             snaps[i].className = snaps[i].className.replace(' active', '');
         }
 
-        var snapHeight = this.containers[type].children[0].offsetHeight;
+        var snapHeight = 50;
 
         this.containers[type].style.transform = 'translateY(' + ( (idx - 2) * - snapHeight + 'px' ) + ')';
         this.containers[type].style['-webkit-transform'] = 'translateY(' + ( (idx - 2) * - snapHeight + 'px' ) + ')';

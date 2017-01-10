@@ -42,7 +42,7 @@ var webpackConfig = merge(baseWebpackConfig, {
          "Vue": "vue",
           "moment": "moment",
           "PhotoSwipe":"photoswipe",
-          "CarouselDatepicker":"../src/lib/datepicker/scripts/datepicker"
+          "CarouselDatepicker":"src/lib/datepicker/scripts/datepicker"
     }),
 
     new webpack.optimize.OccurenceOrderPlugin(),
@@ -92,21 +92,21 @@ var webpackConfig = merge(baseWebpackConfig, {
 })
 
 if (config.build.productionGzip) {
-  var CompressionWebpackPlugin = require('compression-webpack-plugin')
+  // var CompressionWebpackPlugin = require('compression-webpack-plugin')
 
-  webpackConfig.plugins.push(
-    new CompressionWebpackPlugin({
-      asset: '[path].gz[query]',
-      algorithm: 'gzip',
-      test: new RegExp(
-        '\\.(' +
-        config.build.productionGzipExtensions.join('|') +
-        ')$'
-      ),
-      threshold: 10240,
-      minRatio: 0.8
-    })
-  )
+  // webpackConfig.plugins.push(
+  //   new CompressionWebpackPlugin({
+  //     asset: '[path].gz[query]',
+  //     algorithm: 'gzip',
+  //     test: new RegExp(
+  //       '\\.(' +
+  //       config.build.productionGzipExtensions.join('|') +
+  //       ')$'
+  //     ),
+  //     threshold: 10240,
+  //     minRatio: 0.8
+  //   })
+  // )
 }
 
 module.exports = webpackConfig

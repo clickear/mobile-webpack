@@ -37,7 +37,7 @@ module.exports = merge(baseWebpackConfig, {
          "Vue": "vue",
           "moment": "moment",
           "PhotoSwipe":"photoswipe",
-          "CarouselDatepicker":"../src/lib/datepicker/scripts/datepicker"
+          "CarouselDatepicker":"src/lib/datepicker/scripts/datepicker"
     }),
 
 

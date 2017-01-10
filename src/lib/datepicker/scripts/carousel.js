@@ -13,7 +13,7 @@ var Carousel = function (options) {
     this.onScrollEnd = options.onScrollEnd;
     this.onSnapChange = options.onSnapChange;
 
-    this.snapHeight = this.container.children[0].offsetHeight;
+    this.snapHeight = 50;
 
     this.currMove = options.currMove || 0;
     this.currSnapIdx = (this.snapHeight - this.currMove) / this.snapHeight;
@@ -38,13 +38,6 @@ Carousel.prototype.$init = function () {
     var moveY = null;
 
     var speed = null;
-
-    var boundary = {
-        top: this.wrapper.offsetTop,
-        right: this.wrapper.offsetLeft + this.wrapper.offsetWidth,
-        bottom: this.wrapper.offsetTop + this.wrapper.offsetHeight,
-        left: this.wrapper.offsetLeft
-    };
 
     var touchmove = function (e) {
         var touch = e.touches[0];

@@ -68,7 +68,7 @@ module.exports = {
         test: require.resolve('photoswipe'),
         loader: 'expose?PhotoSwipe!'
       }, {
-        test: require.resolve('../src/lib/datepicker/scripts/datepicker'),
+        test: require.resolve('../src/lib/datepicker/scripts/datepicker.js'),
         loader: 'expose?CarouselDatepicker!'
       }, {
         test: /\.vue$/,
