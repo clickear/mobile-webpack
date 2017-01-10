@@ -1,8 +1,16 @@
 <template>
-    <div class="nd-edit-content nd-datepick">
+    <div class="nd-edit-content nd-datepick" v-show="!displaymodel">
         <div class="nd-txt-title tit" style="margin-left:15px;" v-show="label">{{label}}</div>
-    	<div :id="id" class="datePlugin" ></div>
+    	<div :id="uid" class="datePlugin"></div>
     </div>
+
+     <div class="nd-receipt-header" v-else>
+          <div class="nd-typerow">
+            <span class="nd-lab" v-show="label">{{label}}:</span>
+            <span class="nd-conent">{{value}}</span>
+            <input :id="id" type="hidden" :valu="value">
+          </div>
+        </div>
 </template>
 
 
@@ -40,7 +48,10 @@ export default{
         	type:Boolean,
         	default:true
         },
-
+        showtime:{
+            type:[Boolean,String],
+            default:false
+        },
         max: {
         	type:[String,Date],
             default:function(){return new Date('2050/12/12 10:00')}
@@ -91,8 +102,8 @@ export default{
             val = new Date().format(vm.valueformat);
         }
 
-        if(!vm.id){
-            vm.id = Math.random().toString(36).substring(3, 8);
+        if(!vm.uid){
+            vm.uid = Math.random().toString(36).substring(3, 8);
         }
         
         // 手机端不支持 hh 模式，进行替换
@@ -101,7 +112,7 @@ export default{
 	ready(){
         let vm = this;
 	    this.carouselDatepicker = new CarouselDatepicker({
-            id: this.id,
+            id: this.uid,
             currDate: this.value,
             beginDate: this.min,
             endDate: this.max,
@@ -157,6 +168,19 @@ export default{
     font-size: 15px;
     color: #535353;
     text-align: center;
+}
+
+.nd-typerow{
+    height: 37px;
+    padding: 10px 0;
+    line-height: 16px;
+    border-bottom: 1px dotted #dcdcdc;
+    color: #313131;
+    font-size: 13px;
+}
+
+.nd-typerow .nd-conent{
+        font-size: 13px;
 }
 
 </style>
