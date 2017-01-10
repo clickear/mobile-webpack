@@ -2,35 +2,75 @@
 
 import FormOperator from '../page/formoperator.js'
 
-window.upLoadStateCallback = upLoadStateCallback;
-window.sys_record = sys_record;
+export default {
+    // 录音
+    record: sys_record,
+    // 录音播放
+    recordPlay: sys_recordPlay,
+    // 人员选择
+    getSelectPerson: sys_getSelectPerson,
+    // 人员多选
+    getSelectMultiplePerson: sys_getSelectMultiplePerson,
+    // 获取图片
+    getImage: sys_getImage,
+    // 选择相册
+    choosePhoto: sys_choosePhoto,
+    // 拍照
+    takePhoto: sys_takePhoto,
+    // 关闭
+    closeActivity: sys_closeActivity,
+    // 回收资源
+    recycle: sys_recycle,
+    // 催审
+    urge: sys_urge,
+    // 获取hosturl
+    getHostUrl: sys_getHostUrl,
+    // 获取模版信息
+    getFormHtml: sys_getFormHtml,
+    // 查看人员信息
+    lookPerson :sys_lookPerson,
+    // 没权限查看
+    formNoPermission:sys_formNoPermission,
+
+    returnBack: returnBack,
+    setMsgkPop:sys_setMsgkPop,
+    setConfirmPop: sys_setConfirmPop,
+}
+
+
+// 这部分为原生调用的方法，必须挂载在window上
 window.recordCallBack = recordCallBack;
-window.sys_recordPlay = sys_recordPlay;
 window.recordPlayCallBack = recordPlayCallBack;
-window.sys_getSelectPerson = sys_getSelectPerson;
 window.selectPersonCallBack = selectPersonCallBack;
-window.sys_getSelectMultiplePerson = sys_getSelectMultiplePerson;
 window.selectMultiplePersonCallBack = selectMultiplePersonCallBack;
-window.sys_getImage = sys_getImage;
 window.getImageCallBack = getImageCallBack;
-window.sys_choosePhoto = sys_choosePhoto;
 window.choosePhotoCallBack = choosePhotoCallBack;
-window.sys_takePhoto = sys_takePhoto;
 window.takePhotoCallBack = takePhotoCallBack;
+window.urgeCallBack = urgeCallBack;
+window.upLoadStateCallback = upLoadStateCallback;
+window.getHostUrlCallBack = getHostUrlCallBack;
+window.getFormHtmlCallBack = getFormHtmlCallBack;
+
+
+window.sys_record = sys_record;
+window.sys_recordPlay = sys_recordPlay;
+window.sys_getSelectPerson = sys_getSelectPerson;
+window.sys_getSelectMultiplePerson = sys_getSelectMultiplePerson;
+window.sys_getImage = sys_getImage;
+window.sys_choosePhoto = sys_choosePhoto;
+window.sys_takePhoto = sys_takePhoto;
 window.sys_closeActivity = sys_closeActivity;
 window.sys_recycle = sys_recycle;
 window.sys_urge = sys_urge;
-window.urgeCallBack = urgeCallBack;
 window.sys_getHostUrl = sys_getHostUrl;
-window.getHostUrlCallBack = getHostUrlCallBack;
 window.sys_getFormHtml = sys_getFormHtml;
-window.getFormHtmlCallBack = getFormHtmlCallBack;
-window.sys_backCallBack = sys_backCallBack;
-window.sys_setConfirmPop = sys_setConfirmPop;
-window.returnBack = returnBack;
 window.sys_lookPerson = sys_lookPerson;
-window.sys_setMsgkPop = sys_setMsgkPop;
 window.sys_formNoPermission = sys_formNoPermission;
+
+
+window.sys_setConfirmPop = sys_setConfirmPop;
+window.sys_setMsgkPop = sys_setMsgkPop;
+window.returnBack = returnBack;
 
 var sys_Control = {
   record: function() {},
@@ -403,10 +443,6 @@ function getFormHtmlCallBack(formTempStr) {
   }
 }
 
-function sys_backCallBack() {
-
-}
-
 /**
  * 弹出框
  * @param  {String}   content  内容
@@ -524,7 +560,7 @@ JSBridge.sendRequest = function(module, method, para, callback) {
   } else if (this.platform == "win32" || this.platform == "win64") {
     console.log('调用原生方法：'+ method +'(' + para +')')
     if("selectMultiplePersonCallBack" == callback){
-      var person = '[{"DAddTime":"/Date(1451040536000+0800)/","DByDate":"/Date(959788800000+0800)/","LCharge":"0","LDepCode":0,"LFlag":1,"LState":1,"LUcPeocode":0,"LUserRight":0,"PersonId":900183,"SByDate":"2000-06-01","SFirstSpell":"w","SPersonName":"多选控件1","SSpell1":"wf","SSpell2":"wf","SYgMobile":"18986096035"},{"DAddTime":"/Date(1451040536000+0800)/","DByDate":"/Date(959788800000+0800)/","LCharge":"0","LDepCode":0,"LFlag":1,"LState":1,"LUcPeocode":0,"LUserRight":0,"PersonId":900240,"SByDate":"2000-06-01","SFirstSpell":"w","SPersonName":"多选控件2","SSpell1":"wf","SSpell2":"wf","SYgMobile":"18986096035"}]';
+      var person = '[{"DAddTime":"/Date(1451040536000+0800)/","DByDate":"/Date(959788800000+0800)/","LCharge":"0","LDepCode":0,"LFlag":1,"LState":1,"LUcPeocode":0,"LUserRight":0,"PersonId":900183,"SByDate":"2000-06-01","SFirstSpell":"w","SPersonName":"多选控件1","SSpell1":"wf","SSpell2":"wf","SYgMobile":"18986096035"},{"DAddTime":"/Date(1451040536000+0800)/","DByDate":"/Date(959788800000+0800)/","LCharge":"0","LDepCode":0,"LFlag":1,"LState":1,"LUcPeocode":0,"LUserRight":0,"PersonId":910172,"SByDate":"2000-06-01","SFirstSpell":"w","SPersonName":"多选控件2","SSpell1":"wf","SSpell2":"wf","SYgMobile":"18986096035"}]';
       selectMultiplePersonCallBack(person);
     }
     else if ("selectPersonCallBack" == callback) {
@@ -577,6 +613,10 @@ JSBridge.sendRequest = function(module, method, para, callback) {
       //       getFormHtmlCallBack(result.FormHtml);
       //      }
       // });  
+    }else if(callback == "recordPlayCallBack"){
+      var recordStatus = {};
+      recordStatus.status = 'play';
+      recordPlayCallBack(JSON.stringify(recordStatus));
     }
   }
 }

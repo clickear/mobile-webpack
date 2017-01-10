@@ -1,19 +1,5 @@
 import jqueryui from 'jqueryui'
 import page from './page/pageinit.js'
-import Custom from './demo/Custom.vue'
-
-import group from 'components/group/index.vue'
-import ndinput from 'components/nd-input/index.vue'
-import ndtextbox from 'components/nd-textbox/index.vue'
-import ndform from 'components/nd-form/index.vue'
-import ndselect from 'components/nd-select/index.vue'
-import ndselectold from 'components/nd-select-old/index.vue'
-import ndcheckbox from 'components/nd-checkbox/index.vue'
-import ndradiogroup from 'components/nd-radiogroup/index.vue'
-import nddatepicker from 'components/nd-datepicker/index.vue'
-
-import vali from 'validator'
-window.vali = vali;
 
 Global.HostUrl = 'http://testwork.nd/'
 
@@ -147,8 +133,7 @@ window.cloundOfficeApp = new Vue({
         formCheck(){
             cloundOfficeApp.$broadcast('form-check')
         }
-    },
-    components:{Custom, group, ndinput, ndtextbox, ndselect, ndselectold, ndcheckbox, ndradiogroup, nddatepicker, ndform}
+    }
 })
 
  

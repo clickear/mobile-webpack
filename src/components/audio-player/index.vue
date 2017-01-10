@@ -1,17 +1,25 @@
 /* 音频播放 */
-var audioPlayerVueCom = Vue.extend({
-    // uploadSoundArr
-    props : ['items', 'allowedit', 'status'],
-    template :  '<div class="voice" v-for="row in items" @click="gotoPlay(row)" :class="status? status : \'stop\'" :status="row.status">'
-                +   '<span class="v1" v-html="getTime(row.time)"></span>'
-                +   '<span class="v2" v-html="getDate(row.date)"></span>'
-                +   '<ins v-if="allowedit" class="icon-del" @click="del"></ins>'
-                +'</div>',
-    methods : {
-        gotoPlay : function(row){
+
+<template>
+    <div class="voice" v-for="row in items" @click="gotoPlay(row)" :class="status? status : 'stop'" :status="row.status">
+    <span class="v1" v-html="getTime(row.time)"></span>
+    <span class="v2" v-html="getDate(row.date)"></span>
+    <ins v-if="allowedit" class="icon-del" @click="del"></ins>
+    </div>
+</template>
+
+<script >
+    import SopNative from '../../page/sopnative'
+
+export default{
+
+    props:['items', 'allowedit', 'status'],
+    methods:{
+        gotoPlay(row){
             var selft = this;
-            sys_recordPlay(row.src,function(recordStatus){
+            SopNative.recordPlay(row.src,function(recordStatus){
                 if(recordStatus){
+                    
                     if(recordStatus.status == 'play'){
                         selft.status = 'play'
                     }else
@@ -21,7 +29,7 @@ var audioPlayerVueCom = Vue.extend({
                 }
             });
         },
-        getTime : function(t){
+        getTime(t){
             var time = "";
             var minu = Math.floor(t/60) ;
             var secon = t%60;
@@ -31,23 +39,25 @@ var audioPlayerVueCom = Vue.extend({
             time += (secon + 's');
             return time;
         },
-        getDate : function(d){
-            var date = "";
+        getDate(d){
+             var date = "";
             var recordDate;
             if(d){
                 recordDate = new Date(d);
             }else{
                 recordDate = new Date();
             }
-            date = moment(recordDate).format("MM-DD");
+            date = recordDate.format("MM-dd");
             return date;
         },
-        del : function(i){
+        del(i){
             if(!this.allowedit){
                 return
             }
             this.items.splice(i, 1);
         }
     }
-});
-Vue.component('audio-player', audioPlayerVueCom)
+}
+
+</script>
+

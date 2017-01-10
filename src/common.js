@@ -5,7 +5,7 @@ import 'photoswipe/dist/photoswipe.css'
 import 'photoswipe/dist/default-skin/default-skin.css'
 
 
-import './style/iview/iview.css'
+// import './style/iview/iview.css'
 
 
 // import './lib/AreaPicker/css/areapick.css'

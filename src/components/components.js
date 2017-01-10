@@ -1,11 +1,13 @@
-import ximg from 'components/ximg/index.js';
+import dragMemberpicker from 'components/drag-memberpicker'
+import audioPlayer from 'components/audio-player';
+
+
+
+
+import ximg from 'components/ximg/index';
 import input from 'components/input-keyword/index.js';
-import fix from 'components/fix-memberpicker/index.js';
-
-import dragmember from 'components/drag-memberpicker/index'
 
 
-import audio from 'components/audio-player/index.js';
 import photo from 'components/photo-slide/index.js';
 import photoswipegalery from 'components/photoswipe-gallery/index.js';
 import receipt from 'components/receipt-status/index.js';
@@ -15,24 +17,50 @@ import approval from 'components/approval-component/index.js';
 import reminder from 'components/reminder-component/index.js';
 import upload from 'components/upload-images/index.js';
 import delfixsend from 'components/delfixsend-component/index.js';
-
 import billlink from 'components/bill-link/index.js';
+
 import {
     editVueMixin,
     detailVueMixin
 } from '../mixins/_vue.mixins'
 
 
+
+import group from 'components/group/index.vue'
+import ndinput from 'components/nd-input/index.vue'
+import ndtextbox from 'components/nd-textbox/index.vue'
+import ndform from 'components/nd-form/index.vue'
+import ndselect from 'components/nd-select/index.vue'
+import ndselectold from 'components/nd-select-old/index.vue'
+import ndcheckbox from 'components/nd-checkbox/index.vue'
+import ndradiogroup from 'components/nd-radiogroup/index.vue'
+import nddatepicker from 'components/nd-datepicker/index.vue'
+
+
+
+
 import Sortable from '../directives/vue-sortable'
-
 import Message from 'components/message/index.js';
-
 import PopMessageJS from 'components/pop/index.js';
+
+
+const ndComponents = 
+{
+    // 头像
+    ximg,
+    'fix-memberpicker': dragMemberpicker,
+    dragMemberpicker,
+    audioPlayer
+
+}
+
+Object.keys(ndComponents).forEach((key) => {
+    Vue.component(key, ndComponents[key])
+});
 
 
 Vue.use(Sortable)
 Vue.prototype.$Message = Message;
-
 Vue.prototype.$Pop = PopMessageJS;
 
 
@@ -41,16 +69,14 @@ Vue.component('Message', Message);
 // Vue.component('pop-massege', PopMessage);
 // Vue.component('pop-check', PopCheck);
 
-Vue.component('drag-memberpicker',dragmember);
-
-import ndinput from 'components/nd-input/index.vue'
-import ndtextbox from 'components/nd-textbox/index.vue'
-import ndform from 'components/nd-form/index.vue'
-
-
-Vue.component('ndinput',ndinput);
-Vue.component('ndtextbox',ndtextbox);
+Vue.component('ndInput',ndinput);
+Vue.component('ndTextbox',ndtextbox);
 Vue.component('ndform',ndform);
+
+
+
+
+
 
 window.editVueMixin = editVueMixin;
 window.detailVueMixin = detailVueMixin;
@@ -69,40 +95,7 @@ function getViewModelData(vm) {
 }
 
 /* 表单状态 */
-window.receiptStatusCfg = {
-    1: {
-        action: 'progress',
-        name: '正在审批中'
-    },
-    2: {
-        action: 'success',
-        name: '通过'
-    },
-    3: {
-        action: 'reject',
-        name: '拒绝'
-    },
-    4: {
-        action: 'progress',
-        name: '未开始'
-    },
-    5: {
-        action: 'revoke',
-        name: '已撤销'
-    },
-    6: {
-        action: 'no-exist',
-        name: '不存在'
-    },
-    7: {
-        action: 'done',
-        name: '已审'
-    },
-    8: {
-        action: 'waiting',
-        name: '待审'
-    }
-}
+
 
 function setCheckPop(obj) {
     var vn = cloundOfficeApp;
@@ -180,8 +173,18 @@ function becomeAvatarSrc(code) {
     return ((Global.HostUrl || '') + '/officephoto/' + code + '/80');
 }
 
+
+
+let lookPersonInfoFlag = true;
 function lookPersonInfo(code) {
-    return sys_lookPerson(code);
+    if(lookPersonInfoFlag){
+        lookPersonInfoFlag = false;
+        setTimeout(function(){lookPersonInfoFlag = true;},1000);
+        return sys_lookPerson(code);
+    }else{
+        console.log('1秒之内只能点击1次')
+    }
+  
 }
 
 //图片上传进度模拟数据

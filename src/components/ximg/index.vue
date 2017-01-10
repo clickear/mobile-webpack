@@ -1,23 +1,28 @@
+<template>
+<img :src="defaultsrc">
+</template>
 
-/* 图片组件 */
-var avatarMsgVueCom = Vue.extend({
-    props: ['xsrc', 'dsrc'],
-    template:  '<img :src="defaultsrc">',
-    data:function(){
+<script >
+
+export default{
+    props:{
+        'xsrc':'',
+        'dsrc':''
+    },
+    data(){
         return{
-            defaultsrc: this.dsrc || '../static/img/mobile/ava120.png'
+            defaultsrc: this.dsrc || './static/img/mobile/ava120.png'
         }
     },
-    created:function(){
-
+    created(){
         var that = this;
         var img = new Image();
-
         img.onload = function(){
             that.$el.src = that.xsrc;
         }
         img.src = that.xsrc;
-    },watch:{
+    },
+    watch:{
         'xsrc':function(val,oldVal){
             var that = this;
             var img = new Image();
@@ -28,6 +33,7 @@ var avatarMsgVueCom = Vue.extend({
             img.src = that.xsrc;
         }
     }
-})
-Vue.component('ximg', avatarMsgVueCom);
+}
+</script>
+
 
