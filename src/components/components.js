@@ -1,6 +1,9 @@
 import dragMemberpicker from 'components/drag-memberpicker'
 import audioPlayer from 'components/audio-player';
-
+import photoSlide from 'components/photo-slide';
+import photoswipeGallery from 'components/photoswipe-gallery';
+import receiptStatus from 'components/receipt-status';
+import detailOperation from 'components/detail-operation';
 
 
 
@@ -8,11 +11,8 @@ import ximg from 'components/ximg/index';
 import input from 'components/input-keyword/index.js';
 
 
-import photo from 'components/photo-slide/index.js';
-import photoswipegalery from 'components/photoswipe-gallery/index.js';
-import receipt from 'components/receipt-status/index.js';
-import record from 'components/record-items/index.js';
-import detail from 'components/detail-operation/index.js';
+
+import recordItems from 'components/record-items';
 import approval from 'components/approval-component/index.js';
 import reminder from 'components/reminder-component/index.js';
 import upload from 'components/upload-images/index.js';
@@ -50,7 +50,12 @@ const ndComponents =
     ximg,
     'fix-memberpicker': dragMemberpicker,
     dragMemberpicker,
-    audioPlayer
+    audioPlayer,
+    photoSlide,
+    photoswipeGallery,
+    receiptStatus,
+    recordItems,
+    detailOperation,
 
 }
 
@@ -86,8 +91,6 @@ window.setCheckPop = setCheckPop;
 window.setMsgkPop = setMsgkPop;
 window.hadDataChange = hadDataChange;
 window.deepDif = deepDif;
-window.becomeAvatarSrc = becomeAvatarSrc;
-window.lookPersonInfo = lookPersonInfo;
 window.PrgressBar = PrgressBar;
 
 function getViewModelData(vm) {
@@ -169,23 +172,9 @@ function deepDif(x, y) {
     return true;
 }
 
-function becomeAvatarSrc(code) {
-    return ((Global.HostUrl || '') + '/officephoto/' + code + '/80');
-}
 
 
 
-let lookPersonInfoFlag = true;
-function lookPersonInfo(code) {
-    if(lookPersonInfoFlag){
-        lookPersonInfoFlag = false;
-        setTimeout(function(){lookPersonInfoFlag = true;},1000);
-        return sys_lookPerson(code);
-    }else{
-        console.log('1秒之内只能点击1次')
-    }
-  
-}
 
 //图片上传进度模拟数据
 window.configStep = [{

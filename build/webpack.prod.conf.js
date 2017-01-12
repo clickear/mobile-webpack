@@ -39,10 +39,12 @@ var webpackConfig = merge(baseWebpackConfig, {
         new webpack.ProvidePlugin({
         "$": "jquery",
         "jQuery": "jquery",
-         "Vue": "vue",
-          "moment": "moment",
-          "PhotoSwipe":"photoswipe",
-          "CarouselDatepicker":"src/lib/datepicker/scripts/datepicker"
+        "Vue": "vue",
+        "moment": "moment",
+        "PhotoSwipe":"photoswipe",
+        "CarouselDatepicker":"src/lib/datepicker/scripts/datepicker",
+        "SopNative":"src/page/sopnative",
+         "UtilHelper":"src/utils/utilhelper"
     }),
 
     new webpack.optimize.OccurenceOrderPlugin(),

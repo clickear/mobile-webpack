@@ -70,7 +70,16 @@ module.exports = {
       }, {
         test: require.resolve('../src/lib/datepicker/scripts/datepicker.js'),
         loader: 'expose?CarouselDatepicker!'
-      }, {
+      }, 
+      {
+        test: require.resolve('../src/page/sopnative'),
+        loader: 'expose?SopNative!'
+      }, 
+      {
+        test: require.resolve('../src/utils/utilhelper'),
+        loader: 'expose?UtilHelper!'
+      }, 
+      {
         test: /\.vue$/,
         loader: 'vue'
       }, {

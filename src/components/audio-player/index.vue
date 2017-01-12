@@ -9,17 +9,15 @@
 </template>
 
 <script >
-    import SopNative from '../../page/sopnative'
 
 export default{
 
     props:['items', 'allowedit', 'status'],
     methods:{
         gotoPlay(row){
-            var selft = this;
+            var selft = this;           
             SopNative.recordPlay(row.src,function(recordStatus){
-                if(recordStatus){
-                    
+                if(recordStatus){                   
                     if(recordStatus.status == 'play'){
                         selft.status = 'play'
                     }else

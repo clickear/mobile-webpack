@@ -198,7 +198,7 @@ const editVueMixin = {
             this.$refs.showcheck.popShow();
         },
         getAvatarSrc : function(code){
-            return becomeAvatarSrc(code);
+            return UtilHelper.becomeAvatarSrc(code);
         }
     }
 }

@@ -3,7 +3,7 @@ import page from './page/pageinit.js'
 
 Global.HostUrl = 'http://testwork.nd/'
 
-var isEdit = true;
+var isEdit = false;
 
 if(isEdit){
     window.initData = require('./mobile/leave/edit.json')

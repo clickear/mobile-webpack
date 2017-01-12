@@ -2,7 +2,7 @@
 
 import FormOperator from '../page/formoperator.js'
 
-export default {
+module.exports = {
     // 录音
     record: sys_record,
     // 录音播放
@@ -35,6 +35,8 @@ export default {
     returnBack: returnBack,
     setMsgkPop:sys_setMsgkPop,
     setConfirmPop: sys_setConfirmPop,
+
+    lookPersonInfo:lookPersonInfo,
 }
 
 
@@ -71,6 +73,9 @@ window.sys_formNoPermission = sys_formNoPermission;
 window.sys_setConfirmPop = sys_setConfirmPop;
 window.sys_setMsgkPop = sys_setMsgkPop;
 window.returnBack = returnBack;
+
+window.lookPersonInfo = lookPersonInfo;
+
 
 var sys_Control = {
   record: function() {},
@@ -499,6 +504,20 @@ function returnBack() {
 function sys_lookPerson(personId) {
   sendRequestGlobal("SOPMethod", "lookPerson", personId, "lookPersonCallBack");
 }
+
+
+let lookPersonInfoFlag = true;
+function lookPersonInfo(code) {
+    if(lookPersonInfoFlag){
+        lookPersonInfoFlag = false;
+        setTimeout(function(){lookPersonInfoFlag = true;},1000);
+        return sys_lookPerson(code);
+    }else{
+        console.log('1秒之内只能点击1次')
+    }
+};
+
+
 
 /**
  * 弹出框
