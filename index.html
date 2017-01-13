@@ -46,7 +46,7 @@
  <div id="divTaskFormHtml">
 
     <div id="cloundOfficeApp">
-        <ndform :fixnextpersonarr.sync="fixNextPersonArr" 
+        <nd-form :fixnextpersonarr.sync="fixNextPersonArr" 
                 :fixsendpersonarr.sync="fixSendPersonArr" 
                 :approveruploadsound.sync = "approverUploadSound"
                 :approversendperson.sync = "approverSendPerson"
@@ -73,14 +73,14 @@
                 :config="$test_cfg"
             ></ndtextbox>
             <ndtextbox :max="200" :readonly="!IsEdit"  label='请假时间' v-ref:lAllTime name="lAllTime"></ndtextbox> -->
-            <ndtextbox id="username" v-ref:username name="username" label="姓名" :must="5" :readonly="false" placeholder="测试" :config="test_cfg" :maxlen="5"></ndtextbox>
-            <ndselect placeholder="测试selector" label="省份1" :config="select_cfg" ></ndselect>
-            <ndcheckbox label="是否加薪" ></ndcheckbox>
-            <ndradiogroup label="单选框按钮" :config="radio_cfg"></ndradiogroup>
+            <nd-textbox id="username" v-ref:username name="username" label="姓名" :must="5" :readonly="false" placeholder="测试" :config="test_cfg" :maxlen="5"></nd-textbox>
+            <nd-select placeholder="测试selector" label="省份1" :config="select_cfg" ></nd-select>
+            <nd-checkbox label="是否加薪" ></nd-checkbox>
+            <nd-radiogroup label="单选框按钮" :config="radio_cfg"></nd-radiogroup>
     
-            <nddatepicker  min="2015-10-01" max="6600-12-31" showtime="false" displayformat="yyyy-MM-dd hh:mm"  value="2017-1-7 1:1" label="请假时间"></nddatepicker>
-
-        </ndform>
+            <nd-datepicker  min="2015-10-01" max="6600-12-31" showtime="false" displayformat="yyyy-MM-dd hh:mm"  value="2017-1-7 1:1" label="请假时间"></nd-datepicker>
+            <input v-calc-input length=2 v-model="FlowState">
+        </nd-form>
     </div>
 
 </div>

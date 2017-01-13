@@ -1,54 +1,58 @@
+
+// 系统基础组件
+import ximg from 'components/ximg';
+import inputKeyword from 'components/input-keyword';
 import dragMemberpicker from 'components/drag-memberpicker'
 import audioPlayer from 'components/audio-player';
 import photoSlide from 'components/photo-slide';
 import photoswipeGallery from 'components/photoswipe-gallery';
 import receiptStatus from 'components/receipt-status';
-import detailOperation from 'components/detail-operation';
-
-
-
-import ximg from 'components/ximg/index';
-import input from 'components/input-keyword/index.js';
-
-
-
 import recordItems from 'components/record-items';
-import approval from 'components/approval-component/index.js';
-import reminder from 'components/reminder-component/index.js';
-import upload from 'components/upload-images/index.js';
-import delfixsend from 'components/delfixsend-component/index.js';
-import billlink from 'components/bill-link/index.js';
+import detailOperation from 'components/detail-operation';
+import approvalComponent from 'components/approval-component';
+import uploadImages from 'components/upload-images';
+import delfixsendComponent from 'components/delfixsend-component';
+import billLink from 'components/bill-link';
 
-import {
-    editVueMixin,
-    detailVueMixin
-} from '../mixins/_vue.mixins'
-
-
-
-import group from 'components/group/index.vue'
-import ndinput from 'components/nd-input/index.vue'
-import ndtextbox from 'components/nd-textbox/index.vue'
-import ndform from 'components/nd-form/index.vue'
-import ndselect from 'components/nd-select/index.vue'
-import ndselectold from 'components/nd-select-old/index.vue'
-import ndcheckbox from 'components/nd-checkbox/index.vue'
-import ndradiogroup from 'components/nd-radiogroup/index.vue'
-import nddatepicker from 'components/nd-datepicker/index.vue'
-
-
-
-
-import Sortable from '../directives/vue-sortable'
+// 消息组件
+import PopMessageJS from 'components/pop';
+// iVue message组件
 import Message from 'components/message/index.js';
-import PopMessageJS from 'components/pop/index.js';
+Vue.component('Message', Message);
+// 原生替代，可考虑移除
+import reminder from 'components/reminder-component/index.js';
 
+
+import { editVueMixin, detailVueMixin } from '../mixins/_vue.mixins'
+
+
+// 表单组件
+import ndForm from 'components/nd-form'
+import ndInput from 'components/nd-input'
+import ndTextbox from 'components/nd-textbox'
+import ndSelect from 'components/nd-select'
+import ndSelectOld from 'components/nd-select-old'
+import ndCheckbox from 'components/nd-checkbox'
+import ndRadiogroup from 'components/nd-radiogroup'
+import ndDatepicker from 'components/nd-datepicker'
+
+import sortable from '../directives/vue-sortable'
+import calcInput from '../directives/calcInput'
+import inputTimeformat from '../directives/inputTimeformat'
+
+
+const ndDirectives = {
+    sortable,
+    calcInput,
+    inputTimeformat,
+}
 
 const ndComponents = 
 {
     // 头像
     ximg,
-    'fix-memberpicker': dragMemberpicker,
+    inputKeyword,
+    fixMemberpicker: dragMemberpicker,
     dragMemberpicker,
     audioPlayer,
     photoSlide,
@@ -56,31 +60,31 @@ const ndComponents =
     receiptStatus,
     recordItems,
     detailOperation,
-
+    approvalComponent,
+    uploadImages,
+    delfixsendComponent,
+    billLink,
+    // 表单组件
+    ndForm,
+    ndInput,
+    ndTextbox,
+    ndSelect,
+    ndSelectOld,
+    ndCheckbox,
+    ndRadiogroup,
+    ndDatepicker
 }
 
 Object.keys(ndComponents).forEach((key) => {
     Vue.component(key, ndComponents[key])
 });
 
+Object.keys(ndDirectives).forEach((key) => {
+    Vue.directive(key, ndDirectives[key])
+});
 
-Vue.use(Sortable)
 Vue.prototype.$Message = Message;
 Vue.prototype.$Pop = PopMessageJS;
-
-
-Vue.component('Message', Message);
-
-// Vue.component('pop-massege', PopMessage);
-// Vue.component('pop-check', PopCheck);
-
-Vue.component('ndInput',ndinput);
-Vue.component('ndTextbox',ndtextbox);
-Vue.component('ndform',ndform);
-
-
-
-
 
 
 window.editVueMixin = editVueMixin;
@@ -98,8 +102,6 @@ function getViewModelData(vm) {
 }
 
 /* 表单状态 */
-
-
 function setCheckPop(obj) {
     var vn = cloundOfficeApp;
     var txt;
@@ -250,123 +252,8 @@ function PrgressBar(domObj, imgSize, imgUrl) {
     self.refreshBar();
 }
 
-Vue.directive('calc-input', {
-    bind: function() {
-        var me = this;
-        me.evt = function(e) {
-            var val = me.el.value;
-            var maxlengt = me.el.getAttribute('length')
-            if (val.length > maxlengt) {
-                val = val.substr(0, maxlengt)
-            }
-            me.el.value = val;
-            // Prevent falling in undefined value 
-            return val;
-        };
-
-        // Add a Event listener
-        me.el.addEventListener('input', me.evt, false);
-    },
-
-    unbind: function() {
-        var me = this;
-        // Remove The listener
-        me.el.removeEventListener('input', me.evt, false);
-    }
-});
-
-Vue.directive('input-timeformat', {
-    bind: function() {
-        var me = this;
-        me.evt = function(e) {
-            var val = me.el.value;
-            var returnStr = "";
-            var intSize = me.el.getAttribute('intSize')
-            var floatSize = me.el.getAttribute('floatSize')
-            var isFormat = me.el.getAttribute('isFormat') == "true";
-            var returnStr = FE_Util.formatNumber({
-                val: val,
-                intSize: intSize,
-                floatSize: floatSize,
-                isFormat: isFormat
-            });
-
-            me.el.value = returnStr;
-            // Prevent falling in undefined value
-            return returnStr;
-        };
 
 
-        me.blurEvt = function(e) {
-            var val = me.el.value;
-            var floatSize = me.el.getAttribute('floatSize')
-            floatSize = floatSize || 1;
-            me.el.value = val * Math.pow(10, floatSize) / Math.pow(10, floatSize);
-            return val * 1;
-        };
-
-        me.focusEvt = function(e) {
-            var val = me.el.value;
-            if (val == "0") {
-                me.el.value = '';
-            }
-            return me.el.value;
-        }
-
-        // Add a Event listener
-        me.el.addEventListener('input', me.evt, false);
-        me.el.addEventListener('blur', me.blurEvt, false);
-        me.el.addEventListener('focus', me.focusEvt, false);
-    },
-
-    unbind: function() {
-        var me = this;
-        // Remove The listener
-        me.el.removeEventListener('input', me.evt, false);
-        me.el.removeEventListener('blur', me.blurEvt, false);
-        me.el.removeEventListener('focus', me.focusEvt, false);
-    }
-});
-
-var FE_Util = {
-        formatNumber: function(opts) {
-            var temp = opts.val.replace(/[^\d.]/g, '');
-            var hasdot = new RegExp("\\.", "").test(temp);
-            var strArr = temp.split('.'),
-                intStr = strArr[0],
-                floatStr = strArr[1] || '',
-                returnStr = '';
-            if (strArr.length > 2) {
-                strArr.shift()
-                floatStr = strArr.join('')
-            }
-            if (intStr.length > opts.intSize) {
-                intStr = parseInt(intStr.toString().substr(0, opts.intSize))
-            }
-            if (floatStr.length > opts.floatSize) {
-                floatStr = floatStr.toString().substr(0, opts.floatSize);
-            }
-
-            if (opts.isFormat) {
-                if (floatStr.length > 0) {
-                    if (floatStr == "0") {
-                        floatStr = 0;
-                    } else {
-                        floatStr = 5
-                    }
-                }
-            }
-            if (floatStr === "" && hasdot) {
-                returnStr = intStr + '.';
-            } else if (floatStr !== "") {
-                returnStr = intStr + '.' + floatStr;;
-            } else {
-                returnStr = intStr;
-            }
-
-            return returnStr
-        }
-    }
     /* filter */
 Vue.filter('onlyNumber', {
     // model -> view

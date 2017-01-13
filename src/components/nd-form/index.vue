@@ -164,7 +164,7 @@ export default {
 	props:{
 		isedit:{
 			type:Boolean,
-			default:true
+			default:false
 		},
 		step:{
 			type:Number,

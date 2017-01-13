@@ -2,7 +2,7 @@
 
 <template>
      <div >
-        <div v-sortable:fixMembers="{animation: 150,forceFallback: false, filter: '.ignore', draggable : '.avatar',handle:'.avatar',disabled:!allowedit,onEnd:onEnd}" style="display:inline">
+        <div v-sortable:fixMembers="{animation: 150,forceFallback: false, filter: '.ignore', draggable : '.avatar',handle:'.avatar',disabled:!allowedit,onEnd:onEnd,dragable:apply}" style="display:inline">
                <div class="avatar"  v-for="row in items" name="{{row.code}}" :class="getIgnores($index)"  >
                   <ximg :xsrc="getSrc(row.code)"></ximg>
                   <span class="name">{{ row.name }}</span>
@@ -32,7 +32,7 @@ export default {
             }
         },
         getSrc : function(code){
-            return becomeAvatarSrc(code);
+            return UtilHelper.becomeAvatarSrc(code);
         },
         getIgnores : function(i){
             // console.log(i)
@@ -54,10 +54,6 @@ export default {
             return true;  
         }
     }
-}
-
-function becomeAvatarSrc(code){
-    return ( (Global.HostUrl) + '/officephoto/' + code + '/80');
 }
 
 </script>

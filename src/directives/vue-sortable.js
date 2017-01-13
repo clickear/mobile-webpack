@@ -2,17 +2,9 @@
 /* see the directions https://github.com/sagalbot/vue-sortable*/
 /** see the sortable.js https://github.com/RubaXa/Sortable  */
 import Sortable from 'sortablejs'
-var vSortable = {}
 
-if (!Sortable) {
-  throw new Error('[vue-sortable] cannot locate Sortable.js.')
-}
 
-// exposed global options
-vSortable.config = {}
-
-vSortable.install = function(Vue) {
-  Vue.directive('sortable', function(newOption, oldOption) {
+function sortable(newOption, oldOption) {
     newOption = newOption || {}
     // when it already register and update disabled
     if (oldOption && newOption != oldOption) {
@@ -20,6 +12,9 @@ vSortable.install = function(Vue) {
         this.vm.sortable[this.arg].option("disabled", !!newOption.disabled);
         return;
       }
+    }
+    if(!newOption.dragable){
+      return;
     }
     var sortable = new Sortable(this.el, newOption)
     if (this.arg && !this.vm.sortable) {
@@ -31,7 +26,7 @@ vSortable.install = function(Vue) {
     } else if (this.arg) {
       this.vm.sortable[this.arg] = sortable
     }
-  })
-}
+  }
 
-module.exports = vSortable;
+
+module.exports = sortable;

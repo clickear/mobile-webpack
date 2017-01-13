@@ -1,6 +1,6 @@
 
 
-window.becomeAvatarSrc = becomeAvatarSrc;
+
 
 
 /**
@@ -72,10 +72,54 @@ function friendlyFormatDate(completeTime){
     return result;
 }
 
+const FE_Util = {
+    formatNumber: function(opts) {
+        var temp = opts.val.replace(/[^\d.]/g, '');
+        var hasdot = new RegExp("\\.", "").test(temp);
+        var strArr = temp.split('.'),
+            intStr = strArr[0],
+            floatStr = strArr[1] || '',
+            returnStr = '';
+        if (strArr.length > 2) {
+            strArr.shift()
+            floatStr = strArr.join('')
+        }
+        if (intStr.length > opts.intSize) {
+            intStr = parseInt(intStr.toString().substr(0, opts.intSize))
+        }
+        if (floatStr.length > opts.floatSize) {
+            floatStr = floatStr.toString().substr(0, opts.floatSize);
+        }
+
+        if (opts.isFormat) {
+            if (floatStr.length > 0) {
+                if (floatStr == "0") {
+                    floatStr = 0;
+                } else {
+                    floatStr = 5
+                }
+            }
+        }
+        if (floatStr === "" && hasdot) {
+            returnStr = intStr + '.';
+        } else if (floatStr !== "") {
+            returnStr = intStr + '.' + floatStr;;
+        } else {
+            returnStr = intStr;
+        }
+
+        return returnStr
+    }
+}
+
+
+window.becomeAvatarSrc = becomeAvatarSrc;
+window.FE_Util = FE_Util;
 
 module.exports = {
 	receiptStatusCfg:receiptStatusCfg,
 	becomeAvatarSrc:becomeAvatarSrc,
 	friendlyFormatDate:friendlyFormatDate,
+    FE_Util:FE_Util,
 
 } 

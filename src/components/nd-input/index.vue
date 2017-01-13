@@ -5,7 +5,7 @@
       <!-- <inline-desc v-if="inlineDesc">{{inlineDesc}}</inline-desc> -->
     </div>
      <div class="weui_cell_bd weui_cell_primary">
-          <input v-input-timeformat intSize="2" floatSize="23"
+          <input  intSize="2" floatSize="23" onlyNumber
           class="weui_input"
           :autocomplete="autocomplete"
           :autocapitalize="autocapitalize"
@@ -19,8 +19,7 @@
           :readonly="readonly"
           v-model="value"
           @blur="blur"
-          v-on:keypress="isNumber(event)"
-          v-on:input="isInput(event)"
+          @input="updateValue"
           v-el:input/>
       </div>
        <div class="weui_cell_ft">  
@@ -39,12 +38,25 @@
  import Icon from '../icon'
   module.exports = {
     created() {
-      console.log('component a created !');
+      console.log('nd-input component a created !');
     },
     data(){
       return {
-        focus:false
+        focus:false,
+        composing:false
       }
+    },
+    ready(){
+      /** 中文输入法问题 */
+      var self = this;
+      this.$el.addEventListener('compositionstart', function () {
+        self.composing = true;
+      });
+      this.$el.addEventListener('compositionend', function () {
+        self.composing = false;
+        self.updateValue();
+      });
+      
     },
     props: {
       title: {
@@ -86,18 +98,14 @@
         this.value = '' 
         this.focus = true
         this.$els.input.focus()
-      },isNumber(evt){
-        evt = (evt) ? evt : window.event;
-        var charCode = (evt.which) ? evt.which : evt.keyCode;
-        if ((charCode > 31 && (charCode < 48 || charCode > 57)) && charCode !== 46) {
-          evt.preventDefault();;
-        } else {
-          return true;
+      },updateValue(){
+        if(!this.composing){
+          this.$Message.info((this.value))
+          // 值处理  
+          this.$emit('input', this.value)         
         }
-      },isInput(){
-        this.$Message.info(vali.toFloat(this.value))
-
-
+      },getValue(){
+        return this.value;
       }
     },
     computed:{
