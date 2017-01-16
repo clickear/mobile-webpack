@@ -113,13 +113,22 @@ const FE_Util = {
 }
 
 
+function setCheckPop(obj) {
+    var vn = cloundOfficeApp;
+    cloundOfficeApp.$Pop.popCheck.show(obj.content,(obj.title || ''),obj.confirm,(obj.confirmTxt || '确定'));
+}
+
+
+
 window.becomeAvatarSrc = becomeAvatarSrc;
 window.FE_Util = FE_Util;
+window.setCheckPop = setCheckPop;
 
 module.exports = {
 	receiptStatusCfg:receiptStatusCfg,
 	becomeAvatarSrc:becomeAvatarSrc,
 	friendlyFormatDate:friendlyFormatDate,
     FE_Util:FE_Util,
+    setCheckPop:setCheckPop
 
 } 

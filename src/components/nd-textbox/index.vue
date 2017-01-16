@@ -107,6 +107,9 @@ export default {
         if(!this.placeholder){
           this.placeholder = '请输入'+ this.label +(this.max>0 ? '('+ this.maxlen +'个字)':'')
         }
+        if(this.defaultvalue){
+          this.value = this.defaultvalue;
+        }
 
         // 将this.config 属性挂载在vm上    
         Object.assign(this,this.config)
@@ -118,6 +121,7 @@ export default {
       default:''
     }, 
     value: '',
+    defaultvalue:[null],
     id: String,
     name: String,
     classname: '', 
@@ -143,7 +147,9 @@ export default {
     max: Number,
     min: Number,
 
-    height: Number,
+    width:[String,Number],
+    height: [String,Number],
+    labelwidth:[String,Number],
     autosize: {
         type: Boolean,
         default: true 
@@ -155,7 +161,7 @@ export default {
     },
     // 最大长度
     maxlen:{
-      type: Number,
+      type: [Number,String],
       default:0
     },
     readonly: {
@@ -165,7 +171,7 @@ export default {
     // 校验规则
     valid:{
         type:[Boolean,String,Number],
-        default:'number'
+        default:''
     },
     //默认配置项,从model中获取
     config:{

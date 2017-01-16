@@ -36,7 +36,7 @@ export default {
             if(this.step == 2 && this.sremark.trim().length == 0){
                 return;
             }
-            this.$dispatch(submit);
+            this.$dispatch('submit');
         }
     }
 }

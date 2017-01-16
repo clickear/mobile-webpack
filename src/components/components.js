@@ -91,8 +91,6 @@ window.editVueMixin = editVueMixin;
 window.detailVueMixin = detailVueMixin;
 
 window.getViewModelData = getViewModelData;
-window.setCheckPop = setCheckPop;
-window.setMsgkPop = setMsgkPop;
 window.hadDataChange = hadDataChange;
 window.deepDif = deepDif;
 window.PrgressBar = PrgressBar;
@@ -102,41 +100,6 @@ function getViewModelData(vm) {
 }
 
 /* 表单状态 */
-function setCheckPop(obj) {
-    var vn = cloundOfficeApp;
-    var txt;
-    if (!obj.content) {
-        obj.content = '';
-    }
-    if (!obj.title) {
-        obj.title = '';
-    }
-    if (!obj.confirmTxt) {
-        txt = "确定";
-    } else {
-        txt = obj.confirmTxt;
-    }
-    vn.checkContent = obj.content;
-    vn.checkTitle = obj.title;
-    vn.checkConfirmTxt = txt;
-    initConfirmPop(function() {
-        obj.confirm();
-    });
-    vn.showCheckPop();
-}
-
-function setMsgkPop(obj) {
-    var vn = cloundOfficeApp;
-    if (!obj.content) {
-        obj.content = '';
-    }
-    if (!obj.type) {
-        obj.type = '';
-    }
-    vn.massegeText = obj.content;
-    vn.massegeType = obj.type;
-    vn.showMassegePop();
-}
 
 function hadDataChange(app) {
     console.log(JSON.stringify(app))
