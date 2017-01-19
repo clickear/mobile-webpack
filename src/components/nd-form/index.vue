@@ -97,9 +97,6 @@
 		<!--                     <fix-memberpicker :apply="true" :allowedit="true" :items="fixnextpersonarr" @add="editAddApplyPerson"></fix-memberpicker> -->
 
 
-					
-
-				</div>
 
 			    <div class="layout-fd" v-show="isedit">
 				    <a class="fn-btn" href="javascript:;" @click="submit" :data-action="allowSubmit? '':'disable' ">提交</a>
@@ -202,7 +199,7 @@ export default {
 			default:''
 		},
 		enable:{
-			type:[Number,String]
+			type:[Number,String,Boolean]
 		},spersoncode:{
 			type:[Number,String]
 		},spersonname:{
@@ -257,13 +254,16 @@ export default {
         	var vm = this.$root;
         	var result = true;
             var isFirstError = false;
+
+          //  if(!this.clickSubmit) return true;
             for (var k in vm.$refs) {
                 var comp = vm.$refs[k];
                 if (comp.validValue != undefined) {
                     comp.validValue();
                     if (comp.isValid === false ) {
+                    	// todo compType 类型
                         if (!isFirstError && comp.compType === 'textbox' && !comp.readonly ) {
-                            comp.getError();
+                           // comp.getError();
                             isFirstError = true;
                         }
                         result = false;
@@ -288,7 +288,7 @@ export default {
 	},
 	computed:{
 		allowSubmit(){
-			return !this.clickSubmit?true:this._checkValid();
+			return this._checkValid();
 		},                
 		titleLabel(){
             return this.titleArr[this.step];

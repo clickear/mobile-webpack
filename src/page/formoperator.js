@@ -23,6 +23,12 @@ export default {
     sys_MapFormTripToClaim: sys_MapFormTripToClaim,
     sys_GetFormDataAjax: sys_GetFormDataAjax,
     sys_GetFormAndNodeStateHtml: sys_GetFormAndNodeStateHtml,
+    sys_GetFormRenderTemplate:sys_GetFormRenderTemplate,
+}
+
+
+function sys_GetFormRenderTemplate(pageCode, pKey, callback){
+    NDMobile_Ajax.GetFormRenderTemplate(pageCode, pKey, callback);
 }
 
 /**
@@ -355,6 +361,10 @@ var NDMobile_Ajax = {
     },
     MapFormTripToClaim: function(Form, callback) {
         this.RemoteInvoke("MapFormTripToClaim", "POST", Form, "", "Form", callback);
+    },
+    GetFormRenderTemplate:function(pageCode, pKey, callback){
+        var parmar = 'pageCode='+pageCode +'&pkey=' + pKey;  
+        this.RemoteInvoke("GetRenderFormTemplate", "GET", {}, parmar, "FormDesign", callback);
     },
     RemoteInvoke: function(Method, type, Form, parmar, FormCenter, callBack, errorCallBack) {
         var url = Global.HostUrl + this.RemoteUrl + FormCenter + '/' + Method + '.ashx?' + parmar;

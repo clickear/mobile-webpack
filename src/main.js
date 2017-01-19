@@ -3,34 +3,31 @@ import page from './page/pageinit.js'
 
 Global.HostUrl = 'http://testwork.nd/'
 
-var isEdit = false;
-
+var isEdit = true;
+/*
 if(isEdit){
     window.initData = require('./mobile/leave/edit.json')
 }else{
     window.initData = require('./mobile/leave/mock.json')
-}
+}*/
 
 
 
- SetFormAndNodeStateHtmlCall(initData);
-  // SetFormAndNodeStateHtml();
+ //SetFormAndNodeStateHtmlCall(initData);
+  SetFormAndNodeStateHtml();
 
-// Global.CurrentPerson = {name:'当前人员',code:199186}
+/*
+Global.CurrentPerson = {name:'当前人员',code:199186}
+
+
 
 window.cloundOfficeApp = new Vue({
     el:'#cloundOfficeApp',
-    data:{
-
-        allowedit:true,
-        inputValue:'',
-        input:'input',
-        readonly:false,
-
+    data:{    
         FlowState:initData.FlowState, 
         ApproverState:initData.ApproverState,
         ViewType:initData.ViewType,
-        Enable:initData.Enable,
+        Enable:!!initData.Enable,
 
         sPersonCode : initData.sPersonCode || 0,
         sPersonName : initData.sPersonName || '',
@@ -106,24 +103,12 @@ window.cloundOfficeApp = new Vue({
                         { label: '大学', enable: false, value: '4' }
                     ]
                 }
-
-    },
-
-
-    events:{
-        'draggable-end':function(event){
-                var newValue = this.FixArray[event.newIndex];
-                var oldValue = this.FixArray[event.oldIndex];
-                this.FixArray.$set(event.newIndex, oldValue )
-                this.FixArray.$set(event.oldIndex, newValue )
-        }
     },
     methods:{
         getFormData(){
             var data = {};
             for (var k in this.$refs) {
                 var comp = this.$refs[k];
-                debugger;
                 if (comp.name != undefined && comp.name != '' && comp.getValue != undefined) {
                     data[comp.name] = comp.getValue();
                 }
@@ -135,7 +120,7 @@ window.cloundOfficeApp = new Vue({
         }
     }
 })
-
+*/
  
 
 //SetFormAndNodeStateHtml();

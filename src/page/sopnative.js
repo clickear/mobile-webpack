@@ -23,7 +23,7 @@ module.exports = {
     recycle: sys_recycle,
     // 催审
     urge: sys_urge,
-    // 获取hosturl
+    // 获取hosturlget
     getHostUrl: sys_getHostUrl,
     // 获取模版信息
     getFormHtml: sys_getFormHtml,
@@ -583,7 +583,7 @@ JSBridge.sendRequest = function(module, method, para, callback) {
       selectMultiplePersonCallBack(person);
     }
     else if ("selectPersonCallBack" == callback) {
-      var person = '[{"DAddTime":"/Date(1451040536000+0800)/","DByDate":"/Date(959788800000+0800)/","LCharge":"0","LDepCode":0,"LFlag":1,"LState":1,"LUcPeocode":0,"LUserRight":0,"PersonId":900183,"SByDate":"2000-06-01","SFirstSpell":"w","SPersonName":"Íõ·¼","SSpell1":"wf","SSpell2":"wf","SYgMobile":"18986096035"},{"DAddTime":"/Date(1451040536000+0800)/","DByDate":"/Date(959788800000+0800)/","LCharge":"0","LDepCode":0,"LFlag":1,"LState":1,"LUcPeocode":0,"LUserRight":0,"PersonId":900240,"SByDate":"2000-06-01","SFirstSpell":"w","SPersonName":"Íõ·¼","SSpell1":"wf","SSpell2":"wf","SYgMobile":"18986096035"}]';
+      var person = '[{"DAddTime":"/Date(1451040536000+0800)/","DByDate":"/Date(959788800000+0800)/","LCharge":"0","LDepCode":0,"LFlag":1,"LState":1,"LUcPeocode":0,"LUserRight":0,"PersonId":900183,"SByDate":"2000-06-01","SFirstSpell":"w","SPersonName":"单选人员","SSpell1":"wf","SSpell2":"wf","SYgMobile":"18986096035"},{"DAddTime":"/Date(1451040536000+0800)/","DByDate":"/Date(959788800000+0800)/","LCharge":"0","LDepCode":0,"LFlag":1,"LState":1,"LUcPeocode":0,"LUserRight":0,"PersonId":910172,"SByDate":"2000-06-01","SFirstSpell":"w","SPersonName":"单选组件","SSpell1":"wf","SSpell2":"wf","SYgMobile":"18986096035"}]';
       selectPersonCallBack(person);
     } else if ("takePhotoCallBack" == callback) {
       testSrc ++;

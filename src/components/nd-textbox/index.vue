@@ -419,4 +419,33 @@ export default {
   word-break: break-word;
 }
 
+.control-lab{
+    padding-top: 5px;
+    height: 30px;
+    line-height: 25px;
+    color: #a0a0a0;
+    font-size: 13px;
+}
+.nd-textbox-container.displaymodel label{
+    padding-top: 5px;
+    padding-left:5px;
+    height: 30px;
+    line-height: 25px;
+    color: #a0a0a0;
+    font-size: 13px;
+}
+.nd-textbox-container.displaymodel span{
+    padding-left:25px;
+    display:block;
+    font-size: 13px;
+    color: #313131;
+    line-height: 25px;
+    font-weight: 400;
+    margin-bottom: 6px;
+    word-break: break-word;
+}
+
+
+
+
 </style>

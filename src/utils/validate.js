@@ -165,7 +165,7 @@ export default function validate(val, valids, message, vm){
                         break;
                     case 'mobile':
                         reg = /^(0|86|17951)?(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/;
-                        info = reg.test(val) ? '' : (message ? message : i18nJson.phone_number_format_error);
+                        info = reg.test(val) ? '' : (message ? message : '手机号错误');
                         break;
                     case 'phone|mobile':
                         reg = /(^(0|86|17951)?(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$|^(\d{3,4}-)?\d{7,8}$)/;
@@ -173,7 +173,7 @@ export default function validate(val, valids, message, vm){
                         break;
                     case 'name':
                         reg = /^([\u4e00-\u9fa5]|[a-zA-Z])((([\u4e00-\u9fa5]|[a-zA-Z])*[\.]{0,1}([\u4e00-\u9fa5]|[a-zA-Z]))*)$/;
-                        info = reg.test(val) ? '' : (message ? message : i18nJson.name_format_error);
+                        info = reg.test(val) ? '' : (message ? message : '名称错误');
                         break;
                     case 'noSpecial':
                         reg = /^([\u4e00-\u9fa5]|[a-zA-Z]|\d)((([\u4e00-\u9fa5]|[a-zA-Z]|\d)*[\.]{0,1}([\u4e00-\u9fa5]|[a-zA-Z]|\d))*)$/;
@@ -199,7 +199,7 @@ export default function validate(val, valids, message, vm){
                         var reg = new RegExp(valid);
                         var content = vm.label || vm.title;
 
-                        info = reg.test(val) ? '' : ( message ? message : content + i18nJson.input_error);
+                        info = reg.test(val) ? '' : ( message ? message : content + ('输入错误'));
                         break;
                 }
             }
