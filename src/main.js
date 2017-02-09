@@ -11,12 +11,14 @@ if(isEdit){
     window.initData = require('./mobile/leave/mock.json')
 }*/
 
+var fromWeb  = true;
+if(fromWeb){
+    SetFormAndNodeStateHtml();
+}else{
+SetFormAndNodeStateHtmlCall(initData);
+// SetFormAndNodeStateHtml();
 
 
- //SetFormAndNodeStateHtmlCall(initData);
-  SetFormAndNodeStateHtml();
-
-/*
 Global.CurrentPerson = {name:'当前人员',code:199186}
 
 
@@ -119,8 +121,11 @@ window.cloundOfficeApp = new Vue({
             cloundOfficeApp.$broadcast('form-check')
         }
     }
-})
-*/
+}) 
+}
+
+
+
  
 
 //SetFormAndNodeStateHtml();

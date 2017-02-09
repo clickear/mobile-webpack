@@ -119,6 +119,57 @@ function setCheckPop(obj) {
 }
 
 
+function isArray(o) {
+  return Object.prototype.toString.call(o) === '[object Array]';
+}
+
+function isString(o){
+  return Object.prototype.toString.call(o) === '[object String]';
+}
+
+/**
+ * 获取人员字符串 如果是数组，则以，隔开，如果是字符串直接返回
+ * @param  {[Array,String]} people_id [人员列表，数组或者,隔开。用于原生使用]
+ * @return {[type]}           [description]
+ */
+function getPersonCodeString(people_id){
+  var personArr = [];
+  if(isArray(people_id)){
+    if (people_id) {
+      for (var i = 0; i < people_id.length; i++) {
+        personArr.push(people_id[i].code);
+      }
+    }
+    return personArr.join(',');
+  }else if(isString(people_id)){
+    return person_id;
+  }else{
+    return "";
+  }
+}
+
+/**
+ * 获取人员字符串 如果是数组，则以，隔开，如果是字符串直接返回
+ * @param  {[Array,String]} people_id [人员列表，数组或者,隔开。用于原生使用]
+ * @return {[type]}           [description]
+ */
+function getPersonNameString(people_id){
+  var personArr = [];
+  if(isArray(people_id)){
+    if (people_id) {
+      for (var i = 0; i < people_id.length; i++) {
+        personArr.push(people_id[i].name);
+      }
+    }
+    return personArr.join(',');
+  }else if(isString(people_id)){
+    return person_id;
+  }else{
+    return "";
+  }
+}
+
+
 
 window.becomeAvatarSrc = becomeAvatarSrc;
 window.FE_Util = FE_Util;
@@ -129,6 +180,8 @@ module.exports = {
 	becomeAvatarSrc:becomeAvatarSrc,
 	friendlyFormatDate:friendlyFormatDate,
     FE_Util:FE_Util,
-    setCheckPop:setCheckPop
+    setCheckPop:setCheckPop,
+    getPersonCodeString:getPersonCodeString,
+    getPersonNameString:getPersonNameString
 
 } 

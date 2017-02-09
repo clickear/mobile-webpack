@@ -45,6 +45,7 @@
             </div>
         </template>
         <template v-else>
+             <div class="nd-txt-title" >{{label}}<span v-show="must" style="color:red"> (必填) </div>
              <input
                   class="nd-text-area"
                   :id="id"
@@ -81,13 +82,25 @@
         </template>
     </template>
     <template v-else>
-        <div class="nd-receipt-header">
-          <div class="nd-receipt-txt">
-            <p class="nd-lab">{{label}}:</p>
-            <h3>{{value}}</h3>
-            <input type="hidden" :valu="value">
+        <template v-if ="multiple">
+          <div class="nd-receipt-header">
+            <div class="nd-receipt-txt">
+              <p class="nd-lab">{{label}}:</p>
+              <h3>{{value}}</h3>
+              <input type="hidden" :value="value">
+            </div>
           </div>
-        </div>
+        </template>
+        <template v-else>
+            <div class="nd-cell weui_select_after">
+                <div class="weui_cell_hd nd-cell-primary">
+                  <label class="nd-label">{{label}}:</label>
+                 
+                </div>
+                <div class="nd-cell-right">{{value}}</div>
+                <input type="hidden" :value="value">
+            </div>
+        </template>
     </template>
 </template>
 
@@ -247,8 +260,7 @@ export default {
         },
         validValue(){
             let vm = this;
-
-            var val = vm.getValue();
+            var val = vm.getValue() || '';
             vm.validInfo = validate(val, vm.valid, vm.message, vm);
             vm.isValid = vm.validInfo == '' ? true : false;
 

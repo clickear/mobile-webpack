@@ -27,8 +27,8 @@ export default {
 }
 
 
-function sys_GetFormRenderTemplate(pageCode, pKey, callback){
-    NDMobile_Ajax.GetFormRenderTemplate(pageCode, pKey, callback);
+function sys_GetFormRenderTemplate(pageCode, pKey,requireType, callback){
+    NDMobile_Ajax.GetFormRenderTemplate(pageCode, pKey,requireType, callback);
 }
 
 /**
@@ -362,8 +362,8 @@ var NDMobile_Ajax = {
     MapFormTripToClaim: function(Form, callback) {
         this.RemoteInvoke("MapFormTripToClaim", "POST", Form, "", "Form", callback);
     },
-    GetFormRenderTemplate:function(pageCode, pKey, callback){
-        var parmar = 'pageCode='+pageCode +'&pkey=' + pKey;  
+    GetFormRenderTemplate:function(pageCode, pKey, requireType, callback){
+        var parmar = 'pageCode='+pageCode +'&pkey=' + pKey +'&requireType='+requireType;  
         this.RemoteInvoke("GetRenderFormTemplate", "GET", {}, parmar, "FormDesign", callback);
     },
     RemoteInvoke: function(Method, type, Form, parmar, FormCenter, callBack, errorCallBack) {

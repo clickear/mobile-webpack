@@ -23,7 +23,7 @@ testDebugData = {
     userId: 910172,
     comId: 1023,
     pageCOde:  3186,
-    pKey: 0,
+    pKey: 33,
     hostUrl: "http://testwork.nd",
     // sVoucherType:'7'
 }
@@ -82,70 +82,63 @@ function SetFormAndNodeStateHtml() {
 }
 
 
-function initVue(){
-    window.cloundOfficeApp = new Vue({
-    el:'#cloundOfficeApp',
-    data:{    
-        FlowState:initData.FlowState, 
-        ApproverState:initData.ApproverState,
-        ViewType:initData.ViewType,
-        Enable:!!initData.Enable,
+function initVue(extendconfig){
 
-        sPersonCode : initData.sPersonCode || 0,
-        sPersonName : initData.sPersonName || '',
-        sRemark : '',
+    var initVueModel = {
+        el:'#cloundOfficeApp',
+        data:{
+            FlowState:initData.FlowState, 
+            ApproverState:initData.ApproverState,
+            ViewType:initData.ViewType,
+            Enable:!!initData.Enable,
 
-        ApproverList: initData.approvalRecord || [], 
+            sPersonCode : initData.sPersonCode || 0,
+            sPersonName : initData.sPersonName || '',
 
-
-        IsEdit : initData.IsEdit ,        // 编辑状态，还是查看状态
-        FormName: initData.FormName || '表单',              // 表单名称
-        IsAutoFLow :  initData.IsAutoFLow, // 是否自由流程， 1是
-        sAbstract : '',   
-
-                                               //摘要
-        uploadSoundArr : initData.uploadSoundArr || [],       // 录音上传地址
-        uploadPicArr : initData.uploadPicArr || [],         // 图片上传地址
-        fixSendPersonArr : initData.fixSendPersonArr || [],     // 申请时抄送人
-        fixNextPersonArr : initData.fixNextPersonArr || [],      // 申请时下一个审批人
-        approverUploadSound:initData.approverUploadSound || [],     // 同意拒绝时录音
-        approverSendPerson:initData.approverSendPerson || [],
-
-        approverNextPerson:initData.approverNextPerson || [],
-        delSendPersonArr:initData.delSendPersonArr || [],
-
-        showPhotoPicker:false,
-        submitApprovalState:0,
-        sRemark:'', //审批或者驳回意见
-
-        step:0,
+            ApproverList: initData.approvalRecord || [], 
 
 
-        test_cfg:{
-            'beformEvent':function(){
-                console.log('testconfig');
-            },
-            'clickEvent':function(vm){
-                console.log('clickEvent')
-            }
+            IsEdit : initData.IsEdit ,        // 编辑状态，还是查看状态
+            FormName: initData.FormName || '表单',              // 表单名称
+            IsAutoFLow :  initData.IsAutoFLow, // 是否自由流程， 1是
+            sAbstract : '',   
+
+                                                   //摘要
+            uploadSoundArr : initData.uploadSoundArr || [],       // 录音上传地址
+            uploadPicArr : initData.uploadPicArr || [],         // 图片上传地址
+            fixSendPersonArr : initData.fixSendPersonArr || [],     // 申请时抄送人
+            fixNextPersonArr : initData.fixNextPersonArr || [],      // 申请时下一个审批人
+            approverUploadSound:initData.approverUploadSound || [],     // 同意拒绝时录音
+            approverSendPerson:initData.approverSendPerson || [],
+
+            approverNextPerson:initData.approverNextPerson || [],
+            delSendPersonArr:initData.delSendPersonArr || [],
+
+            showPhotoPicker:false,
+            submitApprovalState:0,
+            sRemark:'', //审批或者驳回意见
+            step:0,
         },
-    },
-    methods:{
-        getFormData(){
-            var data = {};
-            for (var k in this.$refs) {
-                var comp = this.$refs[k];
-                if (comp.name != undefined && comp.name != '' && comp.getValue != undefined) {
-                    data[comp.name] = comp.getValue();
+        methods:{
+            getFormData(){
+                var data = {};
+                for (var k in this.$refs) {
+                    var comp = this.$refs[k];
+                    if (comp.name != undefined && comp.name != '' && comp.getValue != undefined) {
+                        data[comp.name] = comp.getValue();
+                    }
                 }
+                return data;
+            },
+            formCheck(){
+                cloundOfficeApp.$broadcast('form-check')
             }
-            return data;
-        },
-        formCheck(){
-            cloundOfficeApp.$broadcast('form-check')
         }
-    }
-})
+    };
+
+    jQuery.extend(initVueModel.data, extendconfig);
+
+    window.cloundOfficeApp = new Vue(initVueModel);
 }
 
 
@@ -170,12 +163,14 @@ function DoSetFormAndNodeStateHtml(pageCode, pKey, callfunction, change) {
     document.getElementById('txtRequireType').value = FormObj.RequireType;
 
     if(Global.sVoucherType >=6){
-        FormOperator.sys_GetFormRenderTemplate(Global.PageCode,Global.Pkey,function(result){
-
+        FormOperator.sys_GetFormRenderTemplate(Global.PageCode,Global.Pkey, FormObj.RequireType,function(result){
 
             setInnerHTML(document.getElementById("cloundOfficeApp"), result.Data.esopTemplate.Html);
             SetFormAndNodeStateHtmlCall(result.Data.formResult);
-            initVue();
+
+            var vueModel = JSON.parse(result.Data.esopTemplate.Javascript);
+
+            initVue(vueModel);
 
         })
     }else{

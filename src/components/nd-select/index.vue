@@ -50,7 +50,7 @@
     </div>
     <div class="nd-cell-right" v-else>
       {{ text }}
-      <input type="hidden" :id="id" :value=":value">
+      <input type="hidden" :id="id" :value="value">
     </div>
   </div>
 
@@ -96,6 +96,7 @@ function _interface(){}
 
 export default{
 	props: {
+        id:String,
  		label: String,
         name: String,
         classname: String,
@@ -131,7 +132,10 @@ export default{
         	type: Boolean,
         	default:false
         },
-        
+        defaultvalue: {
+            type:[Array,String],
+            default:function(){return []}
+        },
         
         emptymsg: '没有可选择的数据',   // 数据为空的时候的选项
 
@@ -142,7 +146,7 @@ export default{
         	default:''
         },
         
-       
+        width:[],
         loadInfo: '',
         selectValue: '',
         filterText: '',
@@ -197,14 +201,16 @@ export default{
 	created(){
 		Object.assign(this,this.config);
 		let vm = this;
+        if(vm.defaultvalue && vm.value ==''){
+            vm.value = vm.defaultvalue;
+            vm.selectItem = [];
+        }
 		const options = Object.assign({},this);
-
 		for (let key in vm.selectItem) {
           if (Object.prototype.hasOwnProperty.call(vm.selectItem, key)) {
             vm.selectItem[key] = vm.selectItem[key].toString();
           }
         }
-
 		if(vm.url == ''){
 			let selectItem = vm.selectItem || [];
 			let data = vm.data || [];
@@ -212,7 +218,7 @@ export default{
             if (data.length > 0 && selectItem.length > 0) {
                 for (var i = 0; i < data.length; i++) {
                 	// todo 类型问题
-                    if (selectItem.indexOf(data[i][options.valuekey]) != -1) {
+                    if (selectItem.indexOf(data[i][options.valuekey].toString()) != -1) {
                         texts.push(data[i][options.textkey]);
 
                         values.push(data[i][options.valuekey]);
@@ -222,8 +228,6 @@ export default{
                 vm.text = texts.join(',');
             }
 		}
-
-
 		console.log('初始化成功selector '+vm.value + vm.text)
 	},
 	methods:{
@@ -375,12 +379,17 @@ export default{
                 vm.value = val;
                 var arr = val.toString().split(',');
                 // todo 
-                if (vm.selectItem.sort().toString() != arr.sort().toString()) {
-                    vm.selectItem.removeAll();
-                    vm.selectItem.pushArray(arr);
-                    vm._buildSelected();
-                    vm.$trigger({}, 'changeEvent', 'set-value');
-                }
+                vm.selectItem = []; 
+                vm.selectItem = arr;
+                vm._buildSelected();
+                vm.$trigger({}, 'changeEvent', 'set-value');
+
+                // if (vm.selectItem.sort().toString() != arr.sort().toString()) {
+                //     vm.selectItem.removeAll();
+                //     vm.selectItem.pushArray(arr);
+                //     vm._buildSelected();
+                //     vm.$trigger({}, 'changeEvent', 'set-value');
+                // }
             }
         },
 
@@ -470,7 +479,6 @@ export default{
                     values.push(vm.data[i][vm.valuekey]);
                 }
             }
-
             vm.value = values.length > 0 ? values.join(',') : '';
             vm.text = texts.length > 0 ? texts.join(',') : '';
 		}
@@ -486,7 +494,7 @@ export default{
            // vm.reloadData(vm.param.$data);
         }
 
-        if (vm.value !== '' && vm.data.length !== 0) {
+        if(vm.value !== '' && vm.data.length !== 0) {
             vm._buildSelected();
         }
         this.blurHandler = document.body.addEventListener('click', function(e){

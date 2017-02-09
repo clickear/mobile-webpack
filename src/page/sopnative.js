@@ -200,31 +200,48 @@ function selectPersonCallBack(src) {
 
 }
 
+
+function isArray(o) {
+  return Object.prototype.toString.call(o) === '[object Array]';
+}
+
+function isString(o){
+  return Object.prototype.toString.call(o) === '[object String]';
+}
+
+/**
+ * 获取人员字符串 如果是数组，则以，隔开，如果是字符串直接返回
+ * @param  {[Array,String]} people_id [人员列表，数组或者,隔开。用于原生使用]
+ * @return {[type]}           [description]
+ */
+function getPersonCodeString(people_id){
+  var personArr = [];
+  if(isArray(people_id)){
+    if (people_id) {
+      for (var i = 0; i < people_id.length; i++) {
+        personArr.push(people_id[i].code);
+      }
+    }
+    return personArr.join(',');
+  }else if(isString(people_id)){
+    return person_id;
+  }else{
+    return "";
+  }
+}
+
 /**
  * 人员多选控件
- * @param  {Arrary} include_org_people_id 不可选中人员列表  [name:'姓名',code:'工号']   传给原生时，以,隔开 
- * @param  {Arrary} exclude_org_people_id 已经选择人员列表  [name:'姓名',code:'工号']   传给原生时，以,隔开
+ * @param  {Arrary} include_org_people_id 已经选中人员列表  [name:'姓名',code:'工号']   传给原生时，以,隔开 
+ * @param  {Arrary} exclude_org_people_id 不可选择人员列表  [name:'姓名',code:'工号']   传给原生时，以,隔开
  * @param  {回调函数} funCallBack           [description]
  * @return {[type]}                       [description]
  */
 function sys_getSelectMultiplePerson(include_org_people_id, exclude_org_people_id, funCallBack) {
   var m_selectPerson = {};
-  var m_temp_exclue = [];
-  var m_temp_inclue = [];
-  if (exclude_org_people_id) {
-    for (var i = 0; i < exclude_org_people_id.length; i++) {
-      m_temp_exclue.push(exclude_org_people_id[i].code);
-    }
-  }
 
-  if (include_org_people_id) {
-    for (var i = 0; i < include_org_people_id.length; i++) {
-      m_temp_inclue.push(include_org_people_id[i].code);
-    }
-  }
-
-  m_selectPerson.include_org_people_id = m_temp_inclue.join(',');
-  m_selectPerson.exclude_org_people_id = m_temp_exclue.join(',');
+  m_selectPerson.include_org_people_id = getPersonCodeString(include_org_people_id);
+  m_selectPerson.exclude_org_people_id = getPersonCodeString(exclude_org_people_id);
 
   sys_Control["selectMultiplePerson"] = funCallBack;
   m_selectPerson = JSON.stringify(m_selectPerson);
@@ -250,7 +267,6 @@ function selectMultiplePersonCallBack(data) {
       sys_Control["selectMultiplePerson"](returnValue);
     }
   }
-
 }
 
 /**

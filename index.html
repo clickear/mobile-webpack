@@ -6,7 +6,7 @@
     <meta http-equiv="content-type" content="text/html; charset=utf-8" />
     <meta name="format-detection" content="telephone=no" />
     <title>mobile-webpack</title>
-  	  </head>
+  </head>
   <body>
         <div id="fixheader" style="z-index: 999999"></div>
         <div class="ui-cover-loadding" style="display: none;"></div>
@@ -25,54 +25,43 @@
         <input type="hidden" id="HostUrl" value="" />
         <input type="hidden" id="txtRequireType" value="" />
 
-
- <div id="divTaskFormHtml">
-
-    <div id="cloundOfficeApp">
-
-<!-- <nd-textbox id="username" name="username" width="100%" :must="true" :readonly="false" label="姓名" labelwidth="120" defaultvalue="s" :multiple="true" :lettercount="true" :height="300"></nd-textbox><nd-textbox id="reason" name="reason" width="100%" :must="false" :readonly="false" label="理由" labelwidth="120" defaultvalue="私事外出" :multiple="false" :lettercount="true" :maxlen="999"></nd-textbox> --><!--模版生成错误: 组件类型"select"不存在--><!--模版生成错误: 组件类型"checkboxgroup"不存在--><!--模版生成错误: 组件类型"radiogroup"不存在--><!--模版生成错误: 组件类型"datepicker"不存在--><!--模版生成错误: 组件类型"deptpicker"不存在-->
-
-
+        <!-- -->
+        <div id="divTaskFormHtml">
+            <div id="cloundOfficeApp">
                 <nd-form 
-                        :fixnextpersonarr.sync="fixNextPersonArr" 
-                        :fixsendpersonarr.sync="fixSendPersonArr" 
-                        :approveruploadsound.sync = "approverUploadSound"
-                        :approvernextperson.sync = "approverNextPerson"
-                        :delsendpersonarr.sync = "delSendPersonArr"
-                        :uploadsoundarr.sync="uploadSoundArr"
-                        :showphotos.sync="showPhotoPicker" 
-                        :uploadpicarr.sync="uploadPicArr"
-                        :formname = "FormName"
-                        :isedit = "IsEdit"
-                        :flowstate = "FlowState"
-                        :viewtype="ViewType"
-                        :approvalstate="ApproverState"
-                        :enable="Enable"
-                        :isautoflow = "IsAutoFlow"
-                        :sremark.sync="sRemark"
-                        :approvalrecord = "ApproverList"
-                        :spersoncode="sPersonCode"
-                        :spersonname="sPersonName"
-                        :step.sync="step"
+                            :fixnextpersonarr.sync="fixNextPersonArr" 
+                            :fixsendpersonarr.sync="fixSendPersonArr" 
+                            :approveruploadsound.sync = "approverUploadSound"
+                            :approvernextperson.sync = "approverNextPerson"
+                            
+                            :delsendpersonarr.sync = "delSendPersonArr"
+                            :uploadsoundarr.sync="uploadSoundArr"
+                            :showphotos.sync="showPhotoPicker" 
+                            :uploadpicarr.sync="uploadPicArr"
+                            :formname = "FormName"
+                            :isedit = "IsEdit"
+                            :flowstate = "FlowState"
+                            :viewtype="ViewType"
+                            :approvalstate="ApproverState"
+                            :enable="Enable"
+                            :isautoflow = "IsAutoFlow"
+                            :sremark.sync="sRemark"
+                            :approvalrecord = "ApproverList"
+                            :spersoncode="sPersonCode"
+                            :spersonname="sPersonName"
+                            :step.sync="step"
                 >
+                <nd-memberpicker label="请假人员选择" v-ref:person></nd-memberpicker>
+                    <nd-textbox id="username" v-ref:username name="username" label="姓名" :must="5" :readonly="false" placeholder="测试" :config="test_cfg" :maxlen="5"></nd-textbox>
+                    <nd-textbox id="reason" name="reason" width="100%" :must="false" :readonly="false" label="理由" labelwidth="120" defaultvalue="私事外出" :multiple="false" :lettercount="true" maxlen="999"></nd-textbox>
+                    <nd-select placeholder="测试selector" label="省份1" :config="select_cfg" defaultvalue="2" ></nd-select>
+                    <nd-checkbox label="是否加薪" ></nd-checkbox>
+                    <nd-radiogroup label="单选框按钮" :config="radio_cfg"></nd-radiogroup>
 
-                
-                
-          <!--   <nd-textbox id="username" v-ref:username name="username" label="姓名" :must="5" :readonly="false" placeholder="测试" :config="test_cfg" :maxlen="5"></nd-textbox>
-
-
-
-
-<nd-textbox id="reason" name="reason" width="100%" :must="false" :readonly="false" label="理由" labelwidth="120" defaultvalue="私事外出" :multiple="false" :lettercount="true" maxlen="999"></nd-textbox>
-
-            <nd-select placeholder="测试selector" label="省份1" :config="select_cfg" ></nd-select>
-            <nd-checkbox label="是否加薪" ></nd-checkbox>
-            <nd-radiogroup label="单选框按钮" :config="radio_cfg"></nd-radiogroup>
-            <nd-datepicker  min="2015-10-01" max="6600-12-31" showtime="false" displayformat="yyyy-MM-dd hh:mm"  value="2017-1-7 1:1" label="请假时间"></nd-datepicker> -->
-        </nd-form> 
-    </div>
-
-</div>
+                    <nd-datepicker  min="2015-10-01" max="6600-12-31" showtime="false" displayformat="yyyy-MM-dd hh:mm"  value="2017-1-7 1:1" label="请假时间"></nd-datepicker> -->
+                </nd-form> 
+            </div>
+        </div>
   </body>
 </html>
  

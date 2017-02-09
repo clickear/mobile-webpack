@@ -35,6 +35,8 @@ import ndSelectOld from 'components/nd-select-old'
 import ndCheckbox from 'components/nd-checkbox'
 import ndRadiogroup from 'components/nd-radiogroup'
 import ndDatepicker from 'components/nd-datepicker'
+import ndMemberpicker from 'components/nd-memberpicker'
+import ndDeptpicker from 'components/nd-deptpicker'
 
 import sortable from '../directives/vue-sortable'
 import calcInput from '../directives/calcInput'
@@ -72,7 +74,9 @@ const ndComponents =
     ndSelectOld,
     ndCheckbox,
     ndRadiogroup,
-    ndDatepicker
+    ndDatepicker,
+    ndMemberpicker,
+    ndDeptpicker
 }
 
 Object.keys(ndComponents).forEach((key) => {
