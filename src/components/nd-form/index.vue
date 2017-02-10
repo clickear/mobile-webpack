@@ -230,17 +230,18 @@ export default {
 		submit(){
 			// cloundOfficeApp.$broadcast('form-check');
 			this.clickSubmit = true;
-			const isValid = this._checkValid();
-			this.allowSubmit = isValid; 
-			if(isValid){
-				sys_formfirstcommit(null,this.getFormData())
+
+			const checkResult = this._checkValid();
+			this.allowSubmit = checkResult.isValid; 
+			if(checkResult.isValid){
+				//sys_formfirstcommit(null,this.getFormData())
 				console.log(this.getFormData())
 			}else{
-				this.$Pop.popMessage.warning('请验证提交项')
+				this.$Pop.popMessage.warning(checkResult.validInfo);
 			}
 
 		},
-		 getFormData(){
+		getFormData(){
             var data = {};
             for (var k in this.$root.$refs) {
                 var comp = this.$root.$refs[k];
@@ -250,45 +251,74 @@ export default {
             }
             return data;
         },
-        _checkValid(){
+        _checkValid(checkModel){
         	var vm = this.$root;
         	var result = true;
             var isFirstError = false;
-
+            var validErrorMessage = "";
           //  if(!this.clickSubmit) return true;
             for (var k in vm.$refs) {
                 var comp = vm.$refs[k];
+
                 if (comp.validValue != undefined) {
-                    comp.validValue();
-                    if (comp.isValid === false ) {
+                    let compIsValid = comp.validValue(checkModel);
+                    if (compIsValid === false ) {
                     	// todo compType 类型
-                        if (!isFirstError && comp.compType === 'textbox' && !comp.readonly ) {
+                        if (!isFirstError && !comp.readonly ) {
                            // comp.getError();
                             isFirstError = true;
+
+                            if(!checkModel && comp.focus  && comp.focus instanceof Function){
+                            	comp.focus();
+                            }
+
                         }
                         result = false;
-                        if (vm.validErrorEvent && vm.validErrorEvent instanceof Function) {
-                            vm.validErrorEvent(vm);
+                        validErrorMessage = comp.validInfo || "请检查输入";
+                        if (comp.validErrorEvent && comp.validErrorEvent instanceof Function) {
+                            comp.validErrorEvent(comp);
                         }
-                        // if (!vm.validAll)
+                        break;
+                        // if (comp.validAll)
                         //     break;
                     }
                 }
             }
+
+            return {
+            	isValid:result,
+            	validInfo:validErrorMessage
+            };
+        },
+        _getValid(){
+        	var vm = this.$root;
+        	var result = true;
+            var isFirstError = false;
+            var validErrorMessage = "";
+          //  if(!this.clickSubmit) return true;
+            for (var k in vm.$refs) {
+                var comp = vm.$refs[k];
+                if (comp && comp.isValid === false ) {
+                	// todo compType 类型
+                    if (!isFirstError && !comp.readonly ) {
+                       // comp.getError();
+                        isFirstError = true;
+                    }
+                    result = false;
+                    
+                    // if (!comp.validAll)
+                    //     break;
+                }               
+            }
+
             return result;
         }
 		
 	},
 	mixins : [baseMixin],
-	events:{
-		'on-change':function(){
-			const isValid = this._checkValid();
-			this.allowSubmit = isValid;
-		}
-	},
 	computed:{
 		allowSubmit(){
-			return this._checkValid();
+			return this._checkValid(true).isValid;
 		},                
 		titleLabel(){
             return this.titleArr[this.step];

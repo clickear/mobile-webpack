@@ -145,7 +145,7 @@ export default function validate(val, valids, message, vm){
                         break;
                     case '+float':
                         reg = /^((0\.)|([1-9][0-9]*\.))(([0-9]*[1-9]{1})|(0{1,2}))$/;
-                        info = reg.test(val) ? '' : (message ? message : i18nJson.please_enter_the_correct_positive_float);
+                        info = reg.test(val) ? '' : (message ? message : '正浮点数字');
                         break;
                     case '-float':
                         reg = /^(-(((0\.)|([1-9][0-9]*\.))))(([0-9]*[1-9]{1})|(0{1,2}))$/;

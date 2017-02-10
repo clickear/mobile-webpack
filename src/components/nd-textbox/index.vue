@@ -197,6 +197,7 @@ export default {
     spellcheck: 'false'
 
     },
+
     data(){
         return {
             // 焦点控制
@@ -221,14 +222,17 @@ export default {
     },
     watch: {
         value (newVal, oldVal) {
+            // 是否超出限制
+            let isLimitLen = false;
             if (this.maxlen && this.value.length > this.maxlen) {
                 newVal = newVal.slice(0, this.maxlen)
+                isLimitLen = true;
             }
             // 新的赋值，需要在nextTick中重复赋值，而不能直接赋值，具体原因未查。或者也可在oninput中赋值。
             this.$nextTick(() => {
-                this.validValue();
+                !isLimitLen || this.validValue();
                 this.value = newVal;
-                this.validValue();
+                !isLimitLen || this.validValue();
                 this.resizeTextarea();
             });
 
@@ -242,7 +246,7 @@ export default {
         setValue(val){
             if(val != this.value){
                 this.value = val;
-                this.validValue();
+                //this.validValue();
             }
         },
         getValue(){
@@ -251,25 +255,26 @@ export default {
         resizeTextarea(){
           const autosize = this.autosize;
           if(!autosize) return false;
-          if(this.$els.textarea){
-            this.textareaStyle = calcTextareaHeight(this.$els.textarea,1,10);
+          // 并且要为多选
+          if(this.$els.textarea && this.multiple){
+            this.textareaStyle = calcTextareaHeight(this.$els.textarea, 3, 10);
           }
         },
         setDisplaymodel( model ){
             this.displaymodel = model;
         },
-        validValue(){
+        validValue(checkModel){
             let vm = this;
             var val = vm.getValue() || '';
-            vm.validInfo = validate(val, vm.valid, vm.message, vm);
-            vm.isValid = vm.validInfo == '' ? true : false;
+            let validInfo = validate(val, vm.valid, vm.message, vm);
+            let isValid = validInfo == '' ? true : false;
 
-            if (vm.isValid) {
+            if (isValid) {
 
                 // 1秒后自动消失
                 if (vm.maxlen && val.replace('/n','aa').length >vm.maxlen) {
                     vm.forceVlid = false;
-                    vm.forceValidInfo = '超过了最大限制';
+                    vm.forceValidInfo = vm.label + '字数已达上限';
                     clearTimeout(this.click);
                     this.click = setTimeout(function(){
                         vm.forceVlid = true;
@@ -277,22 +282,40 @@ export default {
                     },1000);
                     return ;
                 }
+
+
+
                 if (vm.must === true && (val == null || val == '')) {
-                    vm.isValid = false;
-                    vm.validInfo = '请输入' + vm.label;
+                    isValid = false;
+                    validInfo = '请输入' + vm.label;
                 } else if (typeof vm.must == 'number' && val.length != vm.must) {
-                    vm.isValid = false;
-                    vm.validInfo = vm.label + '输入必须为' + vm.must +'个字';
+                    isValid = false;
+                    validInfo = vm.label + '输入必须为' + vm.must +'个字';
                 }  else if (vm.valid.indexOf('int') != -1 || vm.valid.indexOf('float') != -1 || vm.valid.indexOf('number') != -1) {
                     if (vm.max != '' && val > vm.max) {
-                        vm.isValid = false;
-                        vm.validInfo = vm.label + '超过限制'+ vm.max;
+                        isValid = false;
+                        validInfo = vm.label + '超过限制'+ vm.max;
                     } else if (vm.min != '' && val < vm.min) {
-                        vm.isValid = false;
-                        vm.validInfo = vm.label + '最小输入' + vm.min;
+                        isValid = false;
+                        validInfo = vm.label + '最小输入' + vm.min;
                     }
                 } 
             }
+            if(!checkModel){
+                vm.isValid = isValid;
+                vm.validInfo = validInfo;
+            }
+            return isValid;
+        },
+
+        // 获取焦点
+        focus(){
+            let vm = this;
+            Vue.nextTick(function () {
+                var els = vm.$els.textarea || vm.$els.input;
+                els.focus();
+                // document.activeElement.scrollIntoViewIfNeeded();
+            });
         },
 
         // 内部接口事件
@@ -334,6 +357,9 @@ export default {
             len = this.value.replace(/\n/g, 'aa').length
           }
           return len > this.maxlen ? this.maxlen : len
+        },
+        checkValid(){
+
         }
     },
     events:{

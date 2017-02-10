@@ -62,6 +62,31 @@ lazy-load
 ## components 
 > 组件说明： 部分组件来源于iview 
 
+### 组件公共方法
+	+ getValue();	// 获取值，用于保存在数据库中
+	+ setValue(val);	// 设置值
+	+ setDisplaymodel(model) //设置显示模式
+	+ validValue(checkModel) // 用于校验 特别说明：checkModel 校验模式 当为true值，仅仅是为了验证是否可以校验通过，而不需要显示错误提示框。为了提交按钮置灰功能的实现
+
+### 组件公共属性
+	// 传递属性
+	+ label 
+	+ value
+	+ defaultvalue
+	+ id
+	+ name
+	+ classname
+	+ placeholder
+	+ displaymodel
+	+ multiple 
+	+ must
+	+ valid  // 校验规则
+
+	//自有属性
+	+ isValid //校验是否通过
+	+ validInfo // 错误提示信息
+
+
 ### pop 弹出框组件
 > pop组件，分为2种，popMessage(消息提示框) 和popCheck (confirm提示框，有确定，取消按钮)。pop组件挂载在Vue.prototype.$Pop。也就是说所有Vue的实例都可以调用，即this.$pop.popMessage 可获取popMessage对象。
 

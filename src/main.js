@@ -4,14 +4,14 @@ import page from './page/pageinit.js'
 Global.HostUrl = 'http://testwork.nd/'
 
 var isEdit = true;
-/*
+
 if(isEdit){
     window.initData = require('./mobile/leave/edit.json')
 }else{
     window.initData = require('./mobile/leave/mock.json')
-}*/
+}
 
-var fromWeb  = true;
+var fromWeb  = false;
 if(fromWeb){
     SetFormAndNodeStateHtml();
 }else{

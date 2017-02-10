@@ -1,4 +1,4 @@
-/* 职员组件 */
+/* 部门组件 */
 
 <template>
      <div class="receipt-add">
@@ -80,7 +80,7 @@ export default {
     created(){
         Object.assign(this,this.config);
         let vm = this;
-debugger;
+
         // 查看模式
         if(this.displaymodel && this.value){
             let personArr = this.value.split(',');
