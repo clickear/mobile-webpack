@@ -209,10 +209,14 @@ export default{
             }
 		},
 
-		validValue(){
+		validValue(checkModel){
 			let vm = this;
+            let val = vm.getValue() || '';
 			if (vm.must === true) {
-			    if (vm.getValue() == '') {
+                if(checkModel){
+                    return (val ? false:true);
+                }
+			    if (val == '') {
 			        vm.isValid = false;
 			        // todo 
 			        // vm.validInfo = i18nJson.unselected;

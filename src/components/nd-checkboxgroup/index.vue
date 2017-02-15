@@ -73,8 +73,10 @@ export default{
         config:{
             type:Object,
             default:function(){return {}}
+        },
+        value:{
+            type:[String,Boolean,Number]
         }
-
     },
     data(){
         return {
@@ -85,11 +87,11 @@ export default{
         }
     },
     computed:{
-        value: {
+        selectValue: {
             set: function (val) {
                 let vm = this;
                 let textArr = [];
-                let valArr = val ? val.split(',') : [];
+                let valArr = val ? (val+'').split(',') : [];
                 for (var i = 0; i < this.checkboxes.length; i++) {
                     var checkbox = this.checkboxes[i];
                     if (inArrary(valArr, checkbox.value)) {
@@ -108,6 +110,7 @@ export default{
                         }
                     }
                 }
+                vm.value = val;
             },
             get: function () {
                 var valArr = [];
@@ -159,12 +162,13 @@ export default{
             let val = vm.getValue() || '';
             if (vm.must === true) {
                 if(checkModel){
-                    return (val == '' ? true :false);
+                    return (val == '' ? false : true);
                 }else{
                     if (val == '') {
                         vm.isValid = false;
                         //todo 
                        // vm.validInfo = i18nJson['please_select'] + vm.label;
+                        return false;
                     } else {
                         vm.validInfo = '';
                         vm.isValid = true;
@@ -175,7 +179,6 @@ export default{
         },
         toggleList(ev, idx){
             let vm = this;
-            debugger;
             vm.$Items.setOption({  
                 multiple:true, 
                 label:vm.label, 
@@ -197,10 +200,10 @@ export default{
             return data;
         },
         getValue(){
-            return this.value;
+            return this.selectValue;
         },
         setValue(val){
-            this.value = val;
+            this.selectValue = val;
         }
     },
     created(){
@@ -217,8 +220,8 @@ export default{
                 Vue.set(this.checkboxes[i],'ischecked',false)
             }
         }
-
-        
+        // 这里的value 是传递属性，不能同时作为计算属性。所以在selectValue中设置value的值
+        vm.selectValue = vm.value;       
     }
 }
     

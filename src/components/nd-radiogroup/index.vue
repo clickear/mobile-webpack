@@ -95,6 +95,9 @@ export default{
         config:{
             type:Object,
             default:function(){return {}}
+        },
+        value:{
+            type:[String,Boolean,Number]
         }
 
     },
@@ -107,11 +110,11 @@ export default{
         }
     },
     computed:{
-        value: {
+        selectValue: {
             set: function (val) {
                 let vm = this;
                 let textArr = [];
-                let valArr = val ? val.split(',') : [];
+                let valArr = val ? (val+'').split(',') : [];
                 for (var i = 0; i < this.radios.length; i++) {
                     var radio = this.radios[i];
                     if (inArrary(valArr, radio.value)) {
@@ -130,6 +133,7 @@ export default{
                         }
                     }
                 }
+                vm.value = val;
             },
             get: function () {
                 var valArr = [];
@@ -180,10 +184,11 @@ export default{
             let val = vm.getValue() || '';
             if (vm.must === true) {
                 if(checkModel){
-                    return (val == '' ? true :false);
+                    return (val == '' ? false :true);
                 }else{
                     if (val == '') {
                         vm.isValid = false;
+                        return false;
                         //todo 
                        // vm.validInfo = i18nJson['please_select'] + vm.label;
                     } else {
@@ -205,8 +210,8 @@ export default{
                     valuekey:'value', 
                     textkey: 'label'
                 });
-                console.log(vm.radios)
-                vm.$Items.showItems(vm.radios, vm.value);
+                console.log(vm.radios + 'selectVlaue'+ vm.selectValue)
+                vm.$Items.showItems(vm.radios, vm.selectValue);
 
                 /*
                 for (let  i = 0; i < vm.radios.length; i++) {
@@ -247,10 +252,10 @@ export default{
             return data;
         },
         getValue(){
-            return this.value;
+            return this.selectValue;
         },
         setValue(val){
-            this.value = val;
+            this.selectValue = val;
         },
         setDisplaymodel(model){
             this.displaymodel = model;
@@ -261,6 +266,7 @@ export default{
         let vm = this;
         var options = Object.assign(this,this.config);
         var radios = options.radios;
+
         for (var i = 0; i < radios.length; i++) {
             let curRadio = radios[i];
             if (radios[i].enable == undefined) {                
@@ -275,7 +281,7 @@ export default{
                 //vm.radios.$set(i, curRadio);
             }
         }
-
+        vm.selectValue = vm.value;
         
     }
 }
