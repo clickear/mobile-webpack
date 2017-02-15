@@ -61,21 +61,23 @@
                     :spersonname="sPersonName"
                     :step.sync="step"
                 >
-
+<!--
                 <nd-textbox id="textbox" name="textbox" v-ref:"textbox" width="100%" :must="true" :readonly="false" :displaymodel="false" label="数字组件" placeholder="测试的" :multiple="false" :lettercount="true" valid="+float" :height="100" :maxlen="999" value = "" ></nd-textbox>
 
                 <nd-memberpicker label="请假人员选择" v-ref:person1></nd-memberpicker>
                 <nd-memberpicker label="请假人员选择" v-ref:person></nd-memberpicker>
-  <nd-textbox id="username" v-ref:username name="username" label="姓名" :must="true" :readonly="false" placeholder="测试" :config="test_cfg" :maxlen="5"></nd-textbox
+                <nd-textbox id="username" v-ref:username name="username" label="姓名" :must="true" :readonly="false" placeholder="测试" :config="test_cfg" :maxlen="5"></nd-textbox
                 <nd-memberpicker label="请假人员选择" v-ref:person2></nd-memberpicker>
-                  >
+                  
                    <nd-textbox id="reason1" name="reason1" width="100%" :must="false" :readonly="false" label="理由" labelwidth="120" defaultvalue="私事外出" :multiple="false" :lettercount="true" maxlen="999"></nd-textbox>
 
 
                     <nd-textbox id="reason" name="reason" width="100%" :must="false" :readonly="false" label="理由" labelwidth="120" defaultvalue="私事外出" :multiple="false" :lettercount="true" maxlen="999"></nd-textbox>
-                    <nd-select placeholder="测试selector" label="省份1" :config="select_cfg" defaultvalue="2" ></nd-select>
+                    -->
+                    <nd-select id="area" placeholder="测试selector" label="省份1" :config="select_cfg" defaultvalue="2" ></nd-select>  
                     <nd-checkbox label="是否加薪" ></nd-checkbox>
-                    <nd-radiogroup label="单选框按钮" :config="radio_cfg"></nd-radiogroup>
+                    <nd-radiogroup label="单选框按钮 " :config="radio_cfg" defaultvalue="1"></nd-radiogroup>
+ 					<nd-checkboxgroup label="多选按钮 " :config="check_cfg" defaultvalue="1"></nd-checkboxgroup>
 
                     <nd-datepicker  min="2015-10-01" max="6600-12-31" showtime="false" displayformat="yyyy-MM-dd hh:mm"  value="2017-1-7 1:1" label="请假时间"></nd-datepicker> 
                 </nd-form> 

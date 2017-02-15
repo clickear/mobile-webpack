@@ -66,7 +66,7 @@ lazy-load
 	+ getValue();	// 获取值，用于保存在数据库中
 	+ setValue(val);	// 设置值
 	+ setDisplaymodel(model) //设置显示模式
-	+ validValue(checkModel) // 用于校验 特别说明：checkModel 校验模式 当为true值，仅仅是为了验证是否可以校验通过，而不需要显示错误提示框。为了提交按钮置灰功能的实现
+	+ validValue(checkModel) // 用于校验 特别说明：checkModel 校验模式 当为true值，仅仅是为了验证是否可以校验通过,，而不需要显示错误提示框。为了提交按钮置灰功能的实现.返回值: boolean
 
 ### 组件公共属性
 	// 传递属性
@@ -152,8 +152,97 @@ lazy-load
 		         + inputvent： input事件
 		         + focusEvent: 获取焦点事件
 		         + blurEvent：blur 事件
-		     
++ radiogroup 
+    + 组件名称：radiogroup
+    + 组件属性:
 
+| 组件属性 | 组件类型 | 组件名称
+| :------ | :------ | : ------        
+| label   |   string | 字段名称
+| name | string | 字段name 一般与id 一致
+| radios | [] | 数据
+| must | boolean | 是否必填
+| displaymodel | boolean | 显示模式
+| config | object | 配置数据
+| value | string | 组件值，以,隔开
+> 数据说明:
+```
+// 例子数据
+radio_cfg:{
+             radios: [
+                          {
+                            label: '小学', value: '1',
+                            checkEvent: function (ev, vm, radio) {
+                                console.log('小学radio checked:');
+                                console.log(vm.getData().label);
+                            },
+                            changeEvent: function (ev, vm, radio) {
+                                console.log('小学radio changed:' + vm.value);
+                            }
+                        },
+                        { label: '初中',  value: '2' },
+                        { label: '高中', value: '3' },
+                        { label: '大学', enable: false, value: '4' }
+                        ]
+}
+// 对象属性说明
+| label | 选项名称 
+| value | 选项值
+| enable | 是否可选
+| checkEvnet | 选中事件
+| changeEvent | 值变化事件
+```
+
+    + 组件主要方法
+        + getData
+        + getValue
+        + setValue
+    
++ checkboxgroup (与radiogroup 基本一致)
+    + 组件名称：checkboxgroup 
+    + 组件属性:
+
+| 组件属性 | 组件类型 | 组件名称
+| :------ | :------ | : ------        
+| label   |   string | 字段名称
+| name | string | 字段name 一般与id 一致
+| cheboxes| [] | 数据
+| must | boolean | 是否必填
+| displaymodel | boolean | 显示模式
+| config | object | 配置数据
+| value | string | 组件值，以,隔开
+> 数据说明:
+```
+// 例子数据
+radio_cfg:{
+             cheboxes: [
+                          {
+                            label: '小学', value: '1',
+                            checkEvent: function (ev, vm, radio) {
+                                console.log('小学radio checked:');
+                                console.log(vm.getData().label);
+                            },
+                            changeEvent: function (ev, vm, radio) {
+                                console.log('小学radio changed:' + vm.value);
+                            }
+                        },
+                        { label: '初中',  value: '2' },
+                        { label: '高中', value: '3' },
+                        { label: '大学', enable: false, value: '4' }
+                        ]
+}
+// 对象属性说明
+| label | 选项名称 
+| value | 选项值
+| enable | 是否可选
+| checkEvnet | 选中事件
+| changeEvent | 值变化事件
+
+```
+    + 组件主要方法
+        + getData
+        + getValue
+        + setValue
 
 
 # 注意点：

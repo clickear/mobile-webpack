@@ -40,12 +40,58 @@
                 </li>
             </ul>
     	</div>
+
+    <!--
+      <select class="nd-select" :class="{'vux-selector-no-padding':!label}" :name="name" v-model="value" @change="selectOne($event, value)" :style="{direction: direction}">
+        <option value="" v-if="placeholder" :selected="placeholder && !value">{{placeholder}}</option>
+        <option :value="one[valuekey]" v-for="one in data" @click="selectOne($event, one[valuekey])" >{{one[textkey]}}</option>
+      </select>
+      -->
+    </div>
+    <div class="nd-cell-right" v-else>
+      {{ text }}
+      <input type="hidden" :id="id" :value="value">
+    </div>
+</div>
+
+
+  <template v-if="isShowOption">
+  	<div class="nd-ui-btm-modal" id="container_{{id}}">
+	  	<div class="ly-header">
+	        <a class="btn-back" href="javascript:;" @click="toggleList($event)"></a>
+	        <h2>{{label}}</h2>
+	    </div>
+		<div class="bills" style="position: relative; padding-top: 50px;">
+	        <!--
+	        <div class="bills-header" style="position: relative;">
+	            <input class="ipt-txt" type="text" placeholder="其他（10个字）" maxlength="10">
+	            <a href="javascript:;">保存并选择</a>
+	        </div>
+	        -->
+	        <div class="bills-content">
+	            <ul class="bills-list">
+	            	 <li v-for="el in data"  >	            	 	
+	            	 	<a hidefocus="none" href="javascript:void(0)" :class="{'checked': isSelected(el[valuekey])}" :name="el[valuekey]" @click="selectOne($event, el[valuekey])">{{el[textkey]}}{{el.othertext}}</a>
+	            	 </li>
+	               
+	            </ul>
+
+	            <a v-show="multiple" javascript:"void(0)" class="nd-select-button" @click="toggleList($event)" >保存</a>
+	            <h3 style="display: none;">我的添加</h3>
+	            <ul class="bills-list" data-status="reduce">
+	                
+	            </ul>
+	        </div>
+	    </div>
+    </div>
+  </template>
+
+
 </template>
 
 
 
 <script>
-
 function _interface(){}
 
 export default{
@@ -237,16 +283,26 @@ export default{
 		toggleList(ev){
 			let vm = this;
 			if (vm.enable&&vm.readonly!=true) {
-                vm.$Items.setOption({  
-                    multiple:true, 
-                    label:vm.label, 
-                    setValue:vm.setValue,
-                    valuekey:vm.valuekey, 
-                    textkey:vm.textkey
-                });
-		        vm.$Items.showItems(vm.data, vm.value);
-			}	
-            		
+			    if (vm.isShowOption) {
+			        vm.isShowOption = false;
+			    } else {
+			        vm.isShowOption = true;
+			        // todo 
+			        vm.filterText = '过滤';
+
+			        if (!vm.auto) {
+			            vm.reloadData();
+			        }else{
+			            //vm._fixedDirect();
+			        }
+			    }
+			}
+			ev.stopPropagation();  //w3c
+			if(ev && ev.stopPropagation){
+			  ev.stopPropagation();  //w3c
+			}else{
+			  window.event.cancelBubble=true; //IE
+			}
 		},
 		selectOne(ev, val){
 			let vm = this;
@@ -315,7 +371,6 @@ export default{
         	let vm = this;
         	if (val === null || val === '') {
                 vm.selectItem = [];
-                vm.value = val;
                 vm._buildSelected();
                 vm.$trigger({}, 'changeEvent', 'set-value');
             } else {

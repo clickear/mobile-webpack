@@ -16,6 +16,10 @@ import billLink from 'components/bill-link';
 
 // 消息组件
 import PopMessageJS from 'components/pop';
+
+// items组件
+import selectItems from 'components/select-items'
+
 // iVue message组件
 import Message from 'components/message/index.js';
 Vue.component('Message', Message);
@@ -24,7 +28,7 @@ import reminder from 'components/reminder-component/index.js';
 
 
 import { editVueMixin, detailVueMixin } from '../mixins/_vue.mixins'
-
+ 
 
 // 表单组件
 import ndForm from 'components/nd-form'
@@ -34,9 +38,11 @@ import ndSelect from 'components/nd-select'
 import ndSelectOld from 'components/nd-select-old'
 import ndCheckbox from 'components/nd-checkbox'
 import ndRadiogroup from 'components/nd-radiogroup'
+import ndCheckboxgroup from 'components/nd-checkboxgroup'
 import ndDatepicker from 'components/nd-datepicker'
 import ndMemberpicker from 'components/nd-memberpicker'
 import ndDeptpicker from 'components/nd-deptpicker'
+   
 
 import sortable from '../directives/vue-sortable'
 import calcInput from '../directives/calcInput'
@@ -63,7 +69,7 @@ const ndComponents =
     recordItems,
     detailOperation,
     approvalComponent,
-    uploadImages,
+    uploadImages, 
     delfixsendComponent,
     billLink,
     // 表单组件
@@ -74,6 +80,7 @@ const ndComponents =
     ndSelectOld,
     ndCheckbox,
     ndRadiogroup,
+    ndCheckboxgroup,
     ndDatepicker,
     ndMemberpicker,
     ndDeptpicker
@@ -89,6 +96,7 @@ Object.keys(ndDirectives).forEach((key) => {
 
 Vue.prototype.$Message = Message;
 Vue.prototype.$Pop = PopMessageJS;
+Vue.prototype.$Items = selectItems;
 
 
 window.editVueMixin = editVueMixin;

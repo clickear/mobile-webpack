@@ -283,8 +283,6 @@ export default {
                     return ;
                 }
 
-
-
                 if (vm.must === true && (val == null || val == '')) {
                     isValid = false;
                     validInfo = '请输入' + vm.label;
@@ -357,9 +355,6 @@ export default {
             len = this.value.replace(/\n/g, 'aa').length
           }
           return len > this.maxlen ? this.maxlen : len
-        },
-        checkValid(){
-
         }
     },
     events:{

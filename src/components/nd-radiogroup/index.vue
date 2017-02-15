@@ -1,51 +1,76 @@
 
+
 <template>
-    <div class="nd-edit-content">
-        <div class="nd-txt-title" style="margin-left:15px;">{{label}}<span v-show="must" style="color:red"> (必填) </div>
-        
-        <div class="nd-cells">
-        <label class=" nd-cell ui-radio nd-radio-label " @click="clickRadio($event,index)" track-by="$index" :class={'checked':one.ischecked,'disabled':!one.enable} for="radio_{{uuid}}_{{index}}" v-for="(index,one) in radios">
-          <div class=" nd-cell-primary">
-            <p>{{one.label }}</p>
-          </div>
-          <div class="weui_cell_ft">
-            <!-- <input type="radio" class="weui_check" v-model="value" id="radio_{{uuid}}_{{index}}" value="{{one }}"> -->
-            <span class="nd-checkbox-checked"></span>
-          </div>
-        </label>
+  <div class="nd-cell" :class="{'weui_select_after':label, 'weui_cell_select':!displaymodel}" >
+    <div class="weui_cell_hd" v-if="label" :class="{'nd-cell-primary':displaymodel}">
+      <label for="" class="nd-label" >{{label}}</label>
+    </div>
+    <div class=" nd-cell-primary nd-cell-body nd-select-container" v-if="!displaymodel" >
+
+        <div class="input-wrapper"   @click="toggleList($event)"  >
+            <input class="ui-text" 
+                   type="text" 
+                   :placeholder="placeholder" 
+                   :readonly="true" 
+                   :id="id"
+
+                   :disabled="!enable"
+                   :name="name"
+                   :value="text==''?placeholder:text" />
+            <input class="ui-text form-filter" 
+                   type="text"
+                   v-show ="isShowOption"
+                   ms-css-text-align="align"
+                   ms-css-padding-left="label=='' ? 0 : labelwidth + 10"
+                   v-if="filter"
+                   @click="filterHander($event)"
+                   v-model="filterText" />
 
         </div>
-
-
-    </div>
-
-
-    <div class="nd-cell-right" v-else>
-      {{ text }}
-
-    </div>
-
-
-
+        <div class="dropdown-menu nd-select-list" v-if="data!=null" v-show="false">
+            <ul>
+                <li v-for="el in data"  :class="{'nd-selected': isSelected(el[valuekey])}">
+                    <a hidefocus="none" href="javascript:void(0)" :name="el[valuekey]" @click="selectOne($event, el[valuekey])">{{el[textkey]}}{{el.othertext}}</a>
+                    <span class="pull-right" v-if="multiple">&#xe605;</span>
+                </li>
+                <li v-if="data.length === 0">
+                    <a href="javascript:void(0)" class="empty">
+                        {{ emptymsg }}
+                    </a>                  
+                </li>
+            </ul>
+        </div>
 </template>
+
+
+
 
 
 
 <script>
 
+function inArrary(array, val){
+    for(var i =0; i<array.length; i++){
+        if(array[i] == val){
+            return true;
+        }
+    }
+    return false;
+}
+
 export default{
-	props:{
-		label: {
-			type:String,
-			default:''
-		},
+    props:{
+        label: {
+            type:String,
+            default:''
+        },
          name: {
             type:String,
             default:''
          },
         enable: {
-        	type:Boolean,
-        	default:true
+            type:Boolean,
+            default:true
         },
         radios:{
             type:Boolean,
@@ -60,8 +85,8 @@ export default{
             default:false
         },
         ischecked:{
-        	type:Boolean,
-        	default:false
+            type:Boolean,
+            default:false
         },
         // value:'',
         //外部参数
@@ -72,7 +97,7 @@ export default{
             default:function(){return {}}
         }
 
-	},
+    },
     data(){
         return {
             isValid:true,
@@ -84,16 +109,18 @@ export default{
     computed:{
         value: {
             set: function (val) {
-                debugger;
                 let vm = this;
+                let textArr = [];
+                let valArr = val ? val.split(',') : [];
                 for (var i = 0; i < this.radios.length; i++) {
                     var radio = this.radios[i];
-                    if (radio.value == val) {
+                    if (inArrary(valArr, radio.value)) {
                         if (radio.ischecked == false) {
                             radio = (Object.assign({}, this.radios[i], { ischecked: true}))                            
                             vm.radios.$set(i, radio);
                             this.$trigger(radio, null, 'checkEvent');
                             this.$trigger(radio, null, 'changeEvent');
+                            console.log('checked'+ radio.value);
                         }
                     } else {
                         if (radio.ischecked == true) {
@@ -105,18 +132,30 @@ export default{
                 }
             },
             get: function () {
-                var val = '';
+                var valArr = [];
                 for (var i = 0; i < this.radios.length; i++) {
                     if (this.radios[i].ischecked) {
-                        val = this.radios[i].value;
-                        break;
+                        valArr.push(this.radios[i].value);
                     }
                 }
-                return val;
+                return valArr.join(',');
+            }
+        },text:{
+            get:function(){
+                var text = '';
+                for (var i = 0; i < this.radios.length; i++) {
+                    if (this.radios[i].ischecked) {
+                        text += this.radios[i].label + ',';
+                    }
+                }
+                if(text && text.length>0){
+                    text = text.substring(0, text.length-1);
+                }
+                return text;
             }
         }
     },
-	methods:{
+    methods:{
         $trigger(radio, ev, type) {
             let vm = this;
             switch (type) {
@@ -136,23 +175,40 @@ export default{
                 default: break;
             }
         },
-        validValue(){
+        validValue(checkModel){
             let vm = this;
+            let val = vm.getValue() || '';
             if (vm.must === true) {
-                if (vm.getValue() == '') {
-                    vm.isValid = false;
-                    //todo 
-                   // vm.validInfo = i18nJson['please_select'] + vm.label;
-                } else {
-                    vm.validInfo = '';
-                    vm.isValid = true;
-                }
+                if(checkModel){
+                    return (val == '' ? true :false);
+                }else{
+                    if (val == '') {
+                        vm.isValid = false;
+                        //todo 
+                       // vm.validInfo = i18nJson['please_select'] + vm.label;
+                    } else {
+                        vm.validInfo = '';
+                        vm.isValid = true;
+                    }
+                }    
             }
+            return true;
         },
-	    clickRadio(ev, idx){
+        toggleList(ev, idx){
             let vm = this;
-            var radio = vm.radios[idx];
-            if (vm.enable && radio.enable) {
+           // var radio = vm.radios[idx];
+            //if (vm.enable && radio.enable) {
+                vm.$Items.setOption({  
+                    multiple:false, 
+                    label:vm.label, 
+                    setValue:vm.setValue,
+                    valuekey:'value', 
+                    textkey: 'label'
+                });
+                console.log(vm.radios)
+                vm.$Items.showItems(vm.radios, vm.value);
+
+                /*
                 for (let  i = 0; i < vm.radios.length; i++) {
                     let curRadio = vm.radios[i];
                     if (idx == i) {
@@ -176,8 +232,8 @@ export default{
                 }
                 if (vm.validInfo != '') {
                     vm.validValue(null);
-                }
-            }
+                }*/
+            //}
         },
         getData(){
             let vm = this;
@@ -195,10 +251,13 @@ export default{
         },
         setValue(val){
             this.value = val;
+        },
+        setDisplaymodel(model){
+            this.displaymodel = model;
         }
 
-	},
-	created(){
+    },
+    created(){
         let vm = this;
         var options = Object.assign(this,this.config);
         var radios = options.radios;
@@ -217,10 +276,10 @@ export default{
             }
         }
 
-		
-	}
+        
+    }
 }
-	
+    
 </script>
 
 <style>

@@ -104,7 +104,26 @@ window.cloundOfficeApp = new Vue({
                         { label: '高中', value: '3' },
                         { label: '大学', enable: false, value: '4' }
                     ]
+                },
+        check_cfg:{
+             checkboxes: [  
+                        {
+                            label: '小学', value: '1',
+                            checkEvent: function (ev, vm, radio) {
+                                console.log('小学radio checked:');
+                                console.log(vm.getData().label);
+                            },
+                            changeEvent: function (ev, vm, radio) {
+                                console.log('小学radio changed:' + vm.value);
+                            }
+
+                        },
+                        { label: '初中',  value: '2' },
+                        { label: '高中', value: '3' },
+                        { label: '大学', enable: false, value: '4' }
+                    ]
                 }
+
     },
     methods:{
         getFormData(){
