@@ -76,8 +76,8 @@
                     -->
                     <nd-select id="area" placeholder="测试selector" label="省份1" :config="select_cfg" defaultvalue="2" ></nd-select>  
                     <nd-checkbox label="是否加薪" ></nd-checkbox>
-                    <nd-radiogroup label="单选框按钮 " :config="radio_cfg" defaultvalue="1"></nd-radiogroup>
- 					<nd-checkboxgroup label="多选按钮 " :config="check_cfg" defaultvalue="1"></nd-checkboxgroup>
+                    <nd-radiogroup label="单选框按钮 " :config="radio_cfg"  value="2,3" defaultvalue="1"></nd-radiogroup>
+ 					<nd-checkboxgroup label="多选按钮 " :config="check_cfg" value="2" defaultvalue="1"></nd-checkboxgroup>
 
                     <nd-datepicker  min="2015-10-01" max="6600-12-31" showtime="false" displayformat="yyyy-MM-dd hh:mm"  value="2017-1-7 1:1" label="请假时间"></nd-datepicker> 
                 </nd-form> 
