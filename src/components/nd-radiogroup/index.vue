@@ -86,6 +86,12 @@ export default{
             type:Boolean,
             default:false
         },
+        width:{
+            type:[String,Boolean]
+        },
+        readonly:{
+            type:[String,Boolean]
+        },
         // value:'',
         //外部参数
         //changeEvent: null,
@@ -186,6 +192,7 @@ export default{
                 }else{
                     if (val == '') {
                         vm.isValid = false;
+                        vm.validInfo = '请选择' + vm.label;
                         return false;
                         //todo 
                        // vm.validInfo = i18nJson['please_select'] + vm.label;

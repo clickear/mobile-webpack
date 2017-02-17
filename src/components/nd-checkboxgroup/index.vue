@@ -47,6 +47,9 @@ function inArrary(array, val){
 
 export default{
     props:{
+        id:{
+            type:[String]
+        },
         label: {
             type:String,
             default:''
@@ -74,6 +77,14 @@ export default{
         ischecked:{
             type:Boolean,
             default:false
+        },
+        // width 暂时没用到
+        width:{
+          type:[String,Boolean]
+        },
+        // 只读
+        readonly:{
+          type:[String,Boolean]
         },
         // value:'',
         //外部参数
@@ -175,8 +186,7 @@ export default{
                 }else{
                     if (val == '') {
                         vm.isValid = false;
-                        //todo 
-                       // vm.validInfo = i18nJson['please_select'] + vm.label;
+                        vm.validInfo = '请选择' + vm.label;
                         return false;
                     } else {
                         vm.validInfo = '';

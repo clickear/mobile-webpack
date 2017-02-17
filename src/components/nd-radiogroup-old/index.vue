@@ -97,7 +97,7 @@ export default{
                         val = this.radios[i].value;
                         break;
                     }
-                }
+                } 
                 return val;
             }
         }

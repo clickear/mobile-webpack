@@ -9,6 +9,7 @@ window.sys_GetFormTripsByPerson = sys_GetFormTripsByPerson;
 window.sys_GetFormAuxiliaryStatistical = sys_GetFormAuxiliaryStatistical;
 window.sys_MapFormTripToClaim = sys_MapFormTripToClaim;
 window.sys_GetWGetDepMembers = sys_GetWGetDepMembers;
+window.sys_GetWGetOrgDepts = sys_GetWGetOrgDepts;
 
 export default {
     sys_formfirstcommit: sys_formfirstcommit,
@@ -25,6 +26,12 @@ export default {
     sys_GetFormAndNodeStateHtml: sys_GetFormAndNodeStateHtml,
     sys_GetFormRenderTemplate:sys_GetFormRenderTemplate,
     sys_GetWGetDepMembers:sys_GetWGetDepMembers,
+    sys_GetWGetOrgDepts: sys_GetWGetOrgDepts,
+}
+
+
+function sys_GetWGetOrgDepts(depId, callback){
+    NDMobile_Ajax.GetWGetOrgDepts(depId, callback);
 }
 
 /**
@@ -387,6 +394,10 @@ var NDMobile_Ajax = {
     GetWGetDepMembers:function(personId, callback){
         var parmar = 'mPersonIds='+personId;  
         this.RemoteInvoke("WGetDepMembersDto", "GET", {}, parmar, "OrganizationApi", callback);
+    },
+    GetWGetOrgDepts:function(depId, callback){
+        var parmar = 'mDepIds='+depId;  
+        this.RemoteInvoke("WGetOrgDepts", "GET", {}, parmar, "OrganizationApi", callback);
     },
     RemoteInvoke: function(Method, type, Form, parmar, FormCenter, callBack, errorCallBack) {
         var url = Global.HostUrl + this.RemoteUrl + FormCenter + '/' + Method + '.ashx?' + parmar;

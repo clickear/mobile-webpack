@@ -1,5 +1,6 @@
 /* 部门组件 */
 
+<!-- 查看组件列表 -->
 <template>
      <div class="receipt-add">
         <h3 v-if="label">{{label}}:</h3>
@@ -83,10 +84,13 @@ export default {
 
         // 查看模式
         if(this.displaymodel && this.value){
-            let personArr = this.value.split(',');
-            for(let index in personArr){
-                vm.items.push({name:personArr[index],code:personArr[index]});
+           let deptArr = this.value.split(',');
+            for(let index in deptArr){
+                vm.items.push({name:deptArr[index],code:deptArr[index]});
             }
+            UtilHelper.getDeptArrayByDepId(this.value,function(deptArr){
+                vm.items = [].concat(deptArr);
+            });
         }
 
     },
@@ -103,12 +107,12 @@ export default {
             let vm = this;
             // 多选
             if(vm.multiple){
-                SopNative.getSelectMultiplePerson(vm.items,vm.excludeperson,function(personArr){
-                    vm.items = personArr;
+                SopNative.getSelectMultiplePerson(vm.items,vm.excludeperson,function(deptArr){
+                    vm.items = deptArr;
                 })
             }else{ // 单选
-                SopNative.getSelectPerson(function(personArr){
-                    vm.items = vm.items.concat(personArr);
+                SopNative.getSelectPerson(function(deptArr){
+                    vm.items = vm.items.concat(deptArr);
                 })  
             }
         },

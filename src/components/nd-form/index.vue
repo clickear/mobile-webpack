@@ -234,7 +234,7 @@ export default {
 			const checkResult = this._checkValid();
 			this.allowSubmit = checkResult.isValid; 
 			if(checkResult.isValid){
-				//sys_formfirstcommit(null,this.getFormData())
+				sys_formfirstcommit(null,this.getFormData())
 				console.log(this.getFormData())
 			}else{
 				this.$Pop.popMessage.warning(checkResult.validInfo);
@@ -274,7 +274,7 @@ export default {
 
                         }
                         result = false;
-                        validErrorMessage = comp.validInfo || "请检查输入";
+                        validErrorMessage = comp.validInfo || "请检查'" + comp.label + "'";
                         if (comp.validErrorEvent && comp.validErrorEvent instanceof Function) {
                             comp.validErrorEvent(comp);
                         }

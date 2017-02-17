@@ -2,7 +2,7 @@
 
 <template>
      <div class="receipt-add">
-        <h3 v-if="label">{{label}}:</h3>
+        <h3 v-if="label">{{label}} <span v-show="must" style="color:red"> (必填)</span></h3>
         <div style="display:inline">
             <div class="avatar"  v-for="row in items" name="{{row.code}}" >
                   <ximg :xsrc="getSrc(row.code)" @click="look(row.code)"></ximg>
@@ -62,8 +62,6 @@ export default {
         removeData: _interface,
 
         //view属性
-        isValid: true,
-        validInfo: '',
         dataSelect: [],         //已选人员
         
         items:{
@@ -83,7 +81,6 @@ export default {
 
         // 查看模式
         if(this.displaymodel && this.value){
-
             let personArr = this.value.split(',');
             for(let index in personArr){
                 vm.items.push({name:personArr[index],code:personArr[index]});
@@ -92,18 +89,21 @@ export default {
                 vm.items = [].concat(personArr);
             });
         }
-
-
-
+    },
+    data(){
+        return {
+            isValid:true,
+            validInfo :'',
+        }
     },
     methods : {
         getValue(){
             let vm = this;
-            return UtilHelper.getPersonCodeString(vm.items);
+            return UtilHelper.getCodeString(vm.items);
         },
         getText(){
             let vm = this;
-             return UtilHelper.getPersonNameString(vm.items);
+             return UtilHelper.getNameString(vm.items);
         },
         add(){
             let vm = this;
@@ -130,7 +130,26 @@ export default {
         },
         getSrc(code){
             return UtilHelper.becomeAvatarSrc(code);
-        }
+        },        
+        validValue(checkModel){
+            let vm = this;
+            let val = vm.getValue() || '';
+            if (vm.must === true) {
+                if(checkModel){
+                    return (val == '' ? false :true);
+                }else{
+                    if (val == '') {
+                        vm.isValid = false;
+                        vm.validInfo = '请添加人员';
+                        return false;
+                    } else {
+                        vm.validInfo = '';
+                        vm.isValid = true;
+                    }
+                }    
+            }
+            return true;
+        },
         
     }
 }

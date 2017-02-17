@@ -130,7 +130,7 @@ function isString(o){
  * @param  {[Array,String]} people_id [人员列表，数组或者,隔开。用于原生使用]
  * @return {[type]}           [description]
  */
-function getPersonCodeString(people_id){
+function getCodeString(people_id){
   var personArr = [];
   if(isArray(people_id)){
     if (people_id) {
@@ -151,7 +151,7 @@ function getPersonCodeString(people_id){
  * @param  {[Array,String]} people_id [人员列表，数组或者,隔开。用于原生使用]
  * @return {[type]}           [description]
  */
-function getPersonNameString(people_id){
+function getNameString(people_id){
   var personArr = [];
   if(isArray(people_id)){
     if (people_id) {
@@ -188,6 +188,28 @@ function getPersonArrayByPersonId(personId,callback){
 }
 
 
+/**
+ * 从接口中获取值，根据199186,950716获取到数组[{name:'',code:''},{name:'',code:''}]
+ * @param  {[type]} depId 部门Id
+ * @param  {Function} callback 回调函数
+ * @return {[type]}          [description]
+ */
+function getDeptArrayByDepId(depId,callback){
+    FormOperator.sys_GetWGetOrgDepts(depId,function(data){
+        let resultArr = [];
+        if(data && data.Code == 1){
+            for(let i=0; i < data.Data.length; i++){
+                resultArr.push({name:data.Data[i].SDepName,code:data.Data[i].DepId});
+            }
+        }
+        if(callback && callback instanceof Function){
+            callback(resultArr);
+        }
+    });
+}
+
+
+
 window.becomeAvatarSrc = becomeAvatarSrc;
 window.FE_Util = FE_Util;
 window.setCheckPop = setCheckPop;
@@ -198,7 +220,8 @@ module.exports = {
 	friendlyFormatDate:friendlyFormatDate,
     FE_Util:FE_Util,
     setCheckPop:setCheckPop,
-    getPersonCodeString:getPersonCodeString,
-    getPersonNameString:getPersonNameString,
-    getPersonArrayByPersonId:getPersonArrayByPersonId
+    getCodeString:getCodeString,
+    getNameString:getNameString,
+    getPersonArrayByPersonId:getPersonArrayByPersonId,
+    getDeptArrayByDepId:getDeptArrayByDepId
 } 

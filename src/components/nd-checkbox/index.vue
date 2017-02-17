@@ -21,9 +21,6 @@
       <input type="hidden" :id="id" :value=":value">
     </div>
   </div>
-
-
-
 </template>
 
 
@@ -32,22 +29,33 @@
 
 	export default{
 		props:{
+      id:{
+        type:[String]
+      },
 			label: {
 				type:String,
 				default:''
 			},
 	        
-	        enable: {
-	        	type:Boolean,
-	        	default:true
-	        },
-	        ischecked:{
-	        	type:Boolean,
-	        	default:false
-	        },
-	        //外部参数
-	        //changeEvent: null,
-	        //checkEvent: null,
+      enable: {
+      	type:Boolean,
+      	default:true
+      },
+      ischecked:{
+      	type:Boolean,
+      	default:false
+      },
+      // width 暂时没用到
+      width:{
+          type:[String,Boolean]
+      },
+      // 只读
+      readonly:{
+          type:[String,Boolean]
+      },
+      //外部参数
+      //changeEvent: null,
+      //checkEvent: null,
 		},
 		methods:{
 			$onclick(){

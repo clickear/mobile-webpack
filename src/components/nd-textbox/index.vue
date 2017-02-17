@@ -2,7 +2,7 @@
     <template v-if="!displaymodel">
         <template v-if="multiple"> 
             <div class="nd-edit-content" :class="{'nd-error':!isValid}">
-              <div class="nd-txt-title" >{{label}}<span v-show="must" style="color:red"> (必填) </div>
+              <div class="nd-txt-title" >{{label}}<span v-if="unit">({{unit}})</span><span v-show="must" style="color:red"> (必填) </span></div>
                 <div class="nd-txt-con">
                     <!-- maxlength 存在bug ，暂不使用 -->
                     <textarea
@@ -46,7 +46,7 @@
         </template>
         <template v-else>
             <div class="nd-edit-content" :class="{'nd-error':!isValid}">
-                <div class="nd-txt-title" >{{label}}<span v-show="must" style="color:red"> (必填) </div>
+                <div class="nd-txt-title" >{{label}} <span v-if="unit">({{unit}})</span> <span v-show="must" style="color:red"> (必填) </div>
                 <!-- input 组件不显示字数 -->
                 <input
                       class="nd-text-area"
@@ -157,7 +157,10 @@ export default {
       default: true,
     },
     // 单位
-    unit:'',
+    unit:{
+        type:String,
+        default:''
+    },
 
     max: Number,
     min: Number,
