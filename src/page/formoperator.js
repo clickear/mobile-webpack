@@ -8,7 +8,7 @@ window.sys_GetFormTrips = sys_GetFormTrips;
 window.sys_GetFormTripsByPerson = sys_GetFormTripsByPerson;
 window.sys_GetFormAuxiliaryStatistical = sys_GetFormAuxiliaryStatistical;
 window.sys_MapFormTripToClaim = sys_MapFormTripToClaim;
-
+window.sys_GetWGetDepMembers = sys_GetWGetDepMembers;
 
 export default {
     sys_formfirstcommit: sys_formfirstcommit,
@@ -24,9 +24,27 @@ export default {
     sys_GetFormDataAjax: sys_GetFormDataAjax,
     sys_GetFormAndNodeStateHtml: sys_GetFormAndNodeStateHtml,
     sys_GetFormRenderTemplate:sys_GetFormRenderTemplate,
+    sys_GetWGetDepMembers:sys_GetWGetDepMembers,
 }
 
+/**
+ * 获取人员列表(用于人员显示)
+ * @param  {[String]}   personId 工号，以,隔开
+ * @param  {Function} callback 回调函数
+ * @return {[type]}            [description]
+ */
+function sys_GetWGetDepMembers(personId, callback){
+    NDMobile_Ajax.GetWGetDepMembers(personId,callback);
+}
 
+/**
+ * 获取模版信息
+ * @param  {Long}   pageCode    pageCode值
+ * @param  {LONG}   pKey        pkey
+ * @param  {long}   requireType 获取类型 
+ * @param  {Function} callback    回调
+ * @return {[type]}               [description]
+ */
 function sys_GetFormRenderTemplate(pageCode, pKey,requireType, callback){
     NDMobile_Ajax.GetFormRenderTemplate(pageCode, pKey,requireType, callback);
 }
@@ -365,6 +383,10 @@ var NDMobile_Ajax = {
     GetFormRenderTemplate:function(pageCode, pKey, requireType, callback){
         var parmar = 'pageCode='+pageCode +'&pkey=' + pKey +'&requireType='+requireType;  
         this.RemoteInvoke("GetRenderFormTemplate", "GET", {}, parmar, "FormDesign", callback);
+    },
+    GetWGetDepMembers:function(personId, callback){
+        var parmar = 'mPersonIds='+personId;  
+        this.RemoteInvoke("WGetDepMembersDto", "GET", {}, parmar, "OrganizationApi", callback);
     },
     RemoteInvoke: function(Method, type, Form, parmar, FormCenter, callBack, errorCallBack) {
         var url = Global.HostUrl + this.RemoteUrl + FormCenter + '/' + Method + '.ashx?' + parmar;

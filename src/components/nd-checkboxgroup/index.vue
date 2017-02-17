@@ -1,31 +1,40 @@
 <template>
-  <div class="nd-cell" :class="{'weui_select_after':label, 'weui_cell_select':!displaymodel}" >
-    <div class="weui_cell_hd" v-if="label" :class="{'nd-cell-primary':displaymodel}">
-      <label for="" class="nd-label" >{{label}}</label>
-    </div>
-    <div class=" nd-cell-primary nd-cell-body nd-select-container" v-if="!displaymodel" >
-        <div class="input-wrapper"   @click="toggleList($event)"  >
-            <input class="ui-text" 
-                   type="text" 
-                   :placeholder="placeholder" 
-                   :readonly="true" 
-                   :id="id"
+    <template v-if="!displaymodel">
+      <div class="nd-cell" :class="{'weui_select_after':label, 'weui_cell_select':!displaymodel}" >
+        <div class="weui_cell_hd" v-if="label" :class="{'nd-cell-primary':displaymodel}">
+          <label for="" class="nd-label" >{{label}}</label>
+        </div>
+        <div class=" nd-cell-primary nd-cell-body nd-select-container" v-if="!displaymodel" >
+            <div class="input-wrapper"   @click="toggleList($event)"  >
+                <input class="ui-text" 
+                       type="text" 
+                       :placeholder="placeholder" 
+                       :readonly="true" 
+                       :id="id"
 
-                   :disabled="!enable"
-                   :name="name"
-                   :value="text==''?placeholder:text" />
-            <input class="ui-text form-filter" 
-                   type="text"
-                   v-show ="isShowOption"
-                   ms-css-text-align="align"
-                   ms-css-padding-left="label=='' ? 0 : labelwidth + 10"
-                   v-if="filter"
-                   @click="filterHander($event)"
-                   v-model="filterText" />
+                       :disabled="!enable"
+                       :name="name"
+                       :value="text==''?placeholder:text" />
+                <input class="ui-text form-filter" 
+                       type="text"
+                       v-show ="isShowOption"
+                       ms-css-text-align="align"
+                       ms-css-padding-left="label=='' ? 0 : labelwidth + 10"
+                       v-if="filter"
+                       @click="filterHander($event)"
+                       v-model="filterText" />
 
-        </div> 
+            </div> 
+    </template>
+    <template v-else>
+        <div class="nd-cell" :class="{'weui_select_after':label, 'weui_cell_select':!displaymodel}" >
+            <div class="weui_cell_hd nd-cell-primary" >
+                <label class="nd-label" >{{label}}</label>
+            </div>
+            <div class="nd-cell-right">{{text}}</div>
+        </div>
+    </template>
 </template>
-
 <script>
 function inArrary(array, val){
     for(var i =0; i<array.length; i++){

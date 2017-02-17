@@ -1,49 +1,55 @@
-
 <template>
-  <div class="nd-cell" :class="{'weui_select_after':label, 'weui_cell_select':!displaymodel}" >
-    <div class="weui_cell_hd" v-if="label" :class="{'nd-cell-primary':displaymodel}">
-      <label for="" class="nd-label" >{{label}}</label>
-    </div>
-    <div class=" nd-cell-primary nd-cell-body nd-select-container" v-if="!displaymodel" >
+    <template v-if="!displaymodel">
+      <div class="nd-cell" :class="{'weui_select_after':label, 'weui_cell_select':!displaymodel}" >
+        <div class="weui_cell_hd" v-if="label" :class="{'nd-cell-primary':displaymodel}">
+          <label for="" class="nd-label" >{{label}}</label>
+        </div>
+        <div class=" nd-cell-primary nd-cell-body nd-select-container" v-if="!displaymodel" >
 
-    	<div class="input-wrapper"   @click="toggleList($event)"  >
-    		<input class="ui-text" 
-                   type="text" 
-                   :placeholder="placeholder" 
-                   :readonly="true" 
-                   :id="id"
+        	<div class="input-wrapper"   @click="toggleList($event)"  >
+        		<input class="ui-text" 
+                       type="text" 
+                       :placeholder="placeholder" 
+                       :readonly="true" 
+                       :id="id"
 
-                   :disabled="!enable"
-                   :name="name"
-                   v-show ="!isShowOption || !filter"
-                   :value="text==''?placeholder:text" />
-            <input class="ui-text form-filter" 
-                   type="text"
-                   v-show ="isShowOption"
-                   ms-css-text-align="align"
-                   ms-css-padding-left="label=='' ? 0 : labelwidth + 10"
-                   v-if="filter"
-                   @click="filterHander($event)"
-                   v-model="filterText" />
+                       :disabled="!enable"
+                       :name="name"
+                       v-show ="!isShowOption || !filter"
+                       :value="text==''?placeholder:text" />
+                <input class="ui-text form-filter" 
+                       type="text"
+                       v-show ="isShowOption"
+                       ms-css-text-align="align"
+                       ms-css-padding-left="label=='' ? 0 : labelwidth + 10"
+                       v-if="filter"
+                       @click="filterHander($event)"
+                       v-model="filterText" />
 
-    	</div>
-    	<div class="dropdown-menu nd-select-list" v-if="data!=null" v-show="false">
-			<ul>
-                <li v-for="el in data"  :class="{'nd-selected': isSelected(el[valuekey])}">
-                    <a hidefocus="none" href="javascript:void(0)" :name="el[valuekey]" @click="selectOne($event, el[valuekey])">{{el[textkey]}}{{el.othertext}}</a>
-                    <span class="pull-right" v-if="multiple">&#xe605;</span>
-                </li>
-                <li v-if="data.length === 0">
-                    <a href="javascript:void(0)" class="empty">
-                        {{ emptymsg }}
-                    </a>                  
-                </li>
-            </ul>
-    	</div>
-</template>
-
-
-
+        	</div>
+        	<div class="dropdown-menu nd-select-list" v-if="data!=null" v-show="false">
+    			<ul>
+                    <li v-for="el in data"  :class="{'nd-selected': isSelected(el[valuekey])}">
+                        <a hidefocus="none" href="javascript:void(0)" :name="el[valuekey]" @click="selectOne($event, el[valuekey])">{{el[textkey]}}{{el.othertext}}</a>
+                        <span class="pull-right" v-if="multiple">&#xe605;</span>
+                    </li>
+                    <li v-if="data.length === 0">
+                        <a href="javascript:void(0)" class="empty">
+                            {{ emptymsg }}
+                        </a>                  
+                    </li>
+                </ul>
+        	</div>
+    </template>
+    <template v-else>
+            <div class="nd-cell" :class="{'weui_select_after':label, 'weui_cell_select':!displaymodel}" >
+                <div class="weui_cell_hd nd-cell-primary" >
+                    <label class="nd-label" >{{label}}</label>
+                </div>
+                <div class="nd-cell-right">{{text}}</div>
+            </div>
+        </template>
+    </template>
 <script>
 
 function _interface(){}
@@ -214,7 +220,7 @@ export default{
             let val = vm.getValue() || '';
 			if (vm.must === true) {
                 if(checkModel){
-                    return (val ? false:true);
+                    return (val == '' ? false:true);
                 }
 			    if (val == '') {
 			        vm.isValid = false;

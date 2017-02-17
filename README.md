@@ -252,3 +252,6 @@ radio_cfg:{
 + UtilHelper, SopNative 提取
 + 弹出框控件未检查
 + billLink 未验证
+
+# 后期验证注意点
++ 单行文本输入框，默认字数上限20个字，是否右配置设置

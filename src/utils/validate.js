@@ -121,47 +121,47 @@ export default function validate(val, valids, message, vm){
                         break;
                     case '+number':
                         reg = /^((((0\.)|([1-9][0-9]*\.))(([0-9]*[1-9]{1})|(0{1,2})))|([1-9][0-9]*))$/;
-                        info = reg.test(val) ? '' : (message ? message : i18nJson.please_enter_the_correct_positive_number);                    
+                        info = reg.test(val) ? '' : (message ? message : '请输入正确的正数');                    
                         break;
                     case '-number':
                         reg = /^(((-((0\.)|([1-9][0-9]*\.))(([0-9]*[1-9]{1})|(0{1,2}))))|(-[1-9][0-9]*))$/;
-                        info = reg.test(val) ? '' : (message ? message : i18nJson.please_enter_the_correct_negative_number);                    
+                        info = reg.test(val) ? '' : (message ? message : '请输入正确的负数');                    
                         break;                                                
                     case 'int':
                         reg = /^-?[1-9][0-9]*$/;
-                        info = reg.test(val) ? '' : (message ? message : i18nJson.please_enter_the_correct_integer);
+                        info = reg.test(val) ? '' : (message ? message : '请输入正确的整数');
                         break;
                     case '+int':
                         reg = /^[1-9][0-9]*$/;
-                        info = reg.test(val) ? '' : (message ? message : i18nJson.please_enter_the_correct_positive_integer);
+                        info = reg.test(val) ? '' : (message ? message : '请输入正确的正整数');
                         break;
                     case '-int':
                         reg = /^-[1-9][0-9]*$/;
-                        info = reg.test(val) ? '' : (message ? message : i18nJson.please_enter_the_correct_negative_integer);
+                        info = reg.test(val) ? '' : (message ? message : '请输入正确的负整数');
                         break;
                     case 'float':
                         reg = /^(-?((0\.)|([1-9][0-9]*\.)))(([0-9]*[1-9]{1})|(0{1,2}))$/;
-                        info = reg.test(val) ? '' : (message ? message : i18nJson.please_enter_the_correct_float);
+                        info = reg.test(val) ? '' : (message ? message : '请输入正确的浮点数');
                         break;
                     case '+float':
                         reg = /^((0\.)|([1-9][0-9]*\.))(([0-9]*[1-9]{1})|(0{1,2}))$/;
-                        info = reg.test(val) ? '' : (message ? message : '正浮点数字');
+                        info = reg.test(val) ? '' : (message ? message : '请输入正确的正浮点数');
                         break;
                     case '-float':
                         reg = /^(-(((0\.)|([1-9][0-9]*\.))))(([0-9]*[1-9]{1})|(0{1,2}))$/;
-                        info = reg.test(val) ? '' : (message ? message : i18nJson.please_enter_the_correct_negative_float);
+                        info = reg.test(val) ? '' : (message ? message : '请输入正确的负浮点数');
                         break;
                     case 'ip':
                         reg = /^(?:(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])\.){3}(?:[01]?\d{1,2}|2[0-4]\d|25[0-5])$/;
-                        info = reg.test(val) ? '' : (message ? message : i18nJson.ip_address_error);
+                        info = reg.test(val) ? '' : (message ? message : 'IP地址有误');
                         break;
                     case 'email':
                         reg = /^\w+((-\w+)|(\.\w+))*\@[A-Za-z0-9]+((\.|-)[A-Za-z0-9]+)*\.[A-Za-z0-9]{2,5}$/;
-                        info = reg.test(val) ? '' : (message ? message : i18nJson.email_address_error);
+                        info = reg.test(val) ? '' : (message ? message : '电子邮件地址有误');
                         break;
                     case 'phone':
                         reg = /^(\d{3,4}-)?\d{7,8}$/;
-                        info = reg.test(val) ? '' : (message ? message : i18nJson.telephone_number_format_error);
+                        info = reg.test(val) ? '' : (message ? message : '电话号码格式有误');
                         break;
                     case 'mobile':
                         reg = /^(0|86|17951)?(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$/;
@@ -169,15 +169,15 @@ export default function validate(val, valids, message, vm){
                         break;
                     case 'phone|mobile':
                         reg = /(^(0|86|17951)?(13[0-9]|15[0-9]|17[0-9]|18[0-9]|14[0-9])[0-9]{8}$|^(\d{3,4}-)?\d{7,8}$)/;
-                        info = reg.test(val) ? '' : (message ? message : i18nJson.number_format_error);
+                        info = reg.test(val) ? '' : (message ? message : '号码格式有误');
                         break;
                     case 'name':
                         reg = /^([\u4e00-\u9fa5]|[a-zA-Z])((([\u4e00-\u9fa5]|[a-zA-Z])*[\.]{0,1}([\u4e00-\u9fa5]|[a-zA-Z]))*)$/;
-                        info = reg.test(val) ? '' : (message ? message : '名称错误');
+                        info = reg.test(val) ? '' : (message ? message : '姓名格式不正确，仅支持中文、英文、和空格');
                         break;
                     case 'noSpecial':
                         reg = /^([\u4e00-\u9fa5]|[a-zA-Z]|\d)((([\u4e00-\u9fa5]|[a-zA-Z]|\d)*[\.]{0,1}([\u4e00-\u9fa5]|[a-zA-Z]|\d))*)$/;
-                        info = reg.test(val) ? '' : (message ? message : i18nJson.name_format_error);
+                        info = reg.test(val) ? '' : (message ? message :'姓名格式不正确，仅支持中文、英文、和空格');
                         break;
                     case 'num&letters':
                         reg = /^((\d|\w)*)$/;
@@ -185,15 +185,15 @@ export default function validate(val, valids, message, vm){
                         break;                        
                     case 'money':
                         reg = /^(([1-9]\d{0,9})|0)(\.\d{1,2})?$/;
-                        info = reg.test(val) ? '' : (message ? message : i18nJson.please_enter_the_correct_amount);
+                        info = reg.test(val) ? '' : (message ? message : '请输入正确的金额，如11.00');
                         break;
                     case 'url':
                         reg = /^(http:\/\/)?(\w+\.){1,3}(((com|org|net|mil|edu|gov)(\.(uk|jp|cn|hk))?)|ca|io|cc|in|au|co\.cc|co\.in|uk|jp|cn|hk)((\/|\?)[\w-\/?%&=]*)?$/;
-                        info = reg.test(val) ? '' : (message ? message : i18nJson.please_enter_the_correct_url);
+                        info = reg.test(val) ? '' : (message ? message : '请输入正确的网址');
                         break;    
                     case 'postcode':
                         reg = /^[1-9][0-9]{5}$/;
-                        info = reg.test(val) ? '' : (message ? message : i18nJson.please_enter_the_correct_zip_code);
+                        info = reg.test(val) ? '' : (message ? message : '请输入正确的邮政编码');
                         break;                                              
                     default:
                         var reg = new RegExp(valid);

@@ -1,6 +1,4 @@
-
-
-
+import FormOperator from '../page/formoperator.js'
 
 
 /**
@@ -169,6 +167,25 @@ function getPersonNameString(people_id){
   }
 }
 
+/**
+ * 从接口中获取值，根据199186,950716获取到数组[{name:'',code:''},{name:'',code:''}]
+ * @param  {[type]} personId [description]
+ * @param  {Function} callback 回调函数
+ * @return {[type]}          [description]
+ */
+function getPersonArrayByPersonId(personId,callback){
+    FormOperator.sys_GetWGetDepMembers(personId,function(data){
+        let resultArr = [];
+        if(data && data.Code == 1){
+            for(let i=0; i < data.Data.length; i++){
+                resultArr.push({name:data.Data[i].SPersonName,code:data.Data[i].PersonId});
+            }
+        }
+        if(callback && callback instanceof Function){
+            callback(resultArr);
+        }
+    });
+}
 
 
 window.becomeAvatarSrc = becomeAvatarSrc;
@@ -182,6 +199,6 @@ module.exports = {
     FE_Util:FE_Util,
     setCheckPop:setCheckPop,
     getPersonCodeString:getPersonCodeString,
-    getPersonNameString:getPersonNameString
-
+    getPersonNameString:getPersonNameString,
+    getPersonArrayByPersonId:getPersonArrayByPersonId
 } 

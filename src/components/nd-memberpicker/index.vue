@@ -83,11 +83,17 @@ export default {
 
         // 查看模式
         if(this.displaymodel && this.value){
+
             let personArr = this.value.split(',');
             for(let index in personArr){
                 vm.items.push({name:personArr[index],code:personArr[index]});
             }
+            UtilHelper.getPersonArrayByPersonId(this.value,function(personArr){
+                vm.items = [].concat(personArr);
+            });
         }
+
+
 
     },
     methods : {

@@ -45,40 +45,42 @@
             </div>
         </template>
         <template v-else>
-             <div class="nd-txt-title" >{{label}}<span v-show="must" style="color:red"> (必填) </div>
-             <input
-                  class="nd-text-area"
-                  :id="id"
-                  :class="{'nd-showcount':(lettercount && maxlen)}"
-                  :class="classname"            
-                  :style="textareaStyle"
-                  
-                  :id="id"
-                  :name="name"
-                  :must="must"
+            <div class="nd-edit-content" :class="{'nd-error':!isValid}">
+                <div class="nd-txt-title" >{{label}}<span v-show="must" style="color:red"> (必填) </div>
+                <!-- input 组件不显示字数 -->
+                <input
+                      class="nd-text-area"
+                      :id="id"
+                      :class="classname"            
+                      :style="textareaStyle"
+                      
+                      :id="id"
+                      :name="name"
+                      :must="must"
 
-                  :placeholder="placeholder"
-                  :readonly="readonly"
+                      :placeholder="placeholder"
+                      :readonly="readonly"
 
-                  :displaymodel="displaymodel"
+                      :displaymodel="displaymodel"
 
-                  :min="min"
+                      :min="min"
 
-                  :autocomplete="autocomplete"
-                  :autocapitalize="autocapitalize"
-                  :autocorrect="autocorrect"
-                  :spellcheck="spellcheck"
+                      :autocomplete="autocomplete"
+                      :autocapitalize="autocapitalize"
+                      :autocorrect="autocorrect"
+                      :spellcheck="spellcheck"
 
-                  @input="$oninput"
-                  @click="$onclick"
-                  @focus="$onfocus"             
-                  @blur="$onblur"
-
-
-                  v-el:input
-                  v-model="value"
-              >
+                      @input="$oninput"
+                      @click="$onclick"
+                      @focus="$onfocus"             
+                      @blur="$onblur"
+                      
+                      v-el:input
+                      v-model="value"
+                >
+                <span class="nd-txt-error" v-show=" !isValid || !forceVlid " style="" >{{forceValidInfo || validInfo }}</span>
             </textarea>
+            </div>
         </template>
     </template>
     <template v-else>
@@ -285,7 +287,7 @@ export default {
 
                 if (vm.must === true && (val == null || val == '')) {
                     isValid = false;
-                    validInfo = '请输入' + vm.label;
+                    validInfo = '请填写' + vm.label;
                 } else if (typeof vm.must == 'number' && val.length != vm.must) {
                     isValid = false;
                     validInfo = vm.label + '输入必须为' + vm.must +'个字';
