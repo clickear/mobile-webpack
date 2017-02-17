@@ -43,6 +43,7 @@ import ndDatepicker from 'components/nd-datepicker'
 import ndMemberpicker from 'components/nd-memberpicker'
 import ndDeptpicker from 'components/nd-deptpicker'
 import ndSeparation from 'components/nd-separation'
+import ndVoice from 'components/nd-voice'
    
 
 import sortable from '../directives/vue-sortable'
@@ -85,7 +86,8 @@ const ndComponents =
     ndDatepicker,
     ndMemberpicker,
     ndDeptpicker,
-    ndSeparation
+    ndSeparation,
+    ndVoice
 }
 
 Object.keys(ndComponents).forEach((key) => {

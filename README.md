@@ -263,3 +263,6 @@ radio_cfg:{
 + 各组件		详情页面 必填不显示
 + 部门控件		
 + defaultvalue 	问题
+
++ 
+
