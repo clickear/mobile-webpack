@@ -97,11 +97,11 @@ export default {
     methods : {
         getValue(){
             let vm = this;
-            return UtilHelper.getPersonCodeString(vm.items);
+            return UtilHelper.getCodeString(vm.items);
         },
         getText(){
             let vm = this;
-             return UtilHelper.getPersonNameString(vm.items);
+             return UtilHelper.getNameString(vm.items);
         },
         add(){
             let vm = this;
