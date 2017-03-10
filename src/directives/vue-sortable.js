@@ -29,4 +29,20 @@ function sortable(newOption, oldOption) {
   }
 
 
-module.exports = sortable;
+export default {
+    inserted:function(el, binding){
+        let option = binding.value;
+        var sortable = new Sortable(el, option);
+        el.sortable = sortable;
+
+    },
+    update:function(el, option){
+        if( el.sortable && (option.value.disabled != option.oldValue.disabled)){
+            // el.sortable.option('disabled', !! option.value.disabled);
+        }
+        
+    }
+
+}
+
+// module.exports = sortable;

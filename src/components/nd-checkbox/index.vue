@@ -1,49 +1,37 @@
 
 <template>
   <div class="nd-cell" :class="{'weui_select_after':label, 'weui_cell_select':!displaymodel}">
-    <div class="weui_cell_hd" v-if="label" :class="{'nd-cell-primary':displaymodel}">
+    <div class="weui_cell_hd" v-show="label" :class="{'nd-cell-primary':displaymodel}">
       <label for="" class="nd-label" >{{label}}</label>
     </div>
     <div class=" nd-cell-primary  nd-checkbox-container" v-if="!displaymodel" >
-
-    <input class= "nd-switch" type="checkbox" :value="ischecked" @click="$onclick" :disable="!enable"/>
-
-    <!--
-	    <span class="ui-checkbox"
-	    	:class="{'checked':ischecked,'disable': !enable}"
-	          ms-click="$onclick()">
-	       
-	    </span>
-	-->
+      <input class= "nd-switch" type="checkbox" :value="ischecked" @click="$onclick" :disable="!enable"/>
     </div>
-    <div class="nd-cell-right" v-else>
-      {{ text }}
-      <input type="hidden" :id="id" :value=":value">
+    <div class="nd-cell-right" v-if="displaymodel">
+       {{ text }}
+      <input type="hidden" :id="id" :value="value">
     </div>
   </div>
 </template>
 
-
-
 <script>
-
 	export default{
-		props:{
+    props:{
       id:{
         type:[String]
       },
-			label: {
-				type:String,
-				default:''
-			},
-	        
+      label: {
+        type:String,
+        default:''
+      },
+          
       enable: {
-      	type:Boolean,
-      	default:true
+        type:Boolean,
+        default:true
       },
       ischecked:{
-      	type:Boolean,
-      	default:false
+        type:Boolean,
+        default:false
       },
       // width 暂时没用到
       width:{
@@ -56,29 +44,27 @@
       //外部参数
       //changeEvent: null,
       //checkEvent: null,
-		},
-		methods:{
-			$onclick(){
-				let vm = this;
- 				if (vm.ischecked) {
-					if (typeof vm.checkEvent == 'function') {
-					    vm.checkEvent(vm);
-					}
-				}
-				if (typeof vm.changeEvent == 'function') {
-					vm.changeEvent(vm);
-				}
-			}, 
-			getValue(){
-        		return this.ischecked;
-        	},
-
-		},
-		created(){
-			Object.assign(this,this.config);
-		}
+    },
+    methods:{
+      $onclick(){
+        let vm = this;
+        if (vm.ischecked) {
+          if (typeof vm.checkEvent == 'function') {
+              vm.checkEvent(vm);
+          }
+        }
+        if (typeof vm.changeEvent == 'function') {
+          vm.changeEvent(vm);
+        }
+      }, 
+      getValue(){
+        return this.ischecked;
+      }
+    },
+    created(){
+      Object.assign(this,this.config);
+    }
 	}
-	
 </script>
 
 <style>
@@ -167,39 +153,6 @@
 .nd-switch:checked:after {
   transform: translateX(20px);
 }
-
-
-/*
-.ui-checkbox:before {
-	content: '\e634';
-}
-
-.ui-checkbox:before,
-.ui-radio:before {
-  font-size: 28px;
-  color: #5ab8f6;
-  margin-right: 2px;
-  vertical-align: middle;
-  height: 19px;
-  line-height: 19px;
-}
-.ui-checkbox.checked:before {
-  content: '\e636';
-}
-
-
-.nd-checkbox-checked:after{
-	    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    right: 16px;
-    margin: auto 0;
-    width: 21px;
-    height: 21px;
-    background-size: 100px;
-    background-position: -30px -170px;
-}*/
 
 </style>
 

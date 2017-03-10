@@ -10,6 +10,7 @@ window.sys_GetFormAuxiliaryStatistical = sys_GetFormAuxiliaryStatistical;
 window.sys_MapFormTripToClaim = sys_MapFormTripToClaim;
 window.sys_GetWGetDepMembers = sys_GetWGetDepMembers;
 window.sys_GetWGetOrgDepts = sys_GetWGetOrgDepts;
+window.sys_GetFormConfig = sys_GetFormConfig;
 
 export default {
     sys_formfirstcommit: sys_formfirstcommit,
@@ -27,9 +28,34 @@ export default {
     sys_GetFormRenderTemplate:sys_GetFormRenderTemplate,
     sys_GetWGetDepMembers:sys_GetWGetDepMembers,
     sys_GetWGetOrgDepts: sys_GetWGetOrgDepts,
+    sys_GetUploadByFileGUid: sys_GetUploadByFileGUid,
+    sys_GetFormConfig: sys_GetFormConfig
 }
 
+/**
+ * 获取表单配置
+ * @return {[type]} [description]
+ */
+function sys_GetFormConfig(bCreateType, callback) {
+    NDMobile_Ajax.GetFormConfig(bCreateType, callback);
+}
 
+/**
+ * 根据guid获取表单值
+ * @param  {[type]}   uid      [description]
+ * @param  {Function} callback [description]
+ * @return {[type]}            [description]
+ */
+function sys_GetUploadByFileGUid(uid, callback){
+	NDMobile_Ajax.GetUploadByFileGUid(uid, callback);
+}
+
+/**
+ * 获取部门
+ * @param  {[type]}   depId    [description]
+ * @param  {Function} callback [description]
+ * @return {[type]}            [description]
+ */
 function sys_GetWGetOrgDepts(depId, callback){
     NDMobile_Ajax.GetWGetOrgDepts(depId, callback);
 }
@@ -81,26 +107,25 @@ function sys_GetFormAndNodeStateHtml(formObj, callback) {
  * @param  {Function} callback 回调函数
  * @return {[type]}            无
  */
-function sys_formfirstcommit(callback,formData) {
+function sys_formfirstcommit(callback, formData, uploadCompentData) {
+    
     //增加判断是否有未上传完的图片
-    if (imgProgressAry) {
-        for (var key in imgProgressAry) {
-            if (imgProgressAry.hasOwnProperty(key)) {
-                var imgProgress = imgProgressAry[key];
-                if (imgProgress && imgProgress.status && imgProgress.status != 'uploadSuccess') {
-                    sys_setMsgkPop("附件正在上传，请等待上传完成后再提交表单", "warn");
-                    return;
-                }
-            }
+    var picArr = cloundOfficeApp.uploadPicArr;
+    for(var i=0; i< picArr.length; i++){
+        var picObj = picArr[i];
+        if(picObj && picObj.state && picObj.state != 'uploadSuccess') {
+            sys_setMsgkPop("附件正在上传，请等待上传完成后再提交表单", "warn");
+            return;
         }
     }
+
     // 提交之前，android清理资源
     try {
         sys_recycle();
     } catch (e) {
 
     }
-    submitSure(1, "", callback, formData);
+    submitSure(1, "", callback, formData, uploadCompentData);
 }
 
 /**
@@ -156,7 +181,7 @@ var sys_isFormCommiting = false;
  * @param  {Function} callback [description]
  * @return {[type]}            [description]
  */
-function submitSure(first, remark, callback, formData) {
+function submitSure(first, remark, callback, formData, uploadCompentData) {
     if (sys_isFormCommiting)
         return;
     var m_bnode = document.getElementById("txtbNode").value == "1" ? true : false;
@@ -203,6 +228,9 @@ function submitSure(first, remark, callback, formData) {
             Form.approverUploadSound = cloundOfficeApp.approverUploadSound;
             
             Form.testJson = (formData) ? JSON.stringify(formData): JSON.stringify(getViewModelData(cloundOfficeApp));
+
+            Form.UploadComponentArr = uploadCompentData;
+
             //   Dialog.showWaiting('正在提交，请稍候...');
             NDMobile_Ajax.DoFlowNodeSave(Form, DoFlowSave_CallBack, DoFlowSave_ErrorCallBack);
             sys_isFormCommiting = true;
@@ -398,6 +426,14 @@ var NDMobile_Ajax = {
     GetWGetOrgDepts:function(depId, callback){
         var parmar = 'mDepIds='+depId;  
         this.RemoteInvoke("WGetOrgDepts", "GET", {}, parmar, "OrganizationApi", callback);
+    },
+    GetUploadByFileGUid:function(guid, callback){
+    	var parmar = 'sFileGUid='+guid;  
+        this.RemoteInvoke("GetUploadByFileGUid", "GET", {}, parmar, "Form", callback);
+    },
+    GetFormConfig:function(bCreateType, callback){
+        var parmar = 'bCreateType='+ bCreateType;
+        this.RemoteInvoke("GetFormConfig", "GET", {}, parmar, "FormDesign", callback);
     },
     RemoteInvoke: function(Method, type, Form, parmar, FormCenter, callBack, errorCallBack) {
         var url = Global.HostUrl + this.RemoteUrl + FormCenter + '/' + Method + '.ashx?' + parmar;

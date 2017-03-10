@@ -1,186 +1,203 @@
 <template>
-    <div class="nd-edit-content nd-datepick" v-show="!displaymodel">
-        <div class="nd-txt-title tit" style="margin-left:15px;" v-show="label">{{label}}</div>
-    	<div :id="uid" class="datePlugin"></div>
+    <div class="nd-datepicker-container">
+        <label class="nd-txt-title">
+            {{ label }}<span ms-if="must"> (必填) </span>
+        </label>
+        <!-- input 组件不显示字数 -->
+        <input name="reason"
+               class="nd-datepicker-input"
+               :placeholder="placeholder"
+               @click="open"
+               v-model="value"
+               :readonly="readonly" 
+               v-if="enable">     
+        <input name="reason"
+               class="nd-datepicker-input"
+               :placeholder="placeholder"
+               v-model="value"
+               disabled="disabled" 
+               v-else>                                  
+        <span class="nd-txt-error" style="display: none;"></span>
     </div>
-
-     <div class="nd-receipt-header" v-else>
-          <div class="nd-typerow">
-            <span class="nd-lab" v-show="label">{{label}}:</span>
-            <span class="nd-conent">{{value}}</span>
-            <input :id="id" type="hidden" :valu="value">
-          </div>
-        </div>
 </template>
 
+<style scoped>
+    .nd-datepick{
+        background-color: #fff;
+    }
+
+    .nd-datepick .tit{
+        margin: 0 14px;
+        margin-top: 5px;
+        font-size: 15px;
+        color: #535353;
+        text-align: center;
+    }
+
+    .nd-typerow{
+        height: 37px;
+        padding: 10px 0;
+        line-height: 16px;
+        border-bottom: 1px dotted #dcdcdc;
+        color: #313131;
+        font-size: 13px;
+    }
+
+    .nd-typerow .nd-conent{
+            font-size: 13px;
+    }
+</style>
 
 <script>
-	
-function _interface(){}
+import Datepicker from '../../lib/datepicker2'
 
 export default{
 	props:{
+        // 组件id
         id:String,
+
+        // 标题
  		label: String,
+
+        // 组件name值
         name: String,
+
+        // 组件类名
         classname: String,
-        placeholder: String,
-        displaymodel:{
-        	type:Boolean,
-        	default:false
+
+        // 占位符
+        placeholder: {
+            type: String,
+            default: '请选择时间'
         },
+
+        // 日期显示格式
         displayformat: {
-        	type:String,
-        	default:'yyyy-MM-dd HH:mm'
+        	type: String,
+        	default: 'yyyy-MM-dd HH:mm'
         },
-        valueformat:{
+
+        // 日期值的格式
+        valueformat: {
 			type: String,
-        	default: 'yyyy-MM-dd hh:mm'
+        	default: 'yyyy-MM-dd HH:mm'
         },
 
         // 必填
         must: {
-        	type:Boolean,
-        	default:false
+        	type: Boolean,
+        	default: false
         },
-        // 
+
+        // 是否可用
         enable: {
-        	type:Boolean,
-        	default:true
+        	type: Boolean,
+        	default: true
         },
+
+        // 是否显示时间
         showtime:{
-            type:[Boolean,String],
-            default:false
+            type: Boolean,
+            default: false
         },
+
+        // 最大值
         max: {
-        	type:[String,Date],
-            default:function(){return new Date('2050/12/12 10:00')}
+            type: String,
+            default: '2050-03-21 00:00'
         },
-        maxDate: {
-        	type:[String,Date]
-        },    
+
+        // 最小值
         min: {
-            type:[String,Date],
-            default:function(){return new Date('2010/12/12 10:00')}
+            type: String,
+            default: '1970-03-21 00:00'
         },
-        minDate: {
-        	type:[String,Date]
+
+        // 默认值
+        defaultvalue: {
+            type: String,
+            default: ''
         },
-        //内部属性
-        value: {
-        	type:[String, Number, Array,Date],
-        	default:''
-        },
-        stamp:{
-        	type:Boolean,
-        	default:false
-        },
-	    options: {
-	      type: Array,
-	      required: false
-	    },
+
+        // 外部传入的配置项
 	    config:{
-	    	type:Object,
-	    	default:function(){return {}}
+	    	type: Object,
+	    	default: function(){ return {}; }
 	    }
 	},
-	data(){
+
+    /**
+     * 返回数据模型
+     * @param {object} 数据模型
+     * @return none
+     */      
+	data () {
 		return {
-			carouselDatepicker:null
+			datepicker: null,
+            value: '',
+            valid: true
 		}
 	},
-    created(){
-        Object.assign(this,this.config);
-        let vm = this;
-        let val = vm.value;
-        if(typeof val == 'string') {
-            val = new Date(val).format(vm.valueformat);
-        } else if(typeof val == 'number') {
-            val = new Date(val).format(vm.valueformat);
-        } 
-        if(val == '' || val == null ){
-            val = new Date().format(vm.valueformat);
-        }
 
-        if(!vm.uid){
-            vm.uid = Math.random().toString(36).substring(3, 8);
-        }
-        
-        // 手机端不支持 hh 模式，进行替换
-        vm.displayformat = vm.displayformat.replace('hh','HH');
-    },
-	ready(){
-        let vm = this;
-	    this.carouselDatepicker = new CarouselDatepicker({
-            id: this.uid,
-            currDate: this.value,
-            beginDate: this.min,
-            endDate: this.max,
-            format: this.displayformat,
-            onValueChange: function(value) {
-               vm.value = new Date(value).format(vm.valueformat);
-            }           
+    /**
+     * 已创建
+     * @return none
+     */      
+    ready (){
+        Object.assign(this, this.config);
+
+        let self = this;
+
+        this.value = this.defaultvalue;
+
+        this.datepicker = new Datepicker({
+            defaultvalue: this.defaultvalue,
+            min: this.min,
+            max: this.max,
+            displayformat: this.displayformat,
+            valueformat: this.valueformat,
+            showtime: this.showtime,
+            onChange: function (val) {
+                self.value = val;
+            }
         });
-	},
-	methods:{
-        _trigger(ev, type){
-            let vm = this;
-            switch(type){
-                case 'changeEvent':
-                    if (typeof vm.clickEvent == 'function') {
-                        vm.clickEvent(ev, vm);
-                    }
-                    break;
-                default:break;
-            }
+
+        this.$watch('max', function (nv, ov) {
+            this.datepicker.setMax(nv);
+        });
+
+        this.$watch('min', function (nv, ov) {
+            this.datepicker.setMin(nv);
+        });
+    },
+	methods: {
+        /**
+         * 获取当前值
+         * @return none
+         */          
+		getValue () {
+            return this.value;
+		},
+
+        /**
+         * 设置当前值
+         * @param {string} 设置新的值
+         * @return none
+         */  
+        setValue (value) {
+            this.value = value;
+            this.datepicker.setValue(value);
         },
-		getData(){
-			let vm = this;
-			var data = {};
-            data[vm.name] = vm.getValue();
-            return data;
-		},
-		getValue(){
-            let vm = this;
-			var d = new Date(vm.value);
-            if(!vm.stamp) {
-            	return d == null ? '' : d.format(vm.valueformat);
-            } else {
-            	return d == null ? 0 : d.getTime();
-            }
-		},
-        setDisplaymodel(model){
-            this.displaymodel = model;
+
+        /**
+         * 打开日期选择
+         * @param {event} 事件对象
+         * @return none
+         */  
+        open (e) {
+            this.datepicker.open();
+            e.target.blur();
         }
 	}
 }
-
 </script>
-
-<style type="text/css">
-.nd-datepick{
-    background-color: #fff;
-}
-
-.nd-datepick .tit{
-    margin: 0 14px;
-    margin-top: 5px;
-    font-size: 15px;
-    color: #535353;
-    text-align: center;
-}
-
-.nd-typerow{
-    height: 37px;
-    padding: 10px 0;
-    line-height: 16px;
-    border-bottom: 1px dotted #dcdcdc;
-    color: #313131;
-    font-size: 13px;
-}
-
-.nd-typerow .nd-conent{
-        font-size: 13px;
-}
-
-</style>

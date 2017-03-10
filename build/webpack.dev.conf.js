@@ -12,6 +12,9 @@ Object.keys(baseWebpackConfig.entry).forEach(function (name) {
 })
 
 module.exports = merge(baseWebpackConfig, {
+  entry: {
+    dev:'./src/mobile/dev.js'
+  },
   module: {
     loaders: utils.styleLoaders({ sourceMap: config.dev.cssSourceMap, extract: true  })
   },
@@ -34,25 +37,31 @@ module.exports = merge(baseWebpackConfig, {
     new webpack.ProvidePlugin({
         "$": "jquery",
         "jQuery": "jquery",
-         "Vue": "vue",
-          "moment": "moment",
-          "PhotoSwipe":"photoswipe",
-          "CarouselDatepicker":"src/lib/datepicker/scripts/datepicker",
-          "SopNative":"src/page/sopnative",
-          "UtilHelper":"src/utils/utilhelper"
+        "Vue": "vue",
+        "moment": "moment",
+        "PhotoSwipe":"photoswipe",
+        "CarouselDatepicker":"src/lib/datepicker/scripts/datepicker",
+        "SopNative":"src/page/sopnative",
+        "UtilHelper":"src/utils/utilhelper"
     }),
 
 
-    new webpack.optimize.CommonsChunkPlugin('common', 'common.js'),
+    // new webpack.optimize.CommonsChunkPlugin('common', 'common.js'),
     new ExtractTextPlugin("static/[name].css"),
     // https://github.com/ampedandwired/html-webpack-plugin
     new HtmlWebpackPlugin({
       filename: 'index.html',
-      template: 'index.html',
-      inject: true
-    })
-    ,
-
+      template: 'index.ejs',
+      excludeChunks:['dev'],
+      inject:false,
+    }),
+    new HtmlWebpackPlugin({
+        filename: 'devindex.html',
+        template: './src/mobile/index.html',
+        // excludeChunks:['app'],
+        inject: true,
+        chunksSortMode: 'dependency'
+      })
 
   ]
 })

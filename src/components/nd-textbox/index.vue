@@ -1,4 +1,6 @@
 <template>
+  <div>
+  <span>{{testCount}}</span>
     <template v-if="!displaymodel">
         <template v-if="multiple"> 
             <div class="nd-edit-content" :class="{'nd-error':!isValid}">
@@ -8,21 +10,14 @@
                     <textarea
                       class="nd-text-area"
                       :id="id"
-                      :class="{'nd-showcount':(lettercount && maxlen)}"
-                      :class="classname"            
+                      :class="{'nd-showcount':(lettercount && maxlen)}"        
                       :style="textareaStyle"
-                      
-                      :id="id"
                       :name="name"
                       :must="must"
-
                       :placeholder="placeholder"
                       :readonly="readonly"
-
                       :displaymodel="displaymodel"
-
                       :min="min"
-
                       :autocomplete="autocomplete"
                       :autocapitalize="autocapitalize"
                       :autocorrect="autocorrect"
@@ -32,9 +27,7 @@
                       @click="$onclick"
                       @focus="$onfocus"             
                       @blur="$onblur"
-
-
-                      v-el:textarea
+                      v-focus="isActive"
                       v-model="value"
                       >
                     </textarea>
@@ -46,15 +39,12 @@
         </template>
         <template v-else>
             <div class="nd-edit-content" :class="{'nd-error':!isValid}">
-                <div class="nd-txt-title" >{{label}} <span v-if="unit">({{unit}})</span> <span v-show="must" style="color:red"> (必填) </div>
+                <div class="nd-txt-title" >{{label}} <span v-if="unit">({{unit}})</span> <span v-show="must" style="color:red"> (必填) </span></div>
                 <!-- input 组件不显示字数 -->
                 <input
                       class="nd-text-area"
-                      :id="id"
-                      :class="classname"            
+                      :id="id"         
                       :style="textareaStyle"
-                      
-                      :id="id"
                       :name="name"
                       :must="must"
 
@@ -64,7 +54,6 @@
                       :displaymodel="displaymodel"
 
                       :min="min"
-
                       :autocomplete="autocomplete"
                       :autocapitalize="autocapitalize"
                       :autocorrect="autocorrect"
@@ -74,8 +63,7 @@
                       @click="$onclick"
                       @focus="$onfocus"             
                       @blur="$onblur"
-                      
-                      v-el:input
+                      v-focus="isActive"
                       v-model="value"
                 >
                 <span class="nd-txt-error" v-show=" !isValid || !forceVlid " style="" >{{forceValidInfo || validInfo }}</span>
@@ -104,6 +92,7 @@
             </div>
         </template>
     </template>
+    </div>
 </template>
 
 <script>
@@ -117,17 +106,24 @@ export default {
         // if(typeof this.must == 'number'){
         //   this.max = this.must;
         // }
-
         // placeholder 默认值
-        if(!this.placeholder){
-          this.placeholder = '请输入'+ this.label +(this.max>0 ? '('+ this.maxlen +'个字)':'')
-        }
+        // if(!this.placeholder){
+        //   this.placeholder = '请输入'+ this.label +(this.max>0 ? '('+ this.maxlen +'个字)':'')
+        // }
         if(this.defaultvalue){
           this.value = this.defaultvalue;
         }
 
         // 将this.config 属性挂载在vm上    
-        Object.assign(this,this.config)
+        Object.assign(this,this.config);
+
+        // this.$dispatch('FORWARD:OVERALL', {
+        //     event: 'COMPONENT:TEXTBOX:CHANGE',
+        //     data: {
+        //       id: this.id,
+        //       value: this.value
+        //     }
+        // });
     },
     props: {
     // 标签
@@ -135,7 +131,6 @@ export default {
       type:String,
       default:''
     }, 
-    value: '',
     defaultvalue:[null],
     id: String,
     name: String,
@@ -149,7 +144,7 @@ export default {
     // 是否多行文字，input和textarea切换
     multiple: {
       type: Boolean,
-      default: true
+      default: false
     },
     // 数字统计
     lettercount: {
@@ -184,7 +179,7 @@ export default {
     },
     readonly: {
       type: Boolean,
-      default: true
+      default: false
     },
     // 校验规则
     valid:{
@@ -212,7 +207,6 @@ export default {
             // 是否激活
             isActive:false,
 
-
             // 出错信息提示
             validInfo:'',
 
@@ -223,6 +217,7 @@ export default {
             isValid:true,
 
             textareaStyle: {},
+            value:''
         }
     },
     watch: {
@@ -242,9 +237,14 @@ export default {
             });
 
             this.$trigger({ newVal: newVal, oldVal: oldVal }, 'changeEvent');
-        },
-        isValid () {
-          
+
+            // this.$dispatch('FORWARD:OVERALL', {
+            //     event: 'COMPONENT:TEXTBOX:CHANGE',
+            //     data: {
+            //       id: this.id,
+            //       value: newVal
+            //     }
+            // });
         }
     },
     methods:{
@@ -261,8 +261,8 @@ export default {
           const autosize = this.autosize;
           if(!autosize) return false;
           // 并且要为多选
-          if(this.$els.textarea && this.multiple){
-            this.textareaStyle = calcTextareaHeight(this.$els.textarea, 3, 10);
+          if(this.$refs.textarea && this.multiple){
+            this.textareaStyle = calcTextareaHeight(this.$refs.textarea, 3, 10);
           }
         },
         setDisplaymodel( model ){
@@ -275,17 +275,19 @@ export default {
             let isValid = validInfo == '' ? true : false;
 
             if (isValid) {
-
                 // 1秒后自动消失
-                if (vm.maxlen && val.replace('/n','aa').length >vm.maxlen) {
+                if (vm.maxlen && val.replace('/n','aa').length > vm.maxlen) {
                     vm.forceVlid = false;
                     vm.forceValidInfo = vm.label + '字数已达上限';
+
                     clearTimeout(this.click);
+
                     this.click = setTimeout(function(){
                         vm.forceVlid = true;
                         vm.forceValidInfo = '';
                     },1000);
-                    return ;
+
+                    return;
                 }
 
                 if (vm.must === true && (val == null || val == '')) {
@@ -314,10 +316,12 @@ export default {
         // 获取焦点
         focus(){
             let vm = this;
+
+            vm.isActive = true;
+
             Vue.nextTick(function () {
-                var els = vm.$els.textarea || vm.$els.input;
-                els.focus();
-                // document.activeElement.scrollIntoViewIfNeeded();
+                // var els = vm.$refs.textarea || vm.$refs.input;
+                // els.focus();
             });
         },
 
@@ -330,14 +334,21 @@ export default {
             }
         },
         $onclick(ev){
+            var vm = this;
+            var els = vm.$refs.textarea || vm.$refs.input;
+            this.isActive = false;
+            this.isActive = true;
+            // 如果为
+            if(!vm.displaymodel && els){
+              setTimeout(function(){ UtilHelper.mockScrollIntoView(els) },100)
+            }
             this.$trigger(ev, 'clickEvent');
         },
         $oninput(ev){
             // if (this.maxlen && this.value.length > this.maxlen) {
             //     this.value = this.value.slice(0, this.maxlen);
-            //     //this.$els.textarea.value = this.value;
+            //     //this.$refs.textarea.value = this.value;
             // }
-
             this.$trigger(ev, 'inputvent');
         },
         $onfocus(ev){
@@ -360,13 +371,16 @@ export default {
             len = this.value.replace(/\n/g, 'aa').length
           }
           return len > this.maxlen ? this.maxlen : len
+        },
+        testCount(){
+          return  this.$store.state.testCount;
         }
     },
-    events:{
-
-    }, 
-    ready(){
-        this.resizeTextarea();
+    mounted(){
+      let vm = this;
+      Vue.nextTick(function(){
+        vm.resizeTextarea();
+      });
     }
 }
 

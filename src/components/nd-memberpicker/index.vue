@@ -4,10 +4,10 @@
      <div class="receipt-add">
         <h3 v-if="label">{{label}} <span v-show="must" style="color:red"> (必填)</span></h3>
         <div style="display:inline">
-            <div class="avatar"  v-for="row in items" name="{{row.code}}" >
+            <div class="avatar"  v-for="(row,index) in items" :name="row.code" >
                   <ximg :xsrc="getSrc(row.code)" @click="look(row.code)"></ximg>
                   <span class="name">{{ row.name }}</span>
-                  <ins v-if="!displaymodel" class="icon-del" @click="del($index)"></ins>
+                  <ins v-if="!displaymodel" class="icon-del" @click="del(index)"></ins>
             </div>
         </div>
        <a v-if="!displaymodel && (multiple || items.length==0 )" class="fn-btn-add" href="javascript:;" @click="add"></a>

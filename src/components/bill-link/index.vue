@@ -2,13 +2,13 @@
 
 <template>
     <div class="account" v-show="show">
-        <div class="item" v-for="row in data">
+        <div class="item" v-for="(row, index) in data">
             <span class="s2">出差单</span>
             <span class="s1"><i>{{row.price}}</i>元</span> <br>
             <!-- <div class="clx"> -->
             <span class="s3" v-html="getTime(row.dDate)"></span>
             <!-- </div> -->
-            <ins v-show="edite" @click="del($index)" class="icon-del"></ins>
+            <ins v-show="edite" @click="del(index)" class="icon-del"></ins>
         </div>
     </div>
 </template>
@@ -21,7 +21,7 @@ export default{
             this.data.splice(i, 1);
         },
         getTime(date){
-            return new Date(date).format("MM-dd HH:mm");
+            return moment(date).format("MM-DD HH:mm");
         }
     }
 }

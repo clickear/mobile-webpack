@@ -1,27 +1,20 @@
 
 <template>
-  <template v-if="isShowOption">
-  	<div class="nd-ui-btm-modal" id="container_{{id}}">
+<div  v-if="isShowOption">
+  	<div class="nd-ui-btm-modal" >
 	  	<div class="ly-header">
 	        <a class="btn-back" href="javascript:;" @click="closeList($event)"></a>
 	        <h2>{{label || '请选择'}}</h2>
 	    </div>
 		<div class="bills" style="position: relative; padding-top: 50px;">
-	        <!--
-	        <div class="bills-header" style="position: relative;">
-	            <input class="ipt-txt" type="text" placeholder="其他（10个字）" maxlength="10">
-	            <a href="javascript:;">保存并选择</a>
-	        </div>
-	        -->
 	        <div class="bills-content">
 	            <ul class="bills-list">
 	            	 <li v-for="el in items" >	     
 							<a hidefocus="none" href="javascript:void(0)" :class="{'checked': isSelected(el[valuekey])}" :name="el[valuekey]" @click="selectOne($event, el[valuekey])">{{el[textkey]}}{{el.othertext}}</a>
-	            	 </li>
-	               
+	            	 </li>      
 	            </ul>
 
-	            <a v-show="multiple" javascript:"void(0)" class="nd-select-button" @click="saveValue($event)" >保存</a>
+	            <a v-show="multiple" class="nd-select-button" @click="saveValue($event)" >保存</a>
 	            <h3 style="display: none;">我的添加</h3>
 	            <ul class="bills-list" data-status="reduce">
 	                
@@ -29,7 +22,7 @@
 	        </div>
 	    </div>
     </div>
-  </template>
+</div>
 </template>
 
 
@@ -38,8 +31,6 @@
 function _interface(){}
 
 export default{
-
-
 	data(){
 		return{
 			items:[],
@@ -121,9 +112,6 @@ export default{
 			vm.isShowOption = false;
 			vm.setValue(vm.value);
 		}
-	},
-	ready(){
-		
 	},
 	destory(){
 		document.body.removeEventListener('click', function(){},false)

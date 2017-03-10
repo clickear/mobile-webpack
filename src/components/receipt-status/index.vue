@@ -6,7 +6,7 @@
  */
 
 <template>
-    <a class="receipt-btn" data-action="{{status}}" href="javascript:;"></a>
+    <a class="receipt-btn" :data-action="status" href="javascript:;"></a>
 </template>
 
 <script >
@@ -15,6 +15,9 @@
         computed : {
             status : function(){
                 /* flowstate 0 为申请  1 审批中，2通过归档 3 拒绝归档 4（流程错误归档） 5 作废 */
+                if(!this.flowstate && this.flowstate !=0){
+                    return '';
+                }
                 if(this.viewtype != 2){
                     // 提交人和抄送人 根据flowstate
                     return UtilHelper.receiptStatusCfg[this.flowstate].action;

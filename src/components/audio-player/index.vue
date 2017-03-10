@@ -1,10 +1,12 @@
 /* 音频播放 */
 
 <template>
-    <div class="voice" v-for="row in items" @click="gotoPlay(row)" :class="status? status : 'stop'" :status="row.status">
-    <span class="v1" v-html="getTime(row.time)"></span>
-    <span class="v2" v-html="getDate(row.date)"></span>
-    <ins v-if="allowedit" class="icon-del" @click="del"></ins>
+    <div>
+        <div class="voice" v-for="row in items" @click="gotoPlay(row)" :class="status? status : 'stop'" :status="row.status">
+            <span class="v1" v-html="getTime(row.time)"></span>
+            <span class="v2" v-html="getDate(row.date)"></span>
+            <ins v-if="allowedit" class="icon-del" @click="del"></ins>
+        </div>
     </div>
 </template>
 

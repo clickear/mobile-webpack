@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,minimum-scale=1.0,maximum-scale=1.0,user-scalable=0" />
+    <meta http-equiv="content-type" content="text/html; charset=utf-8" />
+    <meta name="format-detection" content="telephone=no" />
+    <!-- <title>mobile-webpack</title> -->
+      <title><%= htmlWebpackPlugin.options.title %></title>
+    <!-- <script src="http://192.168.245.130:8090/target/target-script-min.js#anonymous"></script> -->
+    <link rel="stylesheet" href="<%=  htmlWebpackPlugin.files.chunks.formoperation.css %>" ></style>
+
+    <script src="<%= htmlWebpackPlugin.files.chunks.app.entry %>"></script>
+  </head>
+  <body>
+        <div id="fixheader" style="z-index: 999999"></div>
+        <div class="ui-cover-loadding" style="display: none;"></div>
+        <div class="ui-cover-waitting" style="display: none;"></div>
+        <div class="ui-modal-loading " style="display:block" id="loading"><div class="ui-loading"></div></div>
+        <input type="hidden" id="txtFormCode" name="txtFormCode" value="" />
+        <input type="hidden" id="txtCurrCompanyId" name="txtCurrCompanyId" value="" />  
+        <input type="hidden" id="txtFormINSCode" name="txtFormINSCode" value="" />
+        <input type="hidden" id="txtFormDataCode" name="txtFormDataCode" value="" />
+        <input type="hidden" id="txtCurrUserId" name="txtCurrUserId" value="" />
+        <input type="hidden" id="txtCurrDeptCode" name="txtCurrDeptCode" value="" />
+        <input type="hidden" id="txtsTabCode" name="txtsTabCode" value="" />
+        <input type="hidden" id="txtbFlow" name="txtbFlow" value="" />
+        <input type="hidden" id="txtbNode" name="txtbNode" value="" />
+        <input type="hidden" id="txtViewType" value="0" />
+        <input type="hidden" id="HostUrl" value="" />
+        <input type="hidden" id="txtRequireType" value="" />
+        <script type="text/javascript">
+            // 离线缓存更新
+            // window.addEventListener('load', function(e) {
+            //     window.applicationCache.addEventListener('updateready', function(e) {
+            //         if (window.applicationCache.status == window.applicationCache.UPDATEREADY) {
+            //             // Browser downloaded a new app cache.
+            //             // Swap it in and reload the page to get the new hotness.
+            //             window.applicationCache.swapCache();
+            //             //if (confirm('A new version of this site is available. Load it?')) {
+            //             window.location.reload();
+            //             //}
+            //         } else {
+            //         // Manifest didn't changed. Nothing new to server.
+            //         }
+            //     }, false);
+            // }, false);
+        </script>
+        <!-- !-->
+        <div id="divTaskFormHtml">
+            <div id="cloundOfficeApp">
+                <nd-form :isautoflow="IsAutoFlow" :fixsendpersonarr.sync="fixSendPersonArr" :approveruploadsound.sync = "approverUploadSound":approvernextperson.sync = "approverNextPerson":approversendperson.sync = "approverSendPerson":delsendpersonarr.sync = "delSendPersonArr":uploadsoundarr.sync="uploadSoundArr":showphotos.sync="showPhotoPicker" :uploadpicarr.sync="uploadPicArr":formname = "FormName":isedit = "IsEdit":flowstate = "FlowState":viewtype="ViewType":approvalstate="ApproverState":enable="Enable"  :sremark.sync="sRemark":approvalrecord = "ApproverList":spersoncode="sPersonCode":spersonname="sPersonName":step.sync="step">
+
+                <nd-textbox ref="user" name="user"></nd-textbox>
+                </nd-form>
+            </div>
+        </div>
+
+        <script>   
+            /**
+             * 懒加载，在android下，需要脚本运行完成，才会渲染页面，避免页面空白时间太长。
+             * @return {[type]} [description]
+             */
+            window.Global = {};
+            Global.startTime = new Date();
+            
+            function loadscript() {
+                LazyLoad.js([
+                        <% for (var k in htmlWebpackPlugin.files.chunks){ %>
+                            <% if(k!='app') { %>
+                                '<%= htmlWebpackPlugin.files.chunks[k].entry %>?formMobileCache',
+                            <%} %>
+                        <% } %>     
+                    ], function () {
+                    //Global.startTime = new Date();
+                    SetFormAndNodeStateHtml();
+                });
+            }
+            setTimeout(loadscript, 10);
+        </script>
+  </body>
+</html>
+ 

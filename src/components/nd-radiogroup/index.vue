@@ -1,19 +1,18 @@
 
 <template>
+<div>
     <template v-if="!displaymodel">
       <div class="nd-cell" :class="{'weui_select_after':label, 'weui_cell_select':!displaymodel}" >
         <div class="weui_cell_hd" v-if="label" :class="{'nd-cell-primary':displaymodel}">
           <label for="" class="nd-label" >{{label}}</label>
         </div>
         <div class=" nd-cell-primary nd-cell-body nd-select-container" v-if="!displaymodel" >
-
             <div class="input-wrapper"   @click="toggleList($event)"  >
                 <input class="ui-text" 
                        type="text" 
                        :placeholder="placeholder" 
                        :readonly="true" 
                        :id="id"
-
                        :disabled="!enable"
                        :name="name"
                        :value="text==''?placeholder:text" />
@@ -25,10 +24,10 @@
                        v-if="filter"
                        @click="filterHander($event)"
                        v-model="filterText" />
-
             </div>
+        </div>
+      </div>  
     </template>
-
     <template v-else>
         <div class="nd-cell" :class="{'weui_select_after':label, 'weui_cell_select':!displaymodel}" >
             <div class="weui_cell_hd nd-cell-primary" >
@@ -37,6 +36,7 @@
             <div class="nd-cell-right">{{text}}</div>
         </div>
     </template>
+</div>
 </template>
 
 
@@ -69,10 +69,6 @@ export default{
         enable: {
             type:Boolean,
             default:true
-        },
-        radios:{
-            type:Boolean,
-            default:function(){return []}
         },
         must:{
             type: Boolean,
@@ -109,7 +105,7 @@ export default{
         return {
             isValid:true,
             validInfo :'',
-
+            radios:[]
             // options:[ { label: '初中', ischecked: true, value: '2' },{ label: '高中', value: '3' },]
         }
     },
@@ -123,8 +119,8 @@ export default{
                     var radio = this.radios[i];
                     if (inArrary(valArr, radio.value)) {
                         if (radio.ischecked == false) {
-                            radio = (Object.assign({}, this.radios[i], { ischecked: true}))                            
-                            vm.radios.$set(i, radio);
+                            radio = (Object.assign({}, this.radios[i], { ischecked: true}))      
+                            Vue.set(vm.radios, i, radio);                      
                             this.$trigger(radio, null, 'checkEvent');
                             this.$trigger(radio, null, 'changeEvent');
                             console.log('checked'+ radio.value);
@@ -132,7 +128,7 @@ export default{
                     } else {
                         if (radio.ischecked == true) {
                             radio = (Object.assign({}, this.radios[i], { ischecked: false}))                            
-                            vm.radios.$set(i, radio);
+                            Vue.set(vm.radios, i, radio);   
                             this.$trigger(radio, null, 'changeEvent');
                         }
                     }
@@ -206,8 +202,6 @@ export default{
         },
         toggleList(ev, idx){
             let vm = this;
-           // var radio = vm.radios[idx];
-            //if (vm.enable && radio.enable) {
                 vm.$Items.setOption({  
                     multiple:false, 
                     label:vm.label, 
@@ -216,34 +210,7 @@ export default{
                     textkey: 'label'
                 });
                 console.log(vm.radios + 'selectVlaue'+ vm.selectValue)
-                vm.$Items.showItems(vm.radios, vm.selectValue);
-
-                /*
-                for (let  i = 0; i < vm.radios.length; i++) {
-                    let curRadio = vm.radios[i];
-                    if (idx == i) {
-                        vm.$trigger(radio, ev, 'checkEvent');
-                        if (curRadio.ischecked == false) {
-                            curRadio = (Object.assign({}, this.radios[i], { ischecked: true}))
-                            //Vue.set(this.radios[i],'ischecked',true)
-                            vm.radios.$set(i, curRadio);
-
-                            vm.$trigger(radio, ev, 'changeEvent');
-                        }
-                    } else {
-                        if (curRadio.ischecked == true) {
-                            curRadio = (Object.assign({}, this.radios[i], { ischecked: false}))
-                            curRadio.ischecked = false;
-                            //Vue.set(this.radios[i],'ischecked',false)
-                            vm.radios.$set(i, curRadio);
-                            vm.$trigger(vm.radios[i], ev, 'changeEvent');
-                        }
-                    }
-                }
-                if (vm.validInfo != '') {
-                    vm.validValue(null);
-                }*/
-            //}
+                vm.$Items.showItems(vm.radios, vm.selectValue);          
         },
         getData(){
             let vm = this;
@@ -265,7 +232,6 @@ export default{
         setDisplaymodel(model){
             this.displaymodel = model;
         }
-
     },
     created(){
         let vm = this;
@@ -275,15 +241,11 @@ export default{
         for (var i = 0; i < radios.length; i++) {
             let curRadio = radios[i];
             if (radios[i].enable == undefined) {                
-                //curRadio = (Object.assign({}, this.radios[i], { enable: true}))
-                Vue.set(this.radios[i],'enable',true)
-                //vm.radios.$set(i, curRadio);
+                Vue.set(this.radios[i], 'enable', true);   
             }
             if (radios[i].ischecked == undefined) {
                 radios[i].ischecked = false;
-                //curRadio = (Object.assign({}, this.radios[i], { ischecked: false}))
-                Vue.set(this.radios[i],'ischecked',false)
-                //vm.radios.$set(i, curRadio);
+                Vue.set(this.radios[i], 'ischecked', false);   
             }
         }
         vm.selectValue = vm.value;
