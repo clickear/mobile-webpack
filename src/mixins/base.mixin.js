@@ -6,7 +6,8 @@ export default{
         	editVueMixin.methods.addFixSendPerson.call(this.$root);
         },
         editAddApplyPerson : function(){
-            editVueMixin.methods.addApplyPerson.call(this.$root);
+             this.$store.dispatch('addFixSendPerson');
+             // editVueMixin.methods.addApplyPerson.call(this.$root);
         },
         pickPhoto : function(){
             editVueMixin.methods.pickPhoto.call(this.$root);

@@ -5,10 +5,10 @@
      <div class="receipt-add">
         <h3 v-if="label">{{label}}:</h3>
         <div style="display:inline">
-            <div class="avatar"  v-for="row in items" name="{{row.code}}" >
+            <div class="avatar"  v-for="(row,index) in items" :name="row.code" >
                   <!--ximg :xsrc="getSrc(row.code)" @click="look(row.code)"></ximg-->
                   <span class="name">{{ row.name }}</span>
-                  <ins v-if="!displaymodel" class="icon-del" @click="del($index)"></ins>
+                  <ins v-if="!displaymodel" class="icon-del" @click="del(index)"></ins>
             </div>
         </div>
        <a v-if="!displaymodel && (multiple || items.length==0 )" class="fn-btn-add" href="javascript:;" @click="add"></a>
@@ -40,7 +40,7 @@ export default {
             default:false
         },
         depcode: '',
-        excludeperson: '',      //排除人员
+        excludept: '',      //排除人员
         state: 1,               //状态(0/1/2， 未激活/在职/离职)
         width: '100%',
         labelwidth: 120,
@@ -63,16 +63,14 @@ export default {
         removeData: _interface,
 
         //view属性
-        isValid: true,
-        validInfo: '',
         dataSelect: [],         //已选人员
         
-        items:{
+        items: {
             type:Array,
             default:function(){return []}
         },
 
-        config:{
+        config: {
             type:Object,
             default:function(){return {}}
         }
@@ -94,42 +92,59 @@ export default {
         }
 
     },
-    methods : {
-        getValue(){
+    data () {
+        return {
+            isValid: true,
+            validInfo:'',
+        }
+    },
+    methods: {
+        getValue () {
             let vm = this;
             return UtilHelper.getCodeString(vm.items);
         },
-        getText(){
+        getText () {
             let vm = this;
              return UtilHelper.getNameString(vm.items);
         },
-        add(){
+        add () {
             let vm = this;
-            // 多选
-            if(vm.multiple){
-                SopNative.getSelectMultiplePerson(vm.items,vm.excludeperson,function(deptArr){
-                    vm.items = deptArr;
-                })
-            }else{ // 单选
-                SopNative.getSelectPerson(function(deptArr){
-                    vm.items = vm.items.concat(deptArr);
-                })  
-            }
+            SopNative.getSelectDepartment(vm.items, vm.excludept, vm.multiple, function(deptArr){
+                vm.items = deptArr;
+            })
         },
-        del(i){
+        del (i) {
             let vm = this;
             vm.items.splice(i, 1);               
         },
-        look(personCode){
+        look (personCode) {
             let vm = this;
             if(vm.displaymodel){
                 SopNative.lookPersonInfo(personCode);
             }  
         },
-        getSrc(code){
+        getSrc (code) {
             return UtilHelper.becomeAvatarSrc(code);
-        }
-        
+        },
+        validValue(checkModel){
+            let vm = this;
+            let val = vm.getValue() || '';
+            if (vm.must === true) {
+                if(checkModel){
+                    return (val == '' ? false :true);
+                }else{
+                    if (val == '') {
+                        vm.isValid = false;
+                        vm.validInfo = '请添加部门';
+                        return false;
+                    } else {
+                        vm.validInfo = '';
+                        vm.isValid = true;
+                    }
+                }    
+            }
+            return true;
+        },
         
     }
 }

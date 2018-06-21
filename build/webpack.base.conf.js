@@ -6,31 +6,13 @@ var projectRoot = path.resolve(__dirname, '../')
 var node_modules_dir = path.join(__dirname, 'node_modules');
 var ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-
-var deps = [
-  'jquery/dist/jquery.min.js',
-  'jquery/dist/jquery.js',
-];
-
-var getEntry = function() {
-  var entry = {}; //读取开发目录,并进行路径裁剪 
-  glob.sync('./src/**/*.js').forEach(function(name) {
-    var start = name.indexOf('src/') + 4,
-      end = name.length - 3;
-    var n = name.slice(start, end);
-    n = n.slice(0, n.lastIndexOf('/'));
-
-    //保存各个组件的入口
-    entry[n] = name;
-  });
-  return entry;
-};
-
-
 module.exports = {
+
   entry: {
-    common: ['vue', 'jquery', 'moment', 'jqueryui', 'photoswipe', 'photoswipe/dist/photoswipe-ui-default', 'src/common', 'components/components', 'src/lib/datepicker/scripts/datepicker'],
-    app: './src/main.js',
+    // 创建单据时，最先加载文件 
+    app: ['./src/main.js','src/page/sopnative'],
+    formoperation: ['src/common', 'components/components'],  // 常变动文件
+    common: ['vue', 'jquery', 'moment', 'photoswipe', 'libjs/jquery-ui','photoswipe/dist/photoswipe-ui-default', 'src/lib/datepicker/scripts/datepicker'],  // 公共组件库，很少改动
   },
 
   output: {
@@ -45,15 +27,17 @@ module.exports = {
     alias: {
       'src': path.resolve(__dirname, '../src'),
       'assets': path.resolve(__dirname, '../src/assets'),
-      'components': path.resolve(__dirname, '../src/components')
-    }
+      'components': path.resolve(__dirname, '../src/components'),
+      'libjs': path.resolve(__dirname, '../src/lib/libjs'),    
+      'vue':path.resolve(__dirname,'../node_modules/vue/dist/vue.js')   
+      }
   },
   resolveLoader: {
     fallback: [path.join(__dirname, '../node_modules')]
   },
   module: {
     loaders: [{
-        test: require.resolve('vue'),
+        test: require.resolve('vue/dist/vue'),
         loader: 'expose?Vue!'
       }, {
         test: require.resolve('jquery'),
@@ -62,7 +46,7 @@ module.exports = {
         test: require.resolve('moment'),
         loader: 'expose?moment!'
       }, {
-        test: require.resolve('jqueryui'),
+        test: require.resolve('../src/lib/libjs/jquery-ui'),
         loader: 'expose?jqueryui!'
       }, {
         test: require.resolve('photoswipe'),
@@ -97,14 +81,14 @@ module.exports = {
         test: /\.(png|jpe?g|gif|svg)(\?.*)?$/,
         loader: 'url',
         query: {
-          limit: 10000,
+          limit: 1000,
           name: utils.assetsPath('img/[name].[hash:7].[ext]')
         }
       }, {
         test: /\.(woff2?|eot|ttf|otf)(\?.*)?$/,
         loader: 'url',
         query: {
-          limit: 10000,
+          limit: 1000,
           name: utils.assetsPath('fonts/[name].[hash:7].[ext]')
         }
       }

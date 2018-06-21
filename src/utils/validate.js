@@ -21,6 +21,65 @@ if (typeof Object.assign != 'function') {
   };
 }
 
+ if(/Android [4-6]/.test(navigator.appVersion)) {
+     window.addEventListener("resize", function() {
+         if(document.activeElement.tagName=="INPUT" || document.activeElement.tagName=="TEXTAREA") {
+             window.setTimeout(function() {
+                 document.activeElement.scrollIntoViewIfNeeded();
+             },0);
+         }
+     })
+ }
+
+
+
+/**
+ * 模拟ScrollIntoViewIfNedd事件，该事件在android触发不稳定。
+ */
+
+if (!Element.prototype.mockScrollIntoView) {
+  Element.prototype.mockScrollIntoView = function (centerIfNeeded) {
+    centerIfNeeded = arguments.length === 0 ? true : !!centerIfNeeded;
+    var parent = getParent(this),
+        parentComputedStyle = window.getComputedStyle(parent, null),
+        parentBorderTopWidth = parseInt(parentComputedStyle.getPropertyValue('border-top-width')),
+        parentBorderLeftWidth = parseInt(parentComputedStyle.getPropertyValue('border-left-width')),
+        overTop = this.offsetTop - parent.offsetTop < parent.scrollTop,
+        overBottom = (this.offsetTop - parent.offsetTop + this.clientHeight - parentBorderTopWidth) > (parent.scrollTop + parent.clientHeight),
+        overLeft = this.offsetLeft - parent.offsetLeft < parent.scrollLeft,
+        overRight = (this.offsetLeft - parent.offsetLeft + this.clientWidth - parentBorderLeftWidth) > (parent.scrollLeft + parent.clientWidth),
+        alignWithTop = overTop && !overBottom;
+
+    if ((overTop || overBottom) && centerIfNeeded) {
+      parent.scrollTop = this.offsetTop - parent.offsetTop - parent.clientHeight / 2 - parentBorderTopWidth + this.clientHeight / 2;
+    }
+
+    if ((overLeft || overRight) && centerIfNeeded) {
+      parent.scrollLeft = this.offsetLeft - parent.offsetLeft - parent.clientWidth / 2 - parentBorderLeftWidth + this.clientWidth / 2;
+    }
+
+    if ((overTop || overBottom || overLeft || overRight) && !centerIfNeeded) {
+      this.scrollIntoView(alignWithTop);
+    }
+  };
+}
+
+
+// where
+function getParent(el) {
+    var parent = el.parentNode;
+
+    if (parent === document) {
+        return window;
+   } else if (parent.offsetHeight < parent.scrollHeight || parent.offsetWidth < parent.scrollWidth) {
+        return parent;
+    } else {
+        return getParent(parent);
+    }
+}
+
+
+
 
 Date.prototype.format = function ( fmt ) {
     var o = {
@@ -114,6 +173,7 @@ export default function validate(val, valids, message, vm){
         if (val != '') {
             for (var i = 0; i < validArr.length; i++) {
                 var valid = validArr[i];
+
                 switch (valid) {
                     case 'number':
                         reg = /^((-?((0\.)|([1-9][0-9]*\.))(([0-9]*[1-9]{1})|(0{1,2})))|(-?[1-9][0-9]*))$/;
@@ -204,5 +264,6 @@ export default function validate(val, valids, message, vm){
                 }
             }
         }
+
         return info;
 }

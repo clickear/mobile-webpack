@@ -20,45 +20,51 @@ import PopMessageJS from 'components/pop';
 // items组件
 import selectItems from 'components/select-items'
 
-// iVue message组件
-import Message from 'components/message/index.js';
-Vue.component('Message', Message);
 // 原生替代，可考虑移除
 import reminder from 'components/reminder-component/index.js';
 
-
-import { editVueMixin, detailVueMixin } from '../mixins/_vue.mixins'
+import draggable from 'vuedraggable'
+import { editVueMixin, detailVueMixin } from '../mixins/_vue.mixins';
  
-
-// 表单组件
 import ndForm from 'components/nd-form'
-import ndInput from 'components/nd-input'
 import ndTextbox from 'components/nd-textbox'
 import ndSelect from 'components/nd-select'
 import ndSelectOld from 'components/nd-select-old'
 import ndCheckbox from 'components/nd-checkbox'
 import ndRadiogroup from 'components/nd-radiogroup'
 import ndCheckboxgroup from 'components/nd-checkboxgroup'
-import ndDatepicker from 'components/nd-datepicker'
 import ndMemberpicker from 'components/nd-memberpicker'
 import ndDeptpicker from 'components/nd-deptpicker'
 import ndSeparation from 'components/nd-separation'
 import ndVoice from 'components/nd-voice'
-   
+import ndUploader from 'components/nd-uploader'   
+
+import ndCalculator from 'components/nd-calculator';
+import ndEvaluate from 'components/nd-evaluate';
+import ndDetailtable from 'components/nd-detailtable';
+import ndDatepicker from 'components/nd-datepicker';
+import ndDatezone from 'components/nd-datezone';
 
 import sortable from '../directives/vue-sortable'
 import calcInput from '../directives/calcInput'
 import inputTimeformat from '../directives/inputTimeformat'
+import focus from '../directives/focus'
+
+import lazy from '../directives/lazy'
+import Vuex from 'vuex'
+
+window.Vuex = Vuex;
+Vue.use(lazy);
 
 
 const ndDirectives = {
     sortable,
     calcInput,
     inputTimeformat,
-}
+    focus
+};
 
-const ndComponents = 
-{
+const ndComponents = {
     // 头像
     ximg,
     inputKeyword,
@@ -76,7 +82,6 @@ const ndComponents =
     billLink,
     // 表单组件
     ndForm,
-    ndInput,
     ndTextbox,
     ndSelect,
     ndSelectOld,
@@ -84,11 +89,17 @@ const ndComponents =
     ndRadiogroup,
     ndCheckboxgroup,
     ndDatepicker,
+    ndDatezone,
     ndMemberpicker,
     ndDeptpicker,
     ndSeparation,
-    ndVoice
-}
+    ndVoice,
+    ndEvaluate,
+    ndDetailtable,
+    ndCalculator,
+    ndUploader,
+    draggable
+};
 
 Object.keys(ndComponents).forEach((key) => {
     Vue.component(key, ndComponents[key])
@@ -98,10 +109,8 @@ Object.keys(ndDirectives).forEach((key) => {
     Vue.directive(key, ndDirectives[key])
 });
 
-Vue.prototype.$Message = Message;
 Vue.prototype.$Pop = PopMessageJS;
 Vue.prototype.$Items = selectItems;
-
 
 window.editVueMixin = editVueMixin;
 window.detailVueMixin = detailVueMixin;
@@ -109,7 +118,6 @@ window.detailVueMixin = detailVueMixin;
 window.getViewModelData = getViewModelData;
 window.hadDataChange = hadDataChange;
 window.deepDif = deepDif;
-window.PrgressBar = PrgressBar;
 
 function getViewModelData(vm) {
     return JSON.parse(JSON.stringify(vm.$data));
@@ -153,86 +161,6 @@ function deepDif(x, y) {
     return true;
 }
 
-
-
-
-
-//图片上传进度模拟数据
-window.configStep = [{
-        stage: 20, //进度分段
-        speed: 0.2 //进度所有时间比重
-    }, {
-        stage: 40,
-        speed: 0.4
-    }, {
-        stage: 50,
-        speed: 0.1
-    }, {
-        stage: 80,
-        speed: 0.2
-    }, {
-        stage: 98,
-        speed: 0.1
-    }]
-    //图片上传模拟实例{domObj:进度条ID,imgSize:图片大小,imgURl:图片地址}
-function PrgressBar(domObj, imgSize, imgUrl) {
-    if (!imgSize) {
-        imgSize = 500;
-    }
-    var self = this;
-    self.level = 0; /* 进度百分比 */
-    self.levelSpeed = []; /* 每加1%进度所要时间 */
-    self.levelStep = []; /* 模拟进度改变分段 */
-    self.fileSize = imgSize; /* 图片大小 */
-    self.netSpeed = 100; /* 模拟网速 */
-    self.mockSpeed = self.fileSize / self.netSpeed * 1000; /* 进度所要总时间 */
-    self.refreshBar = function() {
-        setTimeout(function() {
-            domObj.style.display = 'block';
-            domObj.nextSibling.innerHTML = '<em class="progress-txt">图片上传中</em><em class="progress-num">' + self.level + '%</em>';
-            domObj.nextSibling.style.display = 'block';
-            domObj.style.width = self.level + "%";
-            if (self.level >= self.levelStep[0]) {
-                self.levelSpeed.shift();
-                self.levelStep.shift();
-            }
-            self.level++;
-            if (self.levelSpeed.length) {
-                self.refreshBar();
-            }
-        }, self.levelSpeed[0])
-
-    }
-    self.removeBar = function() {
-        domObj.style.display = 'none';
-        domObj.nextSibling.style.display = 'none';
-    }
-    self.setBar = function(num) {
-        self.refreshBar = function() {};
-        domObj.style.display = 'block';
-        domObj.nextSibling.style.display = 'block';
-        domObj.style.width = num + "%";
-        domObj.nextSibling.innerHTML = '<em class="progress-txt">图片上传中</em><em class="progress-num">' + num + '%</em>';
-    }
-    self.turnError = function() {
-        domObj.nextSibling.innerHTML = '<em class="progress-txt">失败</em><em class="progress-num">点击重试</em>';
-        domObj.nextSibling.style.display = 'block';
-    }
-    for (var i = 0, len = configStep.length; i < len; i++) {
-        var dStage = 0;
-        if (i == 0) {
-            dStage = configStep[i].stage;
-        } else {
-            dStage = configStep[i].stage - configStep[i - 1].stage;
-        }
-        self.levelSpeed[i] = configStep[i].speed * self.mockSpeed / dStage;
-        self.levelStep[i] = configStep[i].stage;
-    }
-    self.refreshBar();
-}
-
-
-
     /* filter */
 Vue.filter('onlyNumber', {
     // model -> view
@@ -274,3 +202,24 @@ Vue.filter('timeStepFilter', {
         return isNaN(number) ? 0 : parseFloat(number.toFixed(1))
     }
 });
+
+Global.startTime = new Date();
+console.log('初始化时间'+ new Date())
+
+/**
+ * 格式化文件大小，输入字符串
+ * @param  {Array}  value) 
+ * @return {[type]}        [description]
+ */
+Vue.filter('formatFileSize', function (size) {
+    var unit;
+
+    var units = ['B', 'KB', 'MB', 'GB', 'TB', 'PB', 'EB', 'ZB', 'YB'];
+
+    while ( (unit = units.shift()) && size > 1024 ) {
+        size = size / 1024;
+    }
+
+    return (unit === 'B' ? size : size.toFixed(2 )) +
+            unit;
+})

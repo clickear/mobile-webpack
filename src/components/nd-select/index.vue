@@ -1,45 +1,47 @@
 <template>
+<div>
     <template v-if="!displaymodel">
-      <div class="nd-cell" :class="{'weui_select_after':label, 'weui_cell_select':!displaymodel}" >
-        <div class="weui_cell_hd" v-if="label" :class="{'nd-cell-primary':displaymodel}">
-          <label for="" class="nd-label" >{{label}}</label>
+        <div class="nd-cell" :class="{'weui_select_after':label, 'weui_cell_select':!displaymodel}" >
+            <div class="weui_cell_hd" v-if="label" :class="{'nd-cell-primary':displaymodel}">
+              <label for="" class="nd-label" >{{label}}</label>
+            </div>
+            <div class=" nd-cell-primary nd-cell-body nd-select-container" v-if="!displaymodel" >
+            	<div class="input-wrapper"   @click="toggleList($event)"  >
+            		<input class="ui-text" 
+                           type="text" 
+                           :placeholder="placeholder" 
+                           :readonly="true" 
+                           :id="id"
+
+                           :disabled="!enable"
+                           :name="name"
+                           v-show ="!isShowOption || !filter"
+                           v-focus="focused" @focus="focused = true" @blur="focused = false"
+                           :value="text==''?placeholder:text" />
+                    <input class="ui-text form-filter" 
+                           type="text"
+                           v-show ="isShowOption"
+                           ms-css-text-align="align"
+                           ms-css-padding-left="label=='' ? 0 : labelwidth + 10"
+                           v-if="filter"
+                           @click="filterHander($event)"     
+                           v-model="filterText" />
+            	</div>
+            	<div class="dropdown-menu nd-select-list" v-if="data!=null" v-show="false">
+        			<ul>
+                        <li v-for="el in data"  :class="{'nd-selected': isSelected(el[valuekey])}">
+                            <a hidefocus="none" href="javascript:void(0)" :name="el[valuekey]" @click="selectOne($event, el[valuekey])">{{el[textkey]}}{{el.othertext}}</a>
+                            <span class="pull-right" v-if="multiple">&#xe605;</span>
+                        </li>
+                        <li v-if="data.length === 0">
+                            <a href="javascript:void(0)" class="empty">
+                                {{ emptymsg }}
+                            </a>                  
+                        </li>
+                    </ul>
+            	</div>
+            </div>
         </div>
-        <div class=" nd-cell-primary nd-cell-body nd-select-container" v-if="!displaymodel" >
-
-        	<div class="input-wrapper"   @click="toggleList($event)"  >
-        		<input class="ui-text" 
-                       type="text" 
-                       :placeholder="placeholder" 
-                       :readonly="true" 
-                       :id="id"
-
-                       :disabled="!enable"
-                       :name="name"
-                       v-show ="!isShowOption || !filter"
-                       :value="text==''?placeholder:text" />
-                <input class="ui-text form-filter" 
-                       type="text"
-                       v-show ="isShowOption"
-                       ms-css-text-align="align"
-                       ms-css-padding-left="label=='' ? 0 : labelwidth + 10"
-                       v-if="filter"
-                       @click="filterHander($event)"
-                       v-model="filterText" />
-
-        	</div>
-        	<div class="dropdown-menu nd-select-list" v-if="data!=null" v-show="false">
-    			<ul>
-                    <li v-for="el in data"  :class="{'nd-selected': isSelected(el[valuekey])}">
-                        <a hidefocus="none" href="javascript:void(0)" :name="el[valuekey]" @click="selectOne($event, el[valuekey])">{{el[textkey]}}{{el.othertext}}</a>
-                        <span class="pull-right" v-if="multiple">&#xe605;</span>
-                    </li>
-                    <li v-if="data.length === 0">
-                        <a href="javascript:void(0)" class="empty">
-                            {{ emptymsg }}
-                        </a>                  
-                    </li>
-                </ul>
-        	</div>
     </template>
     <template v-else>
             <div class="nd-cell" :class="{'weui_select_after':label, 'weui_cell_select':!displaymodel}" >
@@ -49,7 +51,8 @@
                 <div class="nd-cell-right">{{text}}</div>
             </div>
         </template>
-    </template>
+</div>
+</template>
 <script>
 
 function _interface(){}
@@ -106,7 +109,7 @@ export default{
         	default:''
         },
         
-        width:[],
+        width:[String,Number],
         loadInfo: '',
         selectValue: '',
         filterText: '',
@@ -118,7 +121,7 @@ export default{
         },
         method: 'GET',
         param: {},
-        data: [],
+
         valuekey: {
         	type:String,
         	default:'value'
@@ -155,7 +158,9 @@ export default{
         	validInfo: '',
         	isLoading:false,
         	isShowOption:false,
-        	setDefaultValue:_interface
+        	setDefaultValue:_interface,
+            focused:false,
+            data: [],
 		}
 	},
 	created(){
@@ -192,7 +197,10 @@ export default{
 		console.log('初始化成功selector '+vm.value + vm.text)
 	},
 	methods:{
-
+        focus(){
+            debugger;
+            this.focused = true;
+        },
 		$trigger(ev, type, action){
 			let vm = this;
 			switch (type) {
@@ -226,11 +234,12 @@ export default{
 			        vm.isValid = false;
 			        // todo 
 			        // vm.validInfo = i18nJson.unselected;
-			        vm.validInfo = '未选择';
+			        vm.validInfo = vm.label + '未选择';
 			    } else {
 			        vm.validInfo = '';
 			        vm.isValid = true;
 			    }
+                return vm.isValid;
 			}
 		},
 		isSelected(val){
@@ -440,26 +449,29 @@ export default{
 		}
 
 	},
-	ready(){
+	mounted(){
 		let vm = this;
-		if(vm.setDefaultValue && vm.setDefaultValue instanceof Function) {
-            vm.setDefaultValue(vm, 'select');
-        }    
+        Vue.nextTick(function(){
+            if(vm.setDefaultValue && vm.setDefaultValue instanceof Function) {
+                vm.setDefaultValue(vm, 'select');
+            }    
 
-		if (vm.auto == true || vm.displaymodel == true || vm.value!='' || vm.selectItem.length>0) {
-           // vm.reloadData(vm.param.$data);
-        }
-
-        if(vm.value !== '' && vm.data.length !== 0) {
-            vm._buildSelected();
-        }
-        this.blurHandler = document.body.addEventListener('click', function(e){
-    	   if ((e.target.tagName == 'INPUT' && e.target.id == vm.id) || (e.target.tagName == 'I' && e.target.id == vm.id + "_icon")) {
-                return;
+            if (vm.auto == true || vm.displaymodel == true || vm.value!='' || vm.selectItem.length>0) {
+               // vm.reloadData(vm.param.$data);
             }
 
-           // vm.isShowOption = false;
-        },false);
+            if(vm.value !== '' && vm.data.length !== 0) {
+                vm._buildSelected();
+            }
+            vm.blurHandler = document.body.addEventListener('click', function(e){
+               if ((e.target.tagName == 'INPUT' && e.target.id == vm.id) || (e.target.tagName == 'I' && e.target.id == vm.id + "_icon")) {
+                    return;
+                }
+
+               // vm.isShowOption = false;
+            },false);
+        })
+
 
 	},
 	destory(){

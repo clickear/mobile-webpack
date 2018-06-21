@@ -208,20 +208,50 @@ function getDeptArrayByDepId(depId,callback){
     });
 }
 
+/**
+ * 生成guid
+ * @return {[type]} [description]
+ */
+function getGUID () {
+	return Math.random().toString(36).substring(3,20);
+}
 
+/**
+ * 根据guid获取上传文件列表
+ * @param  {String}   guid     文件guid，以，隔开
+ * @param  {Function} callback 回调
+ * @return {[type]}            [description]
+ */
+function getUploadByFileGUid(guid, callback){
+	FormOperator.sys_GetUploadByFileGUid(guid,callback);
+}
+
+/**
+ * 模拟跳转到可见区域，经测试scrollIntoViewIfNeed失效。
+ * @return {[type]} [description]
+ */
+function mockScrollIntoView(evemt) {
+    // 该方法在prototype中加入
+    evemt.mockScrollIntoView(true);
+}
 
 window.becomeAvatarSrc = becomeAvatarSrc;
 window.FE_Util = FE_Util;
 window.setCheckPop = setCheckPop;
 
+
 module.exports = {
-	receiptStatusCfg:receiptStatusCfg,
-	becomeAvatarSrc:becomeAvatarSrc,
-	friendlyFormatDate:friendlyFormatDate,
-    FE_Util:FE_Util,
-    setCheckPop:setCheckPop,
-    getCodeString:getCodeString,
-    getNameString:getNameString,
-    getPersonArrayByPersonId:getPersonArrayByPersonId,
-    getDeptArrayByDepId:getDeptArrayByDepId
+	receiptStatusCfg: receiptStatusCfg,
+	becomeAvatarSrc: becomeAvatarSrc,
+	friendlyFormatDate: friendlyFormatDate,
+    FE_Util: FE_Util,
+    setCheckPop: setCheckPop,
+    getCodeString: getCodeString,
+    getNameString: getNameString,
+    getPersonArrayByPersonId: getPersonArrayByPersonId,
+    getDeptArrayByDepId: getDeptArrayByDepId,
+    getUploadByFileGUid: getUploadByFileGUid,
+    getGUID: getGUID,
+    isArrar: isArray,
+    mockScrollIntoView: mockScrollIntoView
 } 

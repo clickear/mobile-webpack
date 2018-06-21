@@ -1,4 +1,5 @@
 <template>
+<div>
     <template v-if="!displaymodel">
       <div class="nd-cell" :class="{'weui_select_after':label, 'weui_cell_select':!displaymodel}" >
         <div class="weui_cell_hd" v-if="label" :class="{'nd-cell-primary':displaymodel}">
@@ -25,6 +26,8 @@
                        v-model="filterText" />
 
             </div> 
+        </div>
+    </div>
     </template>
     <template v-else>
         <div class="nd-cell" :class="{'weui_select_after':label, 'weui_cell_select':!displaymodel}" >
@@ -34,6 +37,7 @@
             <div class="nd-cell-right">{{text}}</div>
         </div>
     </template>
+</div>
 </template>
 <script>
 function inArrary(array, val){
@@ -117,7 +121,7 @@ export default{
                     if (inArrary(valArr, checkbox.value)) {
                         if (checkbox.ischecked == false) {
                             checkbox = (Object.assign({}, this.checkboxes[i], { ischecked: true}))                            
-                            vm.checkboxes.$set(i, checkbox);
+                            Vue.set(vm.checkboxes, i, checkbox);
                             this.$trigger(checkbox, null, 'checkEvent');
                             this.$trigger(checkbox, null, 'changeEvent');
                             console.log('checked'+ checkbox.value);
@@ -125,7 +129,7 @@ export default{
                     } else {
                         if (checkbox.ischecked == true) {
                             checkbox = (Object.assign({}, this.checkboxes[i], { ischecked: false}))                            
-                            vm.checkboxes.$set(i, checkbox);
+                            Vue.set(vm.checkboxes, i, checkbox);
                             this.$trigger(checkbox, null, 'changeEvent');
                         }
                     }

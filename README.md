@@ -117,7 +117,7 @@ lazy-load
 	+ 属性说明:
 	
 		```
-		//  <ndtextbox id="username" v-ref:username name="username" label="姓名" :must="false" :readonly="false"></ndtextbox>
+		//  <ndtextbox id="username" ref=username name="username" label="姓名" :must="false" :readonly="false"></ndtextbox>
 		label: '',    // 标签名称
 		value: '',  // 控件值
 		name: '',

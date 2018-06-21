@@ -46,5 +46,36 @@
     "code": "910172",
     "name": "Administrator"
   },
-  "FormType": "FormLeave"
+  "FormType": "FormLeave",
+  "detailtableConfig": {
+    "id": "b3f6055cx",
+    "label": "明细子表X",
+    "description": "测试一下",
+    "cols": [{
+        "componentId": "b3f6055c",
+        "content": "<nd-radiogroup config=\"b3f6055c\" $id=\"b3f6055c\"></nd:radiogroup>",
+        "component": {
+            "type": "radiogroup",
+            "isDeleted": false,
+            "settings": {
+                "label": "单选",
+                "width": "100%",
+                "classname": "vertically",
+                "defaultvalue": "",
+                "must": false,
+                "radios": [{
+                    "label": "选项1",
+                    "ischecked": false,
+                    "value": 1
+                }, {
+                    "label": "选项2",
+                    "ischecked": false,
+                    "value": 2
+                }]
+          },
+          "componentId": "b3f6055c"
+        },
+        "type": "radiogroup"
+      }, {}, {}]
+  }  
 }

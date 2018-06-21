@@ -5,14 +5,12 @@
       <label for="" class="nd-label" >{{label}}</label>
     </div>
     <div class=" nd-cell-primary nd-cell-body nd-select-container" v-if="!displaymodel" >
-
     	<div class="input-wrapper"   @click="toggleList($event)"  >
     		<input class="ui-text" 
                    type="text" 
                    :placeholder="placeholder" 
                    :readonly="true" 
                    :id="id"
-
                    :disabled="!enable"
                    :name="name"
                    v-show ="!isShowOption || !filter"
@@ -28,7 +26,6 @@
 
     	</div>
     	<div class="dropdown-menu nd-select-list" v-if="data!=null" v-show="isShowOption">
-    		
 			<ul>
                 <li v-for="el in data"  :class="{'nd-selected': isSelected(el[valuekey])}">
                     <a hidefocus="none" href="javascript:void(0)" :name="el[valuekey]" @click="selectOne($event, el[valuekey])">{{el[textkey]}}{{el.othertext}}</a>
@@ -41,17 +38,10 @@
                 </li>
             </ul>
     	</div>
-
-    	<!--
-      <select class="nd-select" :class="{'vux-selector-no-padding':!label}" :name="name" v-model="value" @change="selectOne($event, value)" :style="{direction: direction}">
-        <option value="" v-if="placeholder" :selected="placeholder && !value">{{placeholder}}</option>
-        <option :value="one[valuekey]" v-for="one in data" @click="selectOne($event, one[valuekey])" >{{one[textkey]}}</option>
-      </select>
-      -->
     </div>
-    <div class="nd-cell-right" v-else>
+    <div class="nd-cell-right" v-if="displaymodel">
       {{ text }}
-      <input type="hidden" :id="id" :value=":value">
+      <input type="hidden" :id="id" :value="value">
     </div>
   </div>
 </template>
@@ -109,7 +99,6 @@ export default{
         	default:''
         },
         
-       
         loadInfo: '',
         selectValue: '',
         filterText: '',
@@ -125,7 +114,7 @@ export default{
         valuekey: {
         	type:String,
         	default:'value'
-        },
+        }, 
         textkey: {
         	type:String,
         	default:'text'
@@ -138,8 +127,6 @@ export default{
         loadEvent: _interface,
         selectEvent: _interface,
         changeEvent: _interface,
-
-	
 	    direction: String,
 	    options: {
 	      type: Array,
@@ -149,7 +136,6 @@ export default{
 	    	type:Object,
 	    	default:function(){return {}}
 	    }
-
 	},
 	data(){
 		return{
@@ -216,7 +202,6 @@ export default{
                 default: break;
             }
 		},
-
 		validValue(){
 			let vm = this;
 			if (vm.must === true) {
@@ -275,7 +260,8 @@ export default{
                     vm.selectItem = [];
                     vm.selectItem.push(val);
                 } else {
-                    vm.selectItem.set(0, val);
+                	vm.selectItem[0] = val;
+                    // vm.selectItem.set(0, val);
                 }
 
                 vm.isShowOption = false;
@@ -293,6 +279,8 @@ export default{
                     vm.selectItem.push(val);
                     selected = true;
                 }
+                // 如果为多选，取消冒泡
+                ev.stopPropagation()
             }
 
             vm.value = '';
@@ -332,6 +320,7 @@ export default{
         	let vm = this;
         	if (val === null || val === '') {
                 vm.selectItem = [];
+                vm.value = val;
                 vm._buildSelected();
                 vm.$trigger({}, 'changeEvent', 'set-value');
             } else {
@@ -341,12 +330,17 @@ export default{
                 vm.value = val;
                 var arr = val.toString().split(',');
                 // todo 
-                if (vm.selectItem.sort().toString() != arr.sort().toString()) {
-                    vm.selectItem.removeAll();
-                    vm.selectItem.pushArray(arr);
-                    vm._buildSelected();
-                    vm.$trigger({}, 'changeEvent', 'set-value');
-                }
+                vm.selectItem = []; 
+                vm.selectItem = arr;
+                vm._buildSelected();
+                vm.$trigger({}, 'changeEvent', 'set-value');
+
+                // if (vm.selectItem.sort().toString() != arr.sort().toString()) {
+                //     vm.selectItem.removeAll();
+                //     vm.selectItem.pushArray(arr);
+                //     vm._buildSelected();
+                //     vm.$trigger({}, 'changeEvent', 'set-value');
+                // }
             }
         },
 
@@ -442,32 +436,31 @@ export default{
 		}
 
 	},
-	ready(){
+	mounted(){
 		let vm = this;
-		if(vm.setDefaultValue && vm.setDefaultValue instanceof Function) {
-            vm.setDefaultValue(vm, 'select');
-        }    
+        Vue.nextTick( ()=>{
+    		if(vm.setDefaultValue && vm.setDefaultValue instanceof Function) {
+                vm.setDefaultValue(vm, 'select');
+            }    
 
-		if (vm.auto == true || vm.displaymodel == true || vm.value!='' || vm.selectItem.length>0) {
-           // vm.reloadData(vm.param.$data);
-        }
-
-        if (vm.value !== '' && vm.data.length !== 0) {
-            vm._buildSelected();
-        }
-        this.blurHandler = document.body.addEventListener('click', function(e){
-    	   if ((e.target.tagName == 'INPUT' && e.target.id == vm.id) || (e.target.tagName == 'I' && e.target.id == vm.id + "_icon")) {
-                return;
+    		if (vm.auto == true || vm.displaymodel == true || vm.value!='' || vm.selectItem.length>0) {
+               // vm.reloadData(vm.param.$data);
             }
 
-           // vm.isShowOption = false;
-        },false);
+            if (vm.value !== '' && vm.data.length !== 0) {
+                vm._buildSelected();
+            }
+            this.blurHandler = document.body.addEventListener('click', function(e){
+        	   if ((e.target.tagName == 'INPUT' && e.target.id == vm.id) || (e.target.tagName == 'I' && e.target.id == vm.id + "_icon")) {
+                    return;
+                }
+               vm.isShowOption = false;
+            },false);
+        });
 	},
 	destory(){
 		document.body.removeEventListener('click', function(){},false)
 	}
-
-
 }
 
 

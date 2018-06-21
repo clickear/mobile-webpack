@@ -2,7 +2,7 @@
 
 <template>
     <!-- 消息提示框 -->
-    <div class="fn-tip2-modal" data-status="{{type}}" v-show="isShow">
+    <div class="fn-tip2-modal" :data-status="type" v-show="isShow">
        <p class="txt">
         <ins v-if="type" class="tip-icon"></ins>
        <span>{{msg}}</span>

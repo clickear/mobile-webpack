@@ -4,11 +4,12 @@ const editVueMixin = {
         addFixSendPerson : function(){
             //抄送
             var self = this;
-            var canotChoose = [];
-            canotChoose.push(Global.CurrentPerson)
-            sys_getSelectMultiplePerson(self.fixSendPersonArr,canotChoose,function(per){   
-                self.fixSendPersonArr = per
-            });
+            // var canotChoose = [];
+            // canotChoose.push(Global.CurrentPerson)
+            // sys_getSelectMultiplePerson(self.fixSendPersonArr,canotChoose,function(per){   
+            //     self.fixSendPersonArr = per
+            // });
+            this.$store.dispatch('editAddApplyPerson');
             console.log("增加抄送人");
         },
 
@@ -52,56 +53,42 @@ const editVueMixin = {
             this.showPhotoPicker = true;
         },
 
-         pickPhotoByAlbum : function(){
+        pickPhotoByAlbum : function(){
             var self = this;
             //第一个参数：开始 第2个参数：结束
             sys_choosePhoto(function(src){  
                 if(self.uploadPicArr.length>20){
                     return;
                 }
-                if(src.key){
-                    self.uploadPicArr.push({key:src.key});
+                var returnValue = src[0];
+                var len1 = self.uploadPicArr.length,len2;
+                var isexist = false;
+                if(src && src.state =='uploadSuccess'){
+                    return;
+                } 
+                for(var i=0 ; i<len1; i++){
+                    if(self.uploadPicArr[i].key == src.key){
+                        isexist = true;
+                        break;
+                    }
                 }
-                setTimeout(function(){
-                        var name = src.key;
-                        var domObj = document.getElementById(src.key);
-                        var pro = new PrgressBar(domObj, '1024');
-                        imgProgressAry[name] = {};
-                        imgProgressAry[name].status = 'start';
-                        imgProgressAry[name].data = pro;
-
-                },1);
+                if(!isexist){
+                    self.uploadPicArr.push(src);
+                }
                 self.showPhotoPicker = false;
             },function(src){
                 var returnValue = src[0];
                 var len1 = self.uploadPicArr.length,len2;
-                try{
-                    if(imgProgressAry && imgProgressAry[returnValue.key] &&imgProgressAry[returnValue.key].status){
-                        //change
-                        imgProgressAry[returnValue.key].status = 'uploadSuccess';
-                        if(imgProgressAry[returnValue.key].data){
-                            imgProgressAry[returnValue.key].data.removeBar();
-                        }
-                            for(var i=0 ; i<len1; i++){
-                                if(self.uploadPicArr[i].key == src[0].key){
-                                    self.uploadPicArr.$set(i, src[0]);
-                                    break;
-                                }
-                            }
-                    }else{
-                        //push 之前，张数验证
-                        if(self.uploadPicArr.length>20){
-                            return;
-                        }
-                        self.uploadPicArr.push(src[0]);
-                        if(!imgProgressAry[returnValue.key]){
-                            imgProgressAry[returnValue.key] = {status:'uploadSuccess'};
-                        }else{
-                            imgProgressAry[returnValue.key].status = 'uploadSuccess'; 
-                        }
+                var isexist = false;
+                for(var i=0 ; i<len1; i++){
+                    if(self.uploadPicArr[i].key == src[0].key){
+                        Vue.set(self.uploadPicArr, i, src[0])
+                        isexist = true;
+                        break;
                     }
-                }catch(e){
-
+                }
+                if(!isexist){
+                    self.uploadPicArr.push(src[0]);
                 }
             });
             this.showPhotoPicker = false
@@ -114,51 +101,36 @@ const editVueMixin = {
                 if(self.uploadPicArr.length>20){
                     return;
                 }
-               if(src.key){
-                    self.uploadPicArr.push({key:src.key});
+                var returnValue = src[0];
+                var len1 = self.uploadPicArr.length,len2;
+                var isexist = false;
+                if(src && src.state =='uploadSuccess'){
+                    return;
+                } 
+                for(var i=0 ; i<len1; i++){
+                    if(self.uploadPicArr[i].key == src.key){
+                        isexist = true;
+                        break;
+                    }
                 }
-                setTimeout(function(){
-                        var name = src.key;
-                        var domObj = document.getElementById(src.key);
-                        var pro = new PrgressBar(domObj, '1024');
-                        imgProgressAry[name] = {};
-                        imgProgressAry[name].status = 'start';
-                        imgProgressAry[name].data = pro;
-                },1);
+                if(!isexist){
+                    self.uploadPicArr.push(src);
+                }
+                self.showPhotoPicker = false;
             },function(src){
                 var returnValue = src[0];
                 var len1 = self.uploadPicArr.length,len2;
-                try{
-                    if(imgProgressAry && imgProgressAry[returnValue.key] &&imgProgressAry[returnValue.key].status){
-                        //change
-                        imgProgressAry[returnValue.key].status = 'uploadSuccess';
-                        if(imgProgressAry[returnValue.key].data){
-                            imgProgressAry[returnValue.key].data.removeBar();
-                        }
-                        for(var i=0 ; i<len1; i++){
-                            if(self.uploadPicArr[i].key == src[0].key){
-                                self.uploadPicArr.$set(i, src[0]);
-                                break;
-                            }
-                        }
-                    }else{
-                        //push 之前，张数验证
-                        if(self.uploadPicArr.length>20){
-                            return;
-                        }
-                        self.uploadPicArr.push(src[0]);
-                        if(!imgProgressAry[returnValue.key]){
-                            imgProgressAry[returnValue.key] = {status:'uploadSuccess'};
-                        }else{
-                            imgProgressAry[returnValue.key].status = 'uploadSuccess'; 
-                        }
+                var isexist = false;
+                for(var i=0 ; i<len1; i++){
+                    if(self.uploadPicArr[i].key == src[0].key){
+                        Vue.set(self.uploadPicArr, i, src[0])
+                        isexist = true;
+                        break;
                     }
-                 
-                }catch(e){
-
                 }
-
-
+                if(!isexist){
+                    self.uploadPicArr.push(src[0]);
+                }
             });
             console.log("调用相机");
             this.showPhotoPicker = false;

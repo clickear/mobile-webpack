@@ -37,6 +37,11 @@ module.exports = {
     setConfirmPop: sys_setConfirmPop,
 
     lookPersonInfo:lookPersonInfo,
+    // 获取部门
+    getSelectDepartment:sys_getSelectDepartment,
+    // 上传控件
+    uploadFile: sys_uploadFile,
+    stopUploadFile: sys_stopUploadFile
 }
 
 
@@ -52,6 +57,8 @@ window.urgeCallBack = urgeCallBack;
 window.upLoadStateCallback = upLoadStateCallback;
 window.getHostUrlCallBack = getHostUrlCallBack;
 window.getFormHtmlCallBack = getFormHtmlCallBack;
+window.selectDepartmentCallBack = selectDepartmentCallBack;
+window.uploadFileCallBack = uploadFileCallBack;
 
 
 window.sys_record = sys_record;
@@ -68,7 +75,9 @@ window.sys_getHostUrl = sys_getHostUrl;
 window.sys_getFormHtml = sys_getFormHtml;
 window.sys_lookPerson = sys_lookPerson;
 window.sys_formNoPermission = sys_formNoPermission;
-
+window.sys_getSelectDepartment = sys_getSelectDepartment;
+window.sys_uploadFile = sys_uploadFile;
+window.sys_stopUploadFile = sys_stopUploadFile;
 
 window.sys_setConfirmPop = sys_setConfirmPop;
 window.sys_setMsgkPop = sys_setMsgkPop;
@@ -96,22 +105,18 @@ var sys_Control = {
  * @return {[type]}      [description]
  */
 function upLoadStateCallback(data) {
+  console.log('上传进度条' +data);
   var upLoadState = JSON.parse(data);
-  if (upLoadState.state == "startUpload") {
-    //判断imgProgressAry 是否有值 如果没有值，则进行填充
-    if ((!imgProgressAry[upLoadState.key])) {
-      sys_Control["choosePhoto"](upLoadState);
-    } else if (imgProgressAry[upLoadState.key].status == 'uploadFail') {
-      if (upLoadState) {
-        // var returnValue = [];
-        // returnValue.push(photoValue);
-        // sys_Control["choosePhotoEndCallBack"](returnValue);
-      }
-    }
-  } else if (upLoadState.state == "uploadFail") {
-    if (imgProgressAry[upLoadState.key] && imgProgressAry[upLoadState.key].status != "uploadSuccess") {
-      imgProgressAry[upLoadState.key].status = 'uploadFail';
-      imgProgressAry[upLoadState.key].data.turnError();
+
+  // 组件形式
+  if(upLoadState && upLoadState.componentName){
+    upLoadState.progress = upLoadState.process;
+    cloundOfficeApp && cloundOfficeApp.$broadcast && cloundOfficeApp.$broadcast('uploadProgress',upLoadState);
+  }
+
+  if(upLoadState && !upLoadState.componentName){
+    if(typeof sys_Control["choosePhoto"] == 'function'){
+      sys_Control["choosePhoto"](upLoadState)
     }
   }
 }
@@ -197,7 +202,6 @@ function selectPersonCallBack(src) {
       sys_Control["selectPerson"](returnValue);
     }
   }
-
 }
 
 
@@ -265,6 +269,47 @@ function selectMultiplePersonCallBack(data) {
     }
     if (typeof sys_Control["selectMultiplePerson"] == 'function') {
       sys_Control["selectMultiplePerson"](returnValue);
+    }
+  }
+}
+
+/**
+ * 获取部门信息
+ * @param  {[type]} include_org_dept_id 已经选中部门  
+ * @param  {[type]} exclude_org_dept_id 禁止选中部门
+ * @param  {[type]} multiple            是否多选
+ * @param  {[type]} funCallBack         [回调函数]
+ * @return {[type]}                     [description]
+ */
+function sys_getSelectDepartment(include_org_dept_id, exclude_org_dept_id, multiple, funCallBack){
+  var m_selectDept = {};
+
+  m_selectDept.include_org_dept_id = getPersonCodeString(include_org_dept_id);
+  m_selectDept.exclude_org_dept_id = getPersonCodeString(exclude_org_dept_id);
+  m_selectDept.multiple = !!!multiple;
+  sys_Control["selectDepartment"] = funCallBack;
+  m_selectDept = JSON.stringify(m_selectDept);
+  sendRequestGlobal("SOPMethod", "selectDepartment", m_selectDept, "selectDepartmentCallBack");
+}
+
+/**
+ * 获取部门回调
+ * @param  {[type]} data [description]
+ * @return {[type]}      [description]
+ */
+function selectDepartmentCallBack(data){
+  console.log('选择部门回调'+data)
+  var deptCallBack = JSON.parse(data);
+  if (deptCallBack) {
+    var returnValue = [];
+    for (var i = 0; i < deptCallBack.length; i++) {
+      var tempValue = {};
+      tempValue.code = deptCallBack[i].DepId;
+      tempValue.name = deptCallBack[i].SDepName;
+      returnValue.push(tempValue);
+    }
+    if (typeof sys_Control["selectDepartment"] == 'function') {
+      sys_Control["selectDepartment"](returnValue);
     }
   }
 }
@@ -340,6 +385,43 @@ function takePhotoCallBack(data) {
     returnValue.push(photoValue);
     sys_Control["takePhotoEndCallBack"](returnValue);
   }
+}
+
+/**
+ * 上传控件 
+ * @param  {Object}   fileOption 传递文件参数
+ * @param  {Function} callback   上传成功回调方法 {componentName:'组件名称',multiple:'是否多选 boolean'}
+ * @return {[type]}              [description]
+ */
+function sys_uploadFile(fileOption, callback) {
+  sys_Control["uploadFileCallBack"] = callback;
+  sendRequestGlobal("SOPMethod", "uploadFile", JSON.stringify(fileOption), "uploadFileCallBack");
+}
+
+/**
+ * 上传完成回调 由原生调用
+ * @param  {[type]} data [description]
+ * @return {[type]}      [description]
+ */
+function uploadFileCallBack(data) {
+  console.log('上传完成sopnative回调'+data)
+  var fileValue = JSON.parse(data);
+  if(fileValue){
+     sys_Control["uploadFileCallBack"](fileValue);
+  }
+}
+
+/**
+ * 停止上传文件
+ * @param  {String} componentName 组件名称
+ * @param  {String} key           组件key值，即唯一值
+ * @return {null}               无返回值
+ */
+function sys_stopUploadFile(componentName, key) {
+  var fileOption = {};
+  fileOption.componentName = componentName;
+  fileOption.key = key;
+  sendRequestGlobal("SOPMethod", "stopUploadFile", JSON.stringify(fileOption), "stopUploadFileCallBack");
 }
 
 /**
@@ -599,7 +681,7 @@ JSBridge.sendRequest = function(module, method, para, callback) {
       selectMultiplePersonCallBack(person);
     }
     else if ("selectPersonCallBack" == callback) {
-      var person = '[{"DAddTime":"/Date(1451040536000+0800)/","DByDate":"/Date(959788800000+0800)/","LCharge":"0","LDepCode":0,"LFlag":1,"LState":1,"LUcPeocode":0,"LUserRight":0,"PersonId":900847,"SByDate":"2000-06-01","SFirstSpell":"w","SPersonName":"单选人员","SSpell1":"wf","SSpell2":"wf","SYgMobile":"18986096035"},{"DAddTime":"/Date(1451040536000+0800)/","DByDate":"/Date(959788800000+0800)/","LCharge":"0","LDepCode":0,"LFlag":1,"LState":1,"LUcPeocode":0,"LUserRight":0,"PersonId":910172,"SByDate":"2000-06-01","SFirstSpell":"w","SPersonName":"单选组件","SSpell1":"wf","SSpell2":"wf","SYgMobile":"18986096035"}]';
+      var person = '[{"DAddTime":"/Date(1451040536000+0800)/","DByDate":"/Date(959788800000+0800)/","LCharge":"0","LDepCode":0,"LFlag":1,"LState":1,"LUcPeocode":0,"LUserRight":0,"PersonId":900847,"SByDate":"2000-06-01","SFirstSpell":"w","SPersonName":"单选人员","SSpell1":"wf","SSpell2":"wf","SYgMobile":"18986096035"},{"DAddTime":"/Date(1451040536000+0800)/","DByDate":"/Date(959788800000+0800)/","LCharge":"0","LDepCode":0,"LFlag":1,"LState":1,"LUcPeocode":0,"LUserRight":0,"PersonId":910172,"SByDate":"2000-06-01","SFirstSpell":"w","SPersonName":"单选组件","SSpell1":"wf","SSpell2":"wf","SYgMobile":"18986096035"},{"DAddTime":"/Date(1451040536000+0800)/","DByDate":"/Date(959788800000+0800)/","LCharge":"0","LDepCode":0,"LFlag":1,"LState":1,"LUcPeocode":0,"LUserRight":0,"PersonId":2,"SByDate":"2000-06-01","SFirstSpell":"w","SPersonName":"2组","SSpell1":"wf","SSpell2":"wf","SYgMobile":"18986096035"},{"DAddTime":"/Date(1451040536000+0800)/","DByDate":"/Date(959788800000+0800)/","LCharge":"0","LDepCode":0,"LFlag":1,"LState":1,"LUcPeocode":0,"LUserRight":0,"PersonId":1,"SByDate":"2000-06-01","SFirstSpell":"w","SPersonName":"单选组件123","SSpell1":"wf","SSpell2":"wf","SYgMobile":"18986096035"}]';
       selectPersonCallBack(person);
     } else if ("takePhotoCallBack" == callback) {
       testSrc ++;
@@ -621,6 +703,7 @@ JSBridge.sendRequest = function(module, method, para, callback) {
       obj.src = 'http://cs.101.com/v0.1/static/cscommon/avatar/199186/199186.jpg?size=80';
       obj.fileName = 'ÎÄ¼þÃû'
       obj.time = '100';
+      obj.fileSize=212086;
       obj.date = "/Date(959788800000+0800)/";
 
       choosePhotoCallBack(JSON.stringify(obj));
@@ -632,7 +715,7 @@ JSBridge.sendRequest = function(module, method, para, callback) {
       obj.fileName = '测试文件名'
       obj.time = '100';
       obj.date = "2016/1/14 9:0";
-
+      obj.fileSize=212086;
       recordCallBack(JSON.stringify(obj));
     } else if ("getHostUrlCallBack" == callback) {
       getHostUrlCallBack();
@@ -652,7 +735,144 @@ JSBridge.sendRequest = function(module, method, para, callback) {
       var recordStatus = {};
       recordStatus.status = 'play';
       recordPlayCallBack(JSON.stringify(recordStatus));
+    }else if(callback == "selectDepartmentCallBack") {
+      var person = [{
+      "DepId": 17133,
+      "ComId": 1023,
+      "LDepCode": null,
+      "SDepName": "longgong淡",
+      "LFDepCode": 0,
+      "DAddTime": "\/Date(1477297348000+0800)\/",
+      "LDepLeader": 910172,
+      "LDepLeaderName": "Administrator",
+      "SDepLeaderPic": null,
+      "SDepPhone": null,
+      "SPath": "17133|",
+      "BDel": 0,
+      "LUcDepCode": null,
+      "LOrder": null,
+      "SSpell1": "longgongdan",
+      "SSpell2": "longgongd",
+      "HasChildItem": 1,
+      "SFDepName": null,
+      "LCompanyOrgId": null,
+      "ChildItems": null,
+      "NCount": 0,
+      "PCount": 1,
+      "NeedSave": null,
+      "dLastDate": "\/Date(1477626672000+0800)\/",
+      "LFDepUcCode": null,
+      "LUnitId": 481036342037,
+      "isParent": false,
+      "bAsynced": 0,
+      "BIsCom": 1
+                },
+                {
+                  "DepId": 17453,
+                  "ComId": 1023,
+                  "LDepCode": null,
+                  "SDepName": "人事部",
+                  "LFDepCode": 17133,
+                  "DAddTime": "\/Date(1477535132000+0800)\/",
+                  "LDepLeader": 910172,
+                  "LDepLeaderName": "Administrator",
+                  "SDepLeaderPic": null,
+                  "SDepPhone": null,
+                  "SPath": "17133|17453|",
+                  "BDel": 0,
+                  "LUcDepCode": null,
+                  "LOrder": 5,
+                  "SSpell1": "renshibu",
+                  "SSpell2": "rsb",
+                  "HasChildItem": 0,
+                  "SFDepName": "longgong淡",
+                  "LCompanyOrgId": null,
+                  "ChildItems": null,
+                  "NCount": 0,
+                  "PCount": 0,
+                  "NeedSave": null,
+                  "dLastDate": "\/Date(1477547816000+0800)\/",
+                  "LFDepUcCode": null,
+                  "LUnitId": 481036342037,
+                  "isParent": false,
+                  "bAsynced": 1,
+                  "BIsCom": 0
+                },
+                {
+                  "DepId": 17454,
+                  "ComId": 1023,
+                  "LDepCode": null,
+                  "SDepName": "教研部",
+                  "LFDepCode": 17133,
+                  "DAddTime": "\/Date(1477535132000+0800)\/",
+                  "LDepLeader": 910172,
+                  "LDepLeaderName": "Administrator",
+                  "SDepLeaderPic": null,
+                  "SDepPhone": null,
+                  "SPath": "17133|17454|",
+                  "BDel": 0,
+                  "LUcDepCode": null,
+                  "LOrder": 6,
+                  "SSpell1": "jiaoyanbu",
+                  "SSpell2": "jyb",
+                  "HasChildItem": 0,
+                  "SFDepName": "longgong淡",
+                  "LCompanyOrgId": null,
+                  "ChildItems": null,
+                  "NCount": 0,
+                  "PCount": 0,
+                  "NeedSave": null,
+                  "dLastDate": "\/Date(1477547816000+0800)\/",
+                  "LFDepUcCode": null,
+                  "LUnitId": 481036342037,
+                  "isParent": false,
+                  "bAsynced": 1,
+                  "BIsCom": 0
+                },
+                {
+                  "DepId": 17456,
+                  "ComId": 1023,
+                  "LDepCode": null,
+                  "SDepName": "阿斯达",
+                  "LFDepCode": 17133,
+                  "DAddTime": "\/Date(1477324800000+0800)\/",
+                  "LDepLeader": 0,
+                  "LDepLeaderName": null,
+                  "SDepLeaderPic": null,
+                  "SDepPhone": null,
+                  "SPath": "17133|17456|",
+                  "BDel": 0,
+                  "LUcDepCode": null,
+                  "LOrder": 3,
+                  "SSpell1": "asida",
+                  "SSpell2": "asd",
+                  "HasChildItem": 0,
+                  "SFDepName": "longgong淡",
+                  "LCompanyOrgId": null,
+                  "ChildItems": null,
+                  "NCount": 0,
+                  "PCount": 0,
+                  "NeedSave": null,
+                  "dLastDate": "\/Date(1477547835000+0800)\/",
+                  "LFDepUcCode": null,
+                  "LUnitId": 481036342037,
+                  "isParent": false,
+                  "bAsynced": 1,
+                  "BIsCom": 1
+                }]
+                person = JSON.stringify(person);
+                  selectDepartmentCallBack(person);
+    }else if(callback == "uploadFileCallBack"){
+      var fielOption = JSON.parse(para);
+       var file = {componentName:fielOption.componentName,state:'uploadSuccess',
+        fileName:fielOption.fileName,fileSize:fielOption.fileSize,progress:100,key:fielOption.sFileKey,src:fielOption.src
+        }
+        setTimeout(function(){uploadFileCallBack(JSON.stringify(file));},5000)
+      
     }
+
+
+
   }
 }
 
